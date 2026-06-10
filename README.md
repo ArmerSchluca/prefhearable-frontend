@@ -1,4 +1,8 @@
-# Prefhearable
+# Prefhearable (Client)
+
+<details>
+<summary><b>Expand for details on the project</b></summary>
+<br>
 
 > **Prefhearable** is a mobile data collection instrument developed to standardize the assessment of personal **hearing preferences** based on psychoacoustic and contextual data with special focus on health-related wellbeeing. 
 
@@ -6,8 +10,6 @@ This app serves as a large-scale crowdsourcing tool to build a comprehensive, st
 
 This repository contains the source code for the mobile application developed as part of a Bachelor's Thesis: 
 *"Entwicklung eines mobilen Erhebungsinstruments zur standardisierten Erfassung persönlicher Hörpräferenzen auf Basis psychoakustischer und kontextueller Daten"*.
-
----
 
 ## Purpose & Scope
 
@@ -19,8 +21,7 @@ To train robust machine learning models for auditory profiling, researchers requ
 * **Psychoacoustic Testing:** Seamless, user-friendly mobile audio tests to capture hearing characteristics.
 * **Contextual Data Harvesting:** Gathering situational data (e.g., environmental noise levels, user activity, or time of day) to understand *where* and *how* people listen.
 * **Standardized Dataset Creation:** Consolidating user inputs into a structured format ready for future big data and AI analysis.
-
----
+</details>
 
 ## Tech Stack & Architecture
 
@@ -28,7 +29,7 @@ To train robust machine learning models for auditory profiling, researchers requ
 * **Target Platforms:** iOS & Android
 * **Other theoretically supported Platforms:** Windows & macOS (not tested)
 
-## Getting Started (Client)
+## Setup
 
 ### Prerequisites
 Before running the app, ensure you have the [Flutter SDK](https://docs.flutter.dev/install/quick) installed on your machine.
