@@ -36,7 +36,13 @@ Before running the app, ensure you have the [Flutter SDK](https://docs.flutter.d
 
 ### Installation & Run
 
-1. Clone this repository:
+1. Create directory if not already done:
 ```bash
-   git clone https://git.rchw.de/Prefhearable/frontend.git
+mkdir Prefhearable
+cd Prefhearable
+```
+
+2. Clone repository:
+```bash
+git clone https://git.rchw.de/Prefhearable/frontend.git
 ```
