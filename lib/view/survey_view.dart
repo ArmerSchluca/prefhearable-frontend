@@ -1,16 +1,23 @@
 import 'package:flutter/material.dart';
 
-class HomePage extends StatelessWidget {
-  // Konstruktor
-  const HomePage({super.key});
+class SurveyView extends StatelessWidget {
+  const SurveyView({super.key});
 
-  // Jedes Widget(=HomePage-Class) hat eine build-Methode, die den View-Tree baut
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Prefhearable | Hearing Preference Survey App", style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.black,
+        title: const Center(
+          child: Text("Prefhearable", style: TextStyle(color: Colors.white)),
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          color: Colors.white,
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
 
       body: Padding(
@@ -20,37 +27,25 @@ class HomePage extends StatelessWidget {
           children: [
             SectionCard(
               title: "Personal Data",
-              icon: Icon(
-                Icons.person, 
-                color: Colors.amber
-                ),
+              icon: Icon(Icons.person, color: Colors.amber),
               status: SectionStatus.open,
             ),
             SizedBox(height: 12),
             SectionCard(
               title: "Contextual Data",
-              icon: Icon(
-                Icons.public, 
-                color: Colors.green
-                ),
+              icon: Icon(Icons.public, color: Colors.green),
               status: SectionStatus.open,
             ),
             SizedBox(height: 12),
             SectionCard(
               title: "Audio Tests",
-              icon: Icon(
-                Icons.headphones, 
-                color: Colors.pink
-                ),
+              icon: Icon(Icons.headphones, color: Colors.pink),
               status: SectionStatus.open,
             ),
             SizedBox(height: 12),
             SectionCard(
               title: "Questionnaires",
-              icon: Icon(
-                Icons.assignment, 
-                color: Colors.blue
-                ),
+              icon: Icon(Icons.assignment, color: Colors.blue),
               status: SectionStatus.open,
             ),
           ],
