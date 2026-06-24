@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/service/session_service.dart';
+import 'package:frontend/shared/alert_dialog.dart';
 import 'package:frontend/shared/app_layout.dart';
 import 'package:frontend/view/home_view.dart';
 import 'package:frontend/view/launch_view.dart';
@@ -27,10 +28,30 @@ class _LoginViewState extends State<LoginView> {
         context,
         MaterialPageRoute(builder: (_) => const HomeView()),
       );
-    } catch (_) {
-      setState(() {
-        _errorMessage = "UUID nicht gefunden";
-      });
+    } catch (e) {
+      if (!mounted) return;
+
+      if (e.toString().contains('INVALID_UUID_FORMAT')) {
+        setState(() {
+          _errorMessage =
+              'Ungültiger Zugangscode: falsches Format!';
+        });
+        return;
+      }
+
+      if (e.toString().contains('PARTICIPANT_NOT_FOUND')) {
+        setState(() {
+          _errorMessage = 'Zugangscode nicht gefunden';
+        });
+        return;
+      }
+
+      if (e.toString().contains('SERVER_UNREACHABLE')) {
+        await AppDialog.showServerError(context);
+        return;
+      }
+
+      await AppDialog.showServerError(context);
     }
   }
 
@@ -48,7 +69,7 @@ class _LoginViewState extends State<LoginView> {
             _errorMessage = null;
           },
           decoration: InputDecoration(
-            labelText: "UUID",
+            labelText: "Zugangscode",
             hintText: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
 
             floatingLabelStyle: const TextStyle(color: Colors.blueAccent),
@@ -78,7 +99,7 @@ class _LoginViewState extends State<LoginView> {
             ),
             onPressed: _login,
             child: const Text(
-              "Mit UUID anmelden",
+              "Anmelden",
               style: TextStyle(fontSize: 20),
             ),
           ),

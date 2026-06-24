@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 import 'package:flutter/rendering.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -11,7 +12,7 @@ import 'package:uuid/validation.dart';
 /// Damit wird sich nach dme Schließen der App solange wieder automatisch angemeldet,
 /// bis sich explizitüber die UI abgemeldet wird.
 class SessionService {
-  final String baseUrl = "http://localhost:3000";
+  final String baseUrl = _getBaseUrl();
 
   static const String _storageKey = 'participant_uuid';
 
@@ -35,35 +36,40 @@ class SessionService {
 
   Future<String> loginWithUuid(String participantId) async {
     // Format lokal validieren
-    final isValidFormat = UuidValidation.isValidUUID(fromString: participantId);
-
-    if (!isValidFormat) {
-      throw Exception("Invalid UUID format");
+    if (!UuidValidation.isValidUUID(fromString: participantId)) {
+      throw Exception("INVALID_UUID_FORMAT");
     }
 
-    // Im Backend prüfen, ob die UUID im System ist
-    final response = await http.get(
-      Uri.parse('$baseUrl/participants/me'),
-      headers: {'X-Participant-Id': participantId},
-    );
+    // Im Backend prüfen, ob die UUID existiert
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/participants/me'),
+        headers: {'X-Participant-Id': participantId},
+      );
 
-    if (response.statusCode != 200) {
-      throw Exception("Participant does not exist");
+      if (response.statusCode != 200) {
+        throw Exception("PARTICIPANT_NOT_FOUND");
+      }
+
+      await _saveToLocal(participantId);
+
+      return participantId;
+    } on SocketException {
+      throw Exception("SERVER_UNREACHABLE");
     }
-
-    // lokal speichern
-    await _saveToLocal(participantId);
-
-    return participantId;
   }
 
   Future<String?> getCurrentParticipantId() async {
     final prefs = await SharedPreferences.getInstance();
+    debugPrint('STORED UUID: $_storageKey');
+
     return prefs.getString(_storageKey);
   }
 
   Future<void> logoutParticipant() async {
     final prefs = await SharedPreferences.getInstance();
+    debugPrint('REMOVED UUID: $_storageKey');
+
     await prefs.remove(_storageKey);
   }
 
@@ -71,6 +77,7 @@ class SessionService {
   Future<void> _saveToLocal(String participantId) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_storageKey, participantId);
+    debugPrint('UUID SAVED TO LOCAL STORAGE: $_storageKey');
   }
 
   Future<bool> checkServerHealth() async {
@@ -85,5 +92,13 @@ class SessionService {
     } catch (e) {
       return false;
     }
+  }
+
+  static String _getBaseUrl() {
+    if (Platform.isAndroid) {
+      return "http://10.0.2.2:3000";
+    }
+    // Windows / macOS / Linux / iOS / Browser
+    return "http://localhost:3000";
   }
 }

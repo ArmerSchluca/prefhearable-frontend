@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/shared/alert_dialog.dart';
 import 'package:frontend/shared/app_layout.dart';
 import 'package:frontend/view/home_view.dart';
 import 'package:frontend/view/uuid_login_view.dart';
@@ -108,6 +109,7 @@ class _LaunchViewState extends State<LaunchView> {
                         ),
                       );
                     } catch (e) {
+                      AppDialog.showServerError(context);
                       debugPrint("REGISTER ERROR: $e");
                     }
                   }
@@ -132,7 +134,7 @@ class _LaunchViewState extends State<LaunchView> {
                 MaterialPageRoute(builder: (context) => const LoginView()),
               );
             },
-            child: Text('mit UUID anmelden', style: TextStyle(fontSize: 16.0)),
+            child: Text('mit Zugangscode anmelden', style: TextStyle(fontSize: 16.0)),
           ),
         ),
       ],
