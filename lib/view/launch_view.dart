@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/view/home_view.dart';
+import 'package:frontend/view/uuid_login_view.dart';
+import 'package:frontend/service/session_service.dart';
 
 class LaunchView extends StatefulWidget {
   const LaunchView({super.key});
@@ -9,6 +11,7 @@ class LaunchView extends StatefulWidget {
 }
 
 class _LaunchViewState extends State<LaunchView> {
+  final SessionService _participantService = SessionService();
   bool _consentGiven = false;
 
   @override
@@ -99,16 +102,24 @@ class _LaunchViewState extends State<LaunchView> {
                   ),
                 ),
                 onPressed: _consentGiven
-                    ? () {
-                        /* pushReplacement, damit die StartPage aus dem Stack entfernt wird
-                        und der Participant nicht zurück zur Consent Page navigieren kann, 
-                        bis sich abgemeldet wurde */
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const HomeView(),
-                          ),
-                        );
+                    ? () async {
+                        try {
+                          final id = await _participantService
+                              .registerParticipant();
+
+                          debugPrint("NEW PARTICIPANT: $id");
+
+                          if (!mounted) return;
+
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const HomeView(),
+                            ),
+                          );
+                        } catch (e) {
+                          debugPrint("REGISTER ERROR: $e");
+                        }
                       }
                     : null,
                 child: const Text(
@@ -126,7 +137,10 @@ class _LaunchViewState extends State<LaunchView> {
                   foregroundColor: WidgetStatePropertyAll<Color>(Colors.blue),
                 ),
                 onPressed: () {
-                  // ...
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const LoginView()),
+                  );
                 },
                 child: Text(
                   'mit UUID anmelden',
