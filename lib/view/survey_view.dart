@@ -49,6 +49,8 @@ class SurveyView extends StatelessWidget {
           status: SectionStatus.open,
           destination: QuestionnairesView(),
         ),
+
+        SizedBox(height: 12),
       ],
     );
   }

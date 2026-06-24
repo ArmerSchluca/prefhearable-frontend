@@ -29,7 +29,7 @@ class HomeView extends StatelessWidget {
                 MaterialPageRoute(builder: (context) => const SurveyView()),
               );
             },
-            child: Text("Neue Umfrage Starten"),
+            child: Text("Neue Umfrage starten"),
           ),
         ),
       ],

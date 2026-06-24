@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
 
-/// AppBar mit Defaults und optionalen Parametern. 
+/// AppBar mit Defaults und optionalen Parametern.
 /// Defaults: schwarzer Hintergunrd, weiße Schrift, Text="Prefhearable", kein Navigationpfeil
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
   final Color? color;
   final bool? nav;
 
-  const CustomAppBar({
-    super.key,
-    this.title,
-    this.color,
-    this.nav,
-  });
+  const CustomAppBar({super.key, this.title, this.color, this.nav});
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
@@ -22,7 +17,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       backgroundColor: color ?? Colors.black,
       automaticallyImplyLeading: false,
-      leading: color == true
+      leading: nav == true
           ? IconButton(
               icon: const Icon(Icons.arrow_back),
               color: Colors.white,
