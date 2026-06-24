@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:flutter/rendering.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:uuid/validation.dart';
@@ -18,6 +19,7 @@ class SessionService {
   /// die anschließend im Local Storage gespeichert wird
   Future<String> registerParticipant() async {
     final response = await http.post(Uri.parse('$baseUrl/participants'));
+    debugPrint('BASE URL: $baseUrl');
 
     if (response.statusCode != 201) {
       throw Exception('Could not create participant');

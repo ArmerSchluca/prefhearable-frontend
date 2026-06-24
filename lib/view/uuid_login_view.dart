@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/view/home_view.dart';
 import 'package:frontend/service/session_service.dart';
+import 'package:frontend/shared/app_layout.dart';
+import 'package:frontend/view/home_view.dart';
 import 'package:frontend/view/launch_view.dart';
 
 class LoginView extends StatefulWidget {
@@ -11,100 +12,14 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-  final TextEditingController _uuidController = TextEditingController();
-  final SessionService _participantService = SessionService();
+  final SessionService _sessionService = SessionService();
 
-  bool _isLoading = false;
-  String? _error;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Center(
-          child: Text("Prefhearable", style: TextStyle(color: Colors.white)),
-        ),
-        backgroundColor: Colors.black,
-      ),
-
-      body: Padding(
-        padding: EdgeInsets.all(30.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(child: Icon(Icons.fingerprint, size: 150)),
-
-            SizedBox(height: 30.0),
-
-            TextField(
-              controller: _uuidController,
-              decoration: InputDecoration(
-                labelText: "UUID eingeben",
-                hintText: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-                border: const OutlineInputBorder(),
-                errorText: _error,
-              ),
-            ),
-
-            SizedBox(height: 50),
-            SizedBox(
-              width: double.infinity,
-              height: 80,
-              child: FilledButton(
-                style: ButtonStyle(
-                  backgroundColor: WidgetStatePropertyAll(
-                    _isLoading ? Colors.grey : Colors.blue,
-                  ),
-                  shape: WidgetStatePropertyAll(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5.0),
-                      side: BorderSide(color: Colors.black, width: 1),
-                    ),
-                  ),
-                ),
-                onPressed: _isLoading ? null : _login,
-                child: _isLoading
-                    ? const CircularProgressIndicator(color: Colors.white)
-                    : const Text(
-                        'Mit UUID anmelden',
-                        style: TextStyle(fontSize: 20.0),
-                      ),
-              ),
-            ),
-            SizedBox(height: 30),
-            Center(child: Text("oder", style: TextStyle(fontSize: 16.0))),
-            SizedBox(height: 30),
-            Center(
-              child: TextButton(
-                style: ButtonStyle(
-                  foregroundColor: WidgetStatePropertyAll<Color>(Colors.blue),
-                ),
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const LaunchView()),
-                  );
-                },
-                child: Text(
-                  'zurück zum anmeldefreien Start',
-                  style: TextStyle(fontSize: 16.0),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  String _participantId = '';
+  String? _errorMessage;
 
   Future<void> _login() async {
-    setState(() {
-      _isLoading = true;
-      _error = null;
-    });
-
     try {
-      await _participantService.loginWithUuid(_uuidController.text.trim());
+      await _sessionService.loginWithUuid(_participantId.trim());
 
       if (!mounted) return;
 
@@ -112,20 +27,84 @@ class _LoginViewState extends State<LoginView> {
         context,
         MaterialPageRoute(builder: (_) => const HomeView()),
       );
-    } catch (e) {
+    } catch (_) {
       setState(() {
-        _error = "Login fehlgeschlagen";
-      });
-    } finally {
-      setState(() {
-        _isLoading = false;
+        _errorMessage = "UUID nicht gefunden";
       });
     }
   }
 
   @override
-  void dispose() {
-    _uuidController.dispose();
-    super.dispose();
+  Widget build(BuildContext context) {
+    return AppLayout(
+      children: [
+        Center(child: const Icon(Icons.fingerprint, size: 150)),
+
+        const SizedBox(height: 30),
+
+        TextField(
+          onChanged: (value) {
+            _participantId = value;
+            _errorMessage = null;
+          },
+          decoration: InputDecoration(
+            labelText: "UUID",
+            hintText: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+
+            floatingLabelStyle: const TextStyle(color: Colors.blueAccent),
+
+            border: const OutlineInputBorder(),
+
+            focusedBorder: const OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.blueAccent),
+            ),
+
+            errorText: _errorMessage,
+          ),
+        ),
+
+        const SizedBox(height: 50),
+
+        SizedBox(
+          width: double.infinity,
+          height: 80,
+          child: FilledButton(
+            style: FilledButton.styleFrom(
+              backgroundColor: Colors.blue,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5),
+                side: const BorderSide(color: Colors.black),
+              ),
+            ),
+            onPressed: _login,
+            child: const Text(
+              "Mit UUID anmelden",
+              style: TextStyle(fontSize: 20),
+            ),
+          ),
+        ),
+
+        const SizedBox(height: 30),
+
+        Center(child: const Text("oder")),
+
+        const SizedBox(height: 30),
+
+        Center(
+          child: TextButton(
+            style: ButtonStyle(
+              foregroundColor: WidgetStatePropertyAll<Color>(Colors.blue),
+            ),
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (_) => const LaunchView()),
+              );
+            },
+            child: const Text("zurück zum anmeldefreien Start"),
+          ),
+        ),
+      ],
+    );
   }
 }

@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:frontend/shared/app_layout.dart';
 import 'package:frontend/shared/custom_appbar.dart';
 
-class AudioTestView extends StatelessWidget {
-  const AudioTestView({super.key});
+class PersonalDataView extends StatelessWidget {
+  const PersonalDataView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return AppLayout(
       appBar: CustomAppBar(
-        title: "Hörtest",
-        color: Colors.pinkAccent,
+        title: "Personendaten",
+        color: Colors.orange,
         nav: true,
       ),
       children: [
