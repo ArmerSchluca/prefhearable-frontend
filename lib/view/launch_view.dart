@@ -107,7 +107,7 @@ class _LaunchViewState extends State<LaunchView> {
                           final id = await _participantService
                               .registerParticipant();
 
-                          debugPrint("NEW PARTICIPANT: $id");
+                          debugPrint("REGISTERED: $id");
 
                           if (!mounted) return;
 

@@ -74,18 +74,13 @@ class SessionService {
   Future<bool> checkServerHealth() async {
     try {
       log('REQUEST → $baseUrl/health');
-      
+
       final response = await http
           .get(Uri.parse('$baseUrl/health'))
           .timeout(const Duration(seconds: 5));
 
-      log('STATUS: ${response.statusCode}');
-      log('BODY: ${response.body}');
-
       return response.statusCode == 200;
-    } catch (e, stack) {
-      log('❌ SERVER ERROR: $e');
-      log('$stack');
+    } catch (e) {
       return false;
     }
   }
