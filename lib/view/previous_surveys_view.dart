@@ -54,7 +54,7 @@ class PreviousSurveysView extends StatelessWidget {
 
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text("Daten erfolgreich gelöscht"),
+                  content: Text("Daten erfolgreich gelöscht!"),
                   backgroundColor: Colors.green,
                 ),
               );

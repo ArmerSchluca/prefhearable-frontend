@@ -132,7 +132,7 @@ class AppDialog {
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text("Zugangscode falsch"),
+                      content: Text("Zugangscode falsch!"),
                       backgroundColor: Colors.red,
                     ),
                   );

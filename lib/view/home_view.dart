@@ -48,7 +48,7 @@ class HomeView extends StatelessWidget {
 
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text("Abmeldung erfolgreich"),
+                  content: Text("Abmeldung erfolgreich!"),
                   backgroundColor: Colors.green,
                 ),
               );

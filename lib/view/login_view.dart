@@ -23,6 +23,12 @@ class _LoginViewState extends State<LoginView> {
 
       if (!mounted) return;
 
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Anmeldung erfolgreich!"),
+          backgroundColor: Colors.green,
+        ),
+      );
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => const HomeView()),
