@@ -5,10 +5,10 @@ import 'package:frontend/shared/app_layout.dart';
 import 'package:frontend/shared/custom_appbar.dart';
 import 'package:frontend/shared/footer.dart';
 import 'package:frontend/view/home_view.dart';
-import 'package:frontend/view/survey_data_views/audiotest_view.dart';
-import 'package:frontend/view/survey_data_views/context_data_view.dart';
-import 'package:frontend/view/survey_data_views/person_data_view.dart';
-import 'package:frontend/view/survey_data_views/questionnaires_view.dart';
+import 'package:frontend/view/survey_modules/audiotest_view.dart';
+import 'package:frontend/view/survey_modules/context_data_view.dart';
+import 'package:frontend/view/survey_modules/person_data_view.dart';
+import 'package:frontend/view/survey_modules/questionnaires_view.dart';
 
 class SurveyView extends StatelessWidget {
   const SurveyView({super.key});
