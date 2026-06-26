@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/shared/alert_dialog.dart';
+import 'package:frontend/shared/app_dialogs.dart';
 import 'package:frontend/shared/app_layout.dart';
 import 'package:frontend/view/home_view.dart';
 import 'package:frontend/view/login_view.dart';
@@ -22,21 +22,21 @@ class _LaunchViewState extends State<LaunchView> {
       children: [
         Text(
           "Prefhearable...",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24.0),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
         ),
 
-        SizedBox(height: 10.0),
+        SizedBox(height: 10),
 
         Text(
           "ist eine App zur Erforschung individueller Hörpräferenzen. Wir untersuchen, welchen Einfluss Gesundheit und Umgebung auf das Hörverhalten haben. Mit Ihrer Teilnahme unterstützen Sie den Aufbau eines Datensatzes für die zukünftige Forschung und personalisierte Hörversorgung.",
-          style: TextStyle(fontSize: 18.0),
+          style: TextStyle(fontSize: 18),
         ),
 
         SizedBox(height: 20),
 
         Text(
           "Vielen Dank für Ihre Teilnahme!",
-          style: TextStyle(fontSize: 18.0),
+          style: TextStyle(fontSize: 18),
         ),
 
         SizedBox(height: 40),
@@ -59,7 +59,7 @@ class _LaunchViewState extends State<LaunchView> {
             Expanded(
               child: Text(
                 "Ich bin einverstanden, dass meine Daten pseudonymisiert gespeichert und zu Forschungszwecken verarbeitet werden.",
-                style: TextStyle(fontSize: 14.0),
+                style: TextStyle(fontSize: 14),
               ),
             ),
           ],
@@ -116,12 +116,12 @@ class _LaunchViewState extends State<LaunchView> {
                 : null,
             child: const Text(
               'Jetzt loslegen!',
-              style: TextStyle(fontSize: 20.0),
+              style: TextStyle(fontSize: 20),
             ),
           ),
         ),
         SizedBox(height: 30),
-        Center(child: Text("oder", style: TextStyle(fontSize: 16.0))),
+        Center(child: Text("oder", style: TextStyle(fontSize: 16))),
         SizedBox(height: 30),
         Center(
           child: TextButton(
@@ -134,7 +134,7 @@ class _LaunchViewState extends State<LaunchView> {
                 MaterialPageRoute(builder: (context) => const LoginView()),
               );
             },
-            child: Text('mit Zugangscode anmelden', style: TextStyle(fontSize: 16.0)),
+            child: Text('mit Zugangscode anmelden', style: TextStyle(fontSize: 16)),
           ),
         ),
       ],

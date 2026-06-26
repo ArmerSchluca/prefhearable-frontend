@@ -43,11 +43,41 @@ class AppDialog {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: const Text('Cancel'),
+              child: const Text(
+                'Nein',
+                style: TextStyle(color: Colors.blueAccent, fontSize: 18),
+              ),
             ),
             TextButton(
               onPressed: () => Navigator.pop(context, true),
-              child: const Text('OK'),
+              child: const Text(
+                'Ja',
+                style: TextStyle(color: Colors.red, fontSize: 18),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  static Future<void> showInfo(BuildContext context, Text title, Text content) {
+    return showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return AlertDialog(
+          title: title,
+          content: SingleChildScrollView(
+            child: Padding(padding: const EdgeInsets.all(10), child: content),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text(
+                'Schließen',
+                style: TextStyle(fontSize: 18, color: Colors.blueAccent),
+              ),
             ),
           ],
         );

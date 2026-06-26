@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/service/session_service.dart';
-import 'package:frontend/shared/alert_dialog.dart';
+import 'package:frontend/shared/app_dialogs.dart';
 import 'package:frontend/shared/app_layout.dart';
 import 'package:frontend/view/home_view.dart';
 import 'package:frontend/view/launch_view.dart';
@@ -40,7 +40,7 @@ class _LoginViewState extends State<LoginView> {
 
       if (e.toString().contains('PARTICIPANT_NOT_FOUND')) {
         setState(() {
-          _errorMessage = 'Zugangscode nicht gefunden';
+          _errorMessage = 'Zugangscode nicht gefunden!';
         });
         return;
       }
@@ -60,7 +60,7 @@ class _LoginViewState extends State<LoginView> {
       children: [
         Center(child: const Icon(Icons.fingerprint, size: 150)),
 
-        const SizedBox(height: 30),
+        SizedBox(height: 30),
 
         TextField(
           onChanged: (value) {
@@ -83,7 +83,7 @@ class _LoginViewState extends State<LoginView> {
           ),
         ),
 
-        const SizedBox(height: 50),
+        SizedBox(height: 50),
 
         SizedBox(
           width: double.infinity,
@@ -91,6 +91,7 @@ class _LoginViewState extends State<LoginView> {
           child: FilledButton(
             style: FilledButton.styleFrom(
               backgroundColor: Colors.blue,
+              foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(5),
                 side: const BorderSide(color: Colors.black),
@@ -101,11 +102,11 @@ class _LoginViewState extends State<LoginView> {
           ),
         ),
 
-        const SizedBox(height: 30),
+        SizedBox(height: 30),
 
-        Center(child: const Text("oder")),
+        Center(child: const Text("oder", style: TextStyle(fontSize: 16))),
 
-        const SizedBox(height: 30),
+        SizedBox(height: 30),
 
         Center(
           child: TextButton(
@@ -118,7 +119,10 @@ class _LoginViewState extends State<LoginView> {
                 MaterialPageRoute(builder: (_) => const LaunchView()),
               );
             },
-            child: const Text("zurück zum anmeldefreien Start"),
+            child: const Text(
+              "zurück zum anmeldefreien Start",
+              style: TextStyle(fontSize: 16),
+            ),
           ),
         ),
       ],

@@ -14,14 +14,10 @@ class PersonalDataView extends StatelessWidget {
         nav: true,
       ),
       children: [
-        Text("Lorem Ipsum"),
-        SizedBox(height: 12),
-        Text("Lorem Ipsum"),
-        SizedBox(height: 12),
-        Text("Lorem Ipsum"),
-        SizedBox(height: 12),
-        Text("Lorem Ipsum"),
-      ],
+        // Age
+        SizedBox(height: 12), 
+        
+        SizedBox(height: 12)],
     );
   }
 }

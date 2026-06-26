@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/rendering.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -35,7 +34,6 @@ class SessionService {
   }
 
   Future<String> loginWithUuid(String participantId) async {
-    // Format lokal validieren
     if (!UuidValidation.isValidUUID(fromString: participantId)) {
       throw Exception("INVALID_UUID_FORMAT");
     }
@@ -61,37 +59,22 @@ class SessionService {
 
   Future<String?> getCurrentParticipantId() async {
     final prefs = await SharedPreferences.getInstance();
-    debugPrint('STORED UUID: $_storageKey');
+    debugPrint('STORED_UUID: $_storageKey');
 
     return prefs.getString(_storageKey);
   }
 
   Future<void> logoutParticipant() async {
     final prefs = await SharedPreferences.getInstance();
-    debugPrint('REMOVED UUID: $_storageKey');
+    debugPrint('REMOVED_UUID: $_storageKey');
 
     await prefs.remove(_storageKey);
   }
 
-  /// PRIVATE STORAGE HELPER
   Future<void> _saveToLocal(String participantId) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_storageKey, participantId);
-    debugPrint('UUID SAVED TO LOCAL STORAGE: $_storageKey');
-  }
-
-  Future<bool> checkServerHealth() async {
-    try {
-      log('REQUEST → $baseUrl/health');
-
-      final response = await http
-          .get(Uri.parse('$baseUrl/health'))
-          .timeout(const Duration(seconds: 5));
-
-      return response.statusCode == 200;
-    } catch (e) {
-      return false;
-    }
+    debugPrint('UUID_SAVED_LOCALLY: $_storageKey');
   }
 
   static String _getBaseUrl() {
