@@ -19,7 +19,6 @@ class SessionService {
   /// die anschließend im Local Storage gespeichert wird
   Future<String> registerParticipant() async {
     final response = await http.post(Uri.parse('$baseUrl/participants'));
-    debugPrint('BASE URL: $baseUrl');
 
     if (response.statusCode != 201) {
       throw Exception('Could not create participant');
@@ -57,24 +56,38 @@ class SessionService {
     }
   }
 
+  Future<void> deleteParticipantAndData() async {
+    final participantId = await getCurrentParticipantId();
+
+    if (participantId == null) {
+      throw Exception("No participant logged in");
+    }
+
+    final response = await http.delete(
+      Uri.parse('$baseUrl/participants/me'),
+      headers: {'X-Participant-Id': participantId},
+    );
+
+    if (response.statusCode != 200 && response.statusCode != 204) {
+      throw Exception('Could not delete participant');
+    }
+
+    await logoutParticipant();
+  }
+
   Future<String?> getCurrentParticipantId() async {
     final prefs = await SharedPreferences.getInstance();
-    debugPrint('STORED_UUID: $_storageKey');
-
     return prefs.getString(_storageKey);
   }
 
   Future<void> logoutParticipant() async {
     final prefs = await SharedPreferences.getInstance();
-    debugPrint('REMOVED_UUID: $_storageKey');
-
     await prefs.remove(_storageKey);
   }
 
   Future<void> _saveToLocal(String participantId) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_storageKey, participantId);
-    debugPrint('UUID_SAVED_LOCALLY: $_storageKey');
   }
 
   static String _getBaseUrl() {

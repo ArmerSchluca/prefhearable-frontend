@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/service/session_service.dart';
 import 'package:frontend/shared/app_dialogs.dart';
 import 'package:frontend/shared/app_layout.dart';
+import 'package:frontend/util/session.dart';
 import 'package:frontend/view/home_view.dart';
 import 'package:frontend/view/launch_view.dart';
 
@@ -13,14 +13,13 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-  final SessionService _sessionService = SessionService();
 
   String _participantId = '';
   String? _errorMessage;
 
   Future<void> _login() async {
     try {
-      await _sessionService.loginWithUuid(_participantId.trim());
+      await session.loginWithUuid(_participantId.trim());
 
       if (!mounted) return;
 
@@ -94,7 +93,6 @@ class _LoginViewState extends State<LoginView> {
               foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(5),
-
               ),
             ),
             onPressed: _login,

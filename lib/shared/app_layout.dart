@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/service/session_service.dart';
 import 'package:frontend/shared/footer.dart';
 import 'custom_appbar.dart';
 

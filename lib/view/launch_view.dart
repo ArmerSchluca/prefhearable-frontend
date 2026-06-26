@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/shared/app_dialogs.dart';
 import 'package:frontend/shared/app_layout.dart';
+import 'package:frontend/util/session.dart';
 import 'package:frontend/view/home_view.dart';
 import 'package:frontend/view/login_view.dart';
-import 'package:frontend/service/session_service.dart';
 
 class LaunchView extends StatefulWidget {
   const LaunchView({super.key});
@@ -13,7 +13,6 @@ class LaunchView extends StatefulWidget {
 }
 
 class _LaunchViewState extends State<LaunchView> {
-  final SessionService _participantService = SessionService();
   bool _consentGiven = false;
 
   @override
@@ -34,10 +33,7 @@ class _LaunchViewState extends State<LaunchView> {
 
         SizedBox(height: 20),
 
-        Text(
-          "Vielen Dank für Ihre Teilnahme!",
-          style: TextStyle(fontSize: 18),
-        ),
+        Text("Vielen Dank für Ihre Teilnahme!", style: TextStyle(fontSize: 18)),
 
         SizedBox(height: 40),
 
@@ -94,9 +90,7 @@ class _LaunchViewState extends State<LaunchView> {
             onPressed: _consentGiven
                 ? () async {
                     try {
-                      final id = await _participantService
-                          .registerParticipant();
-
+                      final id = await session.registerParticipant();
                       debugPrint("REGISTERED: $id");
 
                       if (!mounted) return;
@@ -133,7 +127,10 @@ class _LaunchViewState extends State<LaunchView> {
                 MaterialPageRoute(builder: (context) => const LoginView()),
               );
             },
-            child: Text('mit Zugangscode anmelden', style: TextStyle(fontSize: 16)),
+            child: Text(
+              'mit Zugangscode anmelden',
+              style: TextStyle(fontSize: 16),
+            ),
           ),
         ),
       ],

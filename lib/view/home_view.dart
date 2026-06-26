@@ -4,7 +4,9 @@ import 'package:frontend/service/session_service.dart';
 import 'package:frontend/shared/app_dialogs.dart';
 import 'package:frontend/shared/app_layout.dart';
 import 'package:frontend/shared/footer.dart';
+import 'package:frontend/util/session.dart';
 import 'package:frontend/view/launch_view.dart';
+import 'package:frontend/view/previous_surveys_view.dart';
 import 'package:frontend/view/survey_view.dart';
 
 class HomeView extends StatelessWidget {
@@ -12,8 +14,6 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final SessionService sessionService = SessionService();
-
     return AppLayout(
       footer: AppFooter(
         actions: [
@@ -37,7 +37,7 @@ class HomeView extends StatelessWidget {
               );
 
               if (result == true) {
-                await sessionService.logoutParticipant();
+                await session.logoutParticipant();
 
                 if (!context.mounted) return;
 
@@ -61,7 +61,9 @@ class HomeView extends StatelessWidget {
               AppDialog.showInfo(
                 context,
                 const Text("Titel"),
-                const Text("Lorem Ipsum"),
+                const Text(
+                  "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
+                ),
               );
             },
           ),
@@ -77,7 +79,7 @@ class HomeView extends StatelessWidget {
           height: 80,
           child: FilledButton(
             style: FilledButton.styleFrom(
-              elevation: 5,
+              elevation: 3,
               backgroundColor: Colors.blue,
               foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(
@@ -110,7 +112,7 @@ class HomeView extends StatelessWidget {
           height: 80,
           child: FilledButton(
             style: FilledButton.styleFrom(
-              elevation: 5,
+              elevation: 3,
               backgroundColor: Colors.teal,
               foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(
@@ -120,7 +122,7 @@ class HomeView extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const SurveyView()),
+                MaterialPageRoute(builder: (context) => const PreviousSurveysView()),
               );
             },
             child: const Row(
