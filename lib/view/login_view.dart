@@ -33,8 +33,7 @@ class _LoginViewState extends State<LoginView> {
 
       if (e.toString().contains('INVALID_UUID_FORMAT')) {
         setState(() {
-          _errorMessage =
-              'Ungültiger Zugangscode: falsches Format!';
+          _errorMessage = 'Ungültiger Zugangscode: falsches Format!';
         });
         return;
       }
@@ -98,10 +97,7 @@ class _LoginViewState extends State<LoginView> {
               ),
             ),
             onPressed: _login,
-            child: const Text(
-              "Anmelden",
-              style: TextStyle(fontSize: 20),
-            ),
+            child: const Text("Anmelden", style: TextStyle(fontSize: 20)),
           ),
         ),
 

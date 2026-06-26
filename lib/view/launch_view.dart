@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/shared/alert_dialog.dart';
 import 'package:frontend/shared/app_layout.dart';
 import 'package:frontend/view/home_view.dart';
-import 'package:frontend/view/uuid_login_view.dart';
+import 'package:frontend/view/login_view.dart';
 import 'package:frontend/service/session_service.dart';
 
 class LaunchView extends StatefulWidget {
