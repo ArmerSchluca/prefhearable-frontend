@@ -71,7 +71,7 @@ class _LaunchViewState extends State<LaunchView> {
         SizedBox(
           width: double.infinity,
           height: 80,
-          child: FilledButton(
+          child: ElevatedButton(
             style: ButtonStyle(
               backgroundColor: WidgetStateProperty.resolveWith<Color>((states) {
                 if (states.contains(WidgetState.disabled)) {
@@ -88,7 +88,6 @@ class _LaunchViewState extends State<LaunchView> {
               shape: WidgetStatePropertyAll(
                 RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5.0),
-                  side: BorderSide(color: Colors.black, width: 1),
                 ),
               ),
             ),

@@ -109,7 +109,41 @@ class SurveyView extends StatelessWidget {
           destination: QuestionnairesView(),
         ),
 
-        SizedBox(height: 12),
+        SizedBox(height: 30),
+
+        Center(
+          child: FilledButton(
+            style: FilledButton.styleFrom(
+              elevation: 3,
+              backgroundColor: const Color.fromARGB(255, 74, 149, 77),
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5.0), // eckig
+              ),
+            ),
+
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const HomeView()),
+              );
+            },
+            child: const Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.send, size: 24),
+                SizedBox(width: 5),
+                Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Text(
+                    "Ergebnisse absenden",
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -144,10 +178,13 @@ class SectionCard extends Card {
           child: Column(
             mainAxisSize: .min,
             children: <Widget>[
-              ListTile(
-                leading: icon,
-                title: Text(title),
-                subtitle: Text(status.toString()),
+              Padding(
+                padding: EdgeInsets.all(5),
+                child: ListTile(
+                  leading: icon,
+                  title: Text(title),
+                  subtitle: Text(status.toString()),
+                ),
               ),
             ],
           ),

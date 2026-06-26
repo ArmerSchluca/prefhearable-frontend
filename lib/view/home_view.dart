@@ -77,11 +77,11 @@ class HomeView extends StatelessWidget {
           height: 80,
           child: FilledButton(
             style: FilledButton.styleFrom(
+              elevation: 5,
               backgroundColor: Colors.blue,
               foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(5.0), // eckig
-                side: const BorderSide(color: Colors.black, width: 1),
               ),
             ),
 
@@ -110,11 +110,11 @@ class HomeView extends StatelessWidget {
           height: 80,
           child: FilledButton(
             style: FilledButton.styleFrom(
+              elevation: 5,
               backgroundColor: Colors.teal,
               foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(5), // eckig
-                side: const BorderSide(color: Colors.black, width: 1),
               ),
             ),
             onPressed: () {

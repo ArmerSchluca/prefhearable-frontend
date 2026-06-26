@@ -88,13 +88,13 @@ class _LoginViewState extends State<LoginView> {
         SizedBox(
           width: double.infinity,
           height: 80,
-          child: FilledButton(
+          child: ElevatedButton(
             style: FilledButton.styleFrom(
               backgroundColor: Colors.blue,
               foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(5),
-                side: const BorderSide(color: Colors.black),
+
               ),
             ),
             onPressed: _login,
