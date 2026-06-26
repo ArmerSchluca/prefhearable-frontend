@@ -28,25 +28,36 @@ class HomeView extends StatelessWidget {
               style: TextStyle(color: Colors.red, fontSize: 18),
             ),
             onPressed: () async {
-              final result = await AppDialog.showSelection(
+              final uuid = await session.getCurrentParticipantId();
+
+              if (uuid == null) return;
+
+              final confirmed = await AppDialog.showUuidConfirmation(
                 context,
-                Text("Möchten Sie sich wirklich abmelden?"),
-                Text(
-                  "Sichern Sie vorher Ihren Zugangscode, wenn Sie auf Ihre Daten weiter zugreifen möchten.",
+                uuid,
+                "Wirklich abmelden? ",
+                "Laufende Umfragen werden abgebrochen! Wenn Sie künftig auf Ihre bisherigen Umfragen zugreifen können möchten, sichern Sie vorher Ihre UUID zur Anmeldung!"
+                    " Bitte geben Sie Ihren Zugangscode zur Bestätigung ein.",
+              );
+
+              if (!confirmed) return;
+
+              await session.logoutParticipant();
+
+              if (!context.mounted) return;
+
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text("Abmeldung erfolgreich"),
+                  backgroundColor: Colors.green,
                 ),
               );
 
-              if (result == true) {
-                await session.logoutParticipant();
-
-                if (!context.mounted) return;
-
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (_) => const LaunchView()),
-                  (route) => false,
-                );
-              }
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (_) => const LaunchView()),
+                (route) => false,
+              );
             },
           ),
 
@@ -122,7 +133,9 @@ class HomeView extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const PreviousSurveysView()),
+                MaterialPageRoute(
+                  builder: (context) => const PreviousSurveysView(),
+                ),
               );
             },
             child: const Row(

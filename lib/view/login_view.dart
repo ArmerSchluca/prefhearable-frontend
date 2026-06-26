@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/shared/app_dialogs.dart';
 import 'package:frontend/shared/app_layout.dart';
+import 'package:frontend/shared/inputs.dart';
 import 'package:frontend/util/session.dart';
 import 'package:frontend/view/home_view.dart';
 import 'package:frontend/view/launch_view.dart';
@@ -13,7 +14,6 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-
   String _participantId = '';
   String? _errorMessage;
 
@@ -66,18 +66,10 @@ class _LoginViewState extends State<LoginView> {
             _participantId = value;
             _errorMessage = null;
           },
-          decoration: InputDecoration(
-            labelText: "Zugangscode",
-            hintText: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-
-            floatingLabelStyle: const TextStyle(color: Colors.blueAccent),
-
-            border: const OutlineInputBorder(),
-
-            focusedBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.blueAccent),
-            ),
-
+          decoration: AppInputs.textField(
+            label: "Zugangscode",
+            hint: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+            accentColor: Colors.blueAccent,
             errorText: _errorMessage,
           ),
         ),

@@ -35,35 +35,44 @@ class PreviousSurveysView extends StatelessWidget {
               ),
             ),
             onPressed: () async {
-              final result = await AppDialog.showSelection(
+              final uuid = await session.getCurrentParticipantId();
+
+              if (uuid == null) return;
+
+              final confirmed = await AppDialog.showUuidConfirmation(
                 context,
-                Text("Alle Daten löschen?"),
-                Text(
-                  "Dieser Vorgang löscht all Ihre Daten aus der Datenbank samt Ihres Zugangscodes. Die Aktion ist unwiderruflich und permanent!",
+                uuid,
+                "Alle Daten löschen? ",
+                "Dieser Vorgang löscht alle Ihre Daten aus der Datenbank samt Ihres Zugangscodes. Die Aktion ist unwiderruflich und permanent. Bitte beachten Sie, dass diese Daten Forschungszwecken dienen und wertvoll sind.",
+              );
+
+              if (!confirmed) return;
+
+              await session.logoutParticipant();
+
+              if (!context.mounted) return;
+
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text("Daten erfolgreich gelöscht"),
+                  backgroundColor: Colors.green,
                 ),
               );
 
-              if (result == true) {
-                
-                await session.deleteParticipantAndData();
-
-                if (!context.mounted) return;
-
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (_) => const LaunchView()),
-                  (route) => false,
-                );
-              }
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (_) => const LaunchView()),
+                (route) => false,
+              );
             },
           ),
 
           // INFO BUTTON
           TextButton.icon(
-            icon: Icon(Icons.info, size: 24, color: Colors.blueGrey),
+            icon: Icon(Icons.info, size: 20, color: Colors.blueGrey),
             label: Text(
               "Info",
-              style: TextStyle(color: Colors.blueGrey, fontSize: 24),
+              style: TextStyle(color: Colors.blueGrey, fontSize: 18),
             ),
             onPressed: () {
               AppDialog.showInfo(

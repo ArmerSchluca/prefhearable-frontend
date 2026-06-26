@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/shared/inputs.dart';
 
 class AppDialog {
   static Future<void> showServerError(BuildContext context) {
@@ -83,5 +84,71 @@ class AppDialog {
         );
       },
     );
+  }
+
+  static Future<bool> showUuidConfirmation(
+    BuildContext context,
+    String correctUuid,
+    String title,
+    String message,
+  ) async {
+    final controller = TextEditingController();
+
+    final result = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(message),
+              SizedBox(height: 12),
+              TextField(
+                controller: controller,
+                decoration: AppInputs.textField(
+                  label: "Zugangscode",
+                  hint: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+                  accentColor: Colors.blueAccent,
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: Text(
+                "Abbrechen",
+                style: TextStyle(fontSize: 18, color: Colors.blue),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                final input = controller.text.trim();
+
+                if (input == correctUuid) {
+                  Navigator.pop(context, true);
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text("Zugangscode falsch"),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                  Navigator.pop(context, false);
+                }
+              },
+              child: Text(
+                "Bestätigen",
+                style: TextStyle(fontSize: 18, color: Colors.red),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+
+    return result ?? false;
   }
 }

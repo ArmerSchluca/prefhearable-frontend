@@ -109,7 +109,7 @@ class SurveyView extends StatelessWidget {
           destination: QuestionnairesView(),
         ),
 
-        SizedBox(height: 30),
+        SizedBox(height: 50),
 
         Center(
           child: FilledButton(

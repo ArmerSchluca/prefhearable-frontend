@@ -3,7 +3,7 @@ class SurveyService {
 
   Future cancelActiveSurvey() async {}
 
-  Future deletePreviousSurvey(id) async {}
+  Future deletePreviousSurvey(String surveyId) async {}
 
   Future submitSurvey() async {}
 
