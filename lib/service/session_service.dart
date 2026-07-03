@@ -55,25 +55,6 @@ class SessionService {
     }
   }
 
-  Future<void> deleteParticipantAndData() async {
-    final participantId = await getCurrentParticipantId();
-
-    if (participantId == null) {
-      throw Exception("No participant logged in");
-    }
-
-    final response = await http.delete(
-      Uri.parse('$baseUrl/participants/me'),
-      headers: {'X-Participant-Id': participantId},
-    );
-
-    if (response.statusCode != 200 && response.statusCode != 204) {
-      throw Exception('Could not delete participant');
-    }
-
-    await logoutParticipant();
-  }
-
   Future<String?> getCurrentParticipantId() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString(_storageKey);

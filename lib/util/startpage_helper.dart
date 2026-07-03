@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/service/session_service.dart';
+import 'package:frontend/util/session.dart';
 import 'package:frontend/view/home_view.dart';
 import 'package:frontend/view/launch_view.dart';
 
@@ -11,7 +11,6 @@ class StartpageHelper extends StatefulWidget {
 }
 
 class _StartpageHelpereState extends State<StartpageHelper> {
-  final SessionService _sessionService = SessionService();
 
   @override
   void initState() {
@@ -20,14 +19,14 @@ class _StartpageHelpereState extends State<StartpageHelper> {
   }
 
   Future<void> _checkSession() async {
-    final id = await _sessionService.getCurrentParticipantId();
+    final id = await session.getCurrentParticipantId();
 
     if (!mounted) return;
 
     if (id != null) {
       try {
         // Prüfe im Backend, ob UUID im Local Storage noch im existiert
-        await _sessionService.loginWithUuid(id);
+        await session.loginWithUuid(id);
 
         if (!mounted) return;
 
@@ -37,7 +36,7 @@ class _StartpageHelpereState extends State<StartpageHelper> {
         );
         return;
       } catch (_) {
-        await _sessionService.logoutParticipant();
+        await session.logoutParticipant();
       }
     }
 
