@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/shared/app_layout.dart';
-import 'package:frontend/shared/custom_appbar.dart';
+import 'package:frontend/shared_components/app_layout.dart';
+import 'package:frontend/shared_components/custom_appbar.dart';
 
-class ContextDataView extends StatelessWidget {
-  const ContextDataView({super.key});
+class QuestionnairesView extends StatelessWidget {
+  const QuestionnairesView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return AppLayout(
       appBar: CustomAppBar(
-        title: "Kontextdaten",
-        color: Colors.green,
+        title: "Fragebögen",
+        color: Colors.deepPurpleAccent,
         nav: true,
       ),
       children: [

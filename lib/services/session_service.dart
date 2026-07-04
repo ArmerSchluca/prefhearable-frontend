@@ -4,18 +4,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:uuid/validation.dart';
 
-/// Service zum Anlegen eines Participants, sobald ein Nutzer "Jetzt loslegen!" geklickt hat.
-/// Dabei wird eine UUID vom Server erzeugt und an den Client geschickt.
-/// SharedPreferences dient dabei als Local Storage, um die UUID als Identifikator zu speichern.
-/// Damit wird sich nach dme Schließen der App solange wieder automatisch angemeldet,
-/// bis sich explizitüber die UI abgemeldet wird.
 class SessionService {
   final String baseUrl = _getBaseUrl();
+  final String storageKey = 'participant_uuid';
 
-  static const String _storageKey = 'participant_uuid';
-
-  /// Fordert bei der ersten Nutzung der App beim Server die Erzeugung einer UUID an,
-  /// die anschließend im Local Storage gespeichert wird
   Future<String> registerParticipant() async {
     final response = await http.post(Uri.parse('$baseUrl/participants'));
 
@@ -57,17 +49,17 @@ class SessionService {
 
   Future<String?> getCurrentParticipantId() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_storageKey);
+    return prefs.getString(storageKey);
   }
 
   Future<void> logoutParticipant() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(_storageKey);
+    await prefs.remove(storageKey);
   }
 
   Future<void> _saveToLocal(String participantId) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_storageKey, participantId);
+    await prefs.setString(storageKey, participantId);
   }
 
   static String _getBaseUrl() {

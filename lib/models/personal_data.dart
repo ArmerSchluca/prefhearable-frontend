@@ -1,18 +1,18 @@
-import 'package:frontend/util/session.dart';
+import 'package:frontend/utils/session.dart';
 
 class PersonalData {
-  int age;
-  Gender gender;
-  Occupation occupation;
-  HearingAided hearingAided;
-  DateTime? hearingAidSince;
-  ResidentialArea residentialArea;
-  PhysicalActivityType physicalActivityType;
-  PhysicalActivityFrequency physicalActivityFrequency;
-  int physicalActivityDuration;
-  Diet diet;
-  List<String> allergies;
-  List<String> diseases;
+  final int age;
+  final Gender gender;
+  final Occupation occupation;
+  final HearingAided hearingAided;
+  final DateTime? hearingAidSince;
+  final ResidentialArea residentialArea;
+  final PhysicalActivityType physicalActivityType;
+  final PhysicalActivityFrequency physicalActivityFrequency;
+  final int physicalActivityDuration;
+  final Diet diet;
+  final List<String> allergies;
+  final List<String> diseases;
 
   PersonalData({
     required this.age,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/shared/inputs.dart';
+import 'package:frontend/shared_components/inputs.dart';
 
 class AppDialog {
   static Future<void> showServerError(BuildContext context) {
@@ -8,8 +8,8 @@ class AppDialog {
       barrierDismissible: false,
       builder: (context) {
         return AlertDialog(
-          title: const Text("Server nicht erreichbar"),
-          content: const Text(
+          title: Text("Server nicht erreichbar"),
+          content: Text(
             "Die Verbindung zum Server konnte nicht hergestellt werden. "
             "Bitte prüfe deine Internetverbindung oder versuche es später erneut.",
           ),
@@ -18,10 +18,7 @@ class AppDialog {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text(
-                "OK",
-                style: TextStyle(color: Colors.blueAccent),
-              ),
+              child: Text("OK", style: TextStyle(color: Colors.blueAccent)),
             ),
           ],
         );
@@ -44,14 +41,14 @@ class AppDialog {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: const Text(
+              child: Text(
                 'Nein',
                 style: TextStyle(color: Colors.blueAccent, fontSize: 18),
               ),
             ),
             TextButton(
               onPressed: () => Navigator.pop(context, true),
-              child: const Text(
+              child: Text(
                 'Ja',
                 style: TextStyle(color: Colors.red, fontSize: 18),
               ),
@@ -70,12 +67,12 @@ class AppDialog {
         return AlertDialog(
           title: title,
           content: SingleChildScrollView(
-            child: Padding(padding: const EdgeInsets.all(10), child: content),
+            child: Padding(padding: EdgeInsets.all(10), child: content),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text(
+              child: Text(
                 'Schließen',
                 style: TextStyle(fontSize: 18, color: Colors.blueAccent),
               ),

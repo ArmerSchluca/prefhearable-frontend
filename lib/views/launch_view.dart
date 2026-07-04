@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/shared/app_dialogs.dart';
-import 'package:frontend/shared/app_layout.dart';
-import 'package:frontend/util/session.dart';
-import 'package:frontend/view/home_view.dart';
-import 'package:frontend/view/login_view.dart';
+import 'package:frontend/shared_components/app_dialogs.dart';
+import 'package:frontend/shared_components/app_layout.dart';
+import 'package:frontend/utils/session.dart';
+import 'package:frontend/views/home_view.dart';
+import 'package:frontend/views/login_view.dart';
 
 class LaunchView extends StatefulWidget {
   const LaunchView({super.key});
@@ -13,7 +13,7 @@ class LaunchView extends StatefulWidget {
 }
 
 class _LaunchViewState extends State<LaunchView> {
-  bool _consentGiven = false;
+  bool consentGiven = false;
 
   @override
   Widget build(BuildContext context) {
@@ -23,18 +23,13 @@ class _LaunchViewState extends State<LaunchView> {
           "Prefhearable...",
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
         ),
-
         SizedBox(height: 10),
-
         Text(
           "ist eine App zur Erforschung individueller Hörpräferenzen. Wir untersuchen, welchen Einfluss Gesundheit und Umgebung auf das Hörverhalten haben. Mit Ihrer Teilnahme unterstützen Sie den Aufbau eines Datensatzes für die zukünftige Forschung und personalisierte Hörversorgung.",
           style: TextStyle(fontSize: 18),
         ),
-
         SizedBox(height: 20),
-
         Text("Vielen Dank für Ihre Teilnahme!", style: TextStyle(fontSize: 18)),
-
         SizedBox(height: 40),
 
         // CONSENT CHECKBOX
@@ -44,10 +39,10 @@ class _LaunchViewState extends State<LaunchView> {
               scale: 1.3,
               child: Checkbox(
                 activeColor: Colors.green,
-                value: _consentGiven,
+                value: consentGiven,
                 onChanged: (value) {
                   setState(() {
-                    _consentGiven = value ?? false;
+                    consentGiven = value ?? false;
                   });
                 },
               ),
@@ -71,7 +66,7 @@ class _LaunchViewState extends State<LaunchView> {
             style: ButtonStyle(
               backgroundColor: WidgetStateProperty.resolveWith<Color>((states) {
                 if (states.contains(WidgetState.disabled)) {
-                  return Colors.grey.shade700;
+                  return Colors.grey;
                 }
                 return Colors.blue;
               }),
@@ -87,7 +82,7 @@ class _LaunchViewState extends State<LaunchView> {
                 ),
               ),
             ),
-            onPressed: _consentGiven
+            onPressed: consentGiven
                 ? () async {
                     try {
                       final id = await session.registerParticipant();
@@ -97,9 +92,7 @@ class _LaunchViewState extends State<LaunchView> {
 
                       Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => const HomeView(),
-                        ),
+                        MaterialPageRoute(builder: (context) => HomeView()),
                       );
                     } catch (e) {
                       AppDialog.showServerError(context);
@@ -107,10 +100,7 @@ class _LaunchViewState extends State<LaunchView> {
                     }
                   }
                 : null,
-            child: const Text(
-              'Jetzt loslegen!',
-              style: TextStyle(fontSize: 20),
-            ),
+            child: Text('Jetzt loslegen!', style: TextStyle(fontSize: 20)),
           ),
         ),
         SizedBox(height: 30),
@@ -124,7 +114,7 @@ class _LaunchViewState extends State<LaunchView> {
             onPressed: () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => const LoginView()),
+                MaterialPageRoute(builder: (context) => LoginView()),
               );
             },
             child: Text(

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/shared/footer.dart';
+import 'package:frontend/shared_components/footer.dart';
 import 'custom_appbar.dart';
 
 class AppLayout extends StatelessWidget {

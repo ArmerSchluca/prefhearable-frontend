@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/util/session.dart';
-import 'package:frontend/view/home_view.dart';
-import 'package:frontend/view/launch_view.dart';
+import 'package:frontend/utils/session.dart';
+import 'package:frontend/views/home_view.dart';
+import 'package:frontend/views/launch_view.dart';
 
 class StartpageHelper extends StatefulWidget {
   const StartpageHelper({super.key});
@@ -11,14 +11,13 @@ class StartpageHelper extends StatefulWidget {
 }
 
 class _StartpageHelpereState extends State<StartpageHelper> {
-
   @override
   void initState() {
     super.initState();
-    _checkSession();
+    checkSession();
   }
 
-  Future<void> _checkSession() async {
+  Future<void> checkSession() async {
     final id = await session.getCurrentParticipantId();
 
     if (!mounted) return;
@@ -32,10 +31,10 @@ class _StartpageHelpereState extends State<StartpageHelper> {
 
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (_) => const HomeView()),
+          MaterialPageRoute(builder: (context) => HomeView()),
         );
         return;
-      } catch (_) {
+      } catch (context) {
         await session.logoutParticipant();
       }
     }
@@ -44,7 +43,7 @@ class _StartpageHelpereState extends State<StartpageHelper> {
 
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (_) => const LaunchView()),
+      MaterialPageRoute(builder: (context) => LaunchView()),
     );
   }
 

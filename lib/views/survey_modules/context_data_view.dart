@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/shared/app_layout.dart';
-import 'package:frontend/shared/custom_appbar.dart';
+import 'package:frontend/shared_components/app_layout.dart';
+import 'package:frontend/shared_components/custom_appbar.dart';
 
-class AudioTestView extends StatelessWidget {
-  const AudioTestView({super.key});
+class ContextDataView extends StatelessWidget {
+  const ContextDataView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return AppLayout(
       appBar: CustomAppBar(
-        title: "Hörtest",
-        color: Colors.pinkAccent,
+        title: "Kontextdaten",
+        color: Colors.green,
         nav: true,
       ),
       children: [

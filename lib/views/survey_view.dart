@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/service/survey_service.dart';
-import 'package:frontend/shared/app_dialogs.dart';
-import 'package:frontend/shared/app_layout.dart';
-import 'package:frontend/shared/custom_appbar.dart';
-import 'package:frontend/shared/footer.dart';
-import 'package:frontend/view/home_view.dart';
-import 'package:frontend/view/survey_modules/audiotest_view.dart';
-import 'package:frontend/view/survey_modules/context_data_view.dart';
-import 'package:frontend/view/survey_modules/person_data_view.dart';
-import 'package:frontend/view/survey_modules/questionnaires_view.dart';
+import 'package:frontend/services/survey_service.dart';
+import 'package:frontend/shared_components/app_dialogs.dart';
+import 'package:frontend/shared_components/app_layout.dart';
+import 'package:frontend/shared_components/custom_appbar.dart';
+import 'package:frontend/shared_components/footer.dart';
+import 'package:frontend/views/home_view.dart';
+import 'package:frontend/views/survey_modules/audiotest_view.dart';
+import 'package:frontend/views/survey_modules/context_data_view.dart';
+import 'package:frontend/views/survey_modules/person_data_view.dart';
+import 'package:frontend/views/survey_modules/questionnaires_view.dart';
 
 class SurveyView extends StatelessWidget {
   const SurveyView({super.key});
@@ -125,10 +125,10 @@ class SurveyView extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const HomeView()),
+                MaterialPageRoute(builder: (context) => HomeView()),
               );
             },
-            child: const Row(
+            child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Icon(Icons.send, size: 24),

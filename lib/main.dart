@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/util/startpage_helper.dart';
+import 'package:frontend/utils/startpage_helper.dart';
 
 void main() {
   runApp(const Main());

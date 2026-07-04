@@ -1,7 +1,7 @@
 class DeviceInformation {
-  String operatingSystem;
-  String model;
-  String audioDevice;
+  final String operatingSystem;
+  final String model;
+  final String audioDevice;
 
   DeviceInformation({
     required this.operatingSystem,

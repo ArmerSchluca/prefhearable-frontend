@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/shared/app_layout.dart';
-import 'package:frontend/shared/custom_appbar.dart';
+import 'package:frontend/shared_components/app_layout.dart';
+import 'package:frontend/shared_components/custom_appbar.dart';
 
 class PersonalDataView extends StatelessWidget {
   const PersonalDataView({super.key});

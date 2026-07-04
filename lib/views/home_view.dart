@@ -1,13 +1,13 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/service/session_service.dart';
-import 'package:frontend/shared/app_dialogs.dart';
-import 'package:frontend/shared/app_layout.dart';
-import 'package:frontend/shared/footer.dart';
-import 'package:frontend/util/session.dart';
-import 'package:frontend/view/launch_view.dart';
-import 'package:frontend/view/previous_surveys_view.dart';
-import 'package:frontend/view/survey_view.dart';
+import 'package:frontend/services/session_service.dart';
+import 'package:frontend/shared_components/app_dialogs.dart';
+import 'package:frontend/shared_components/app_layout.dart';
+import 'package:frontend/shared_components/footer.dart';
+import 'package:frontend/utils/session.dart';
+import 'package:frontend/views/launch_view.dart';
+import 'package:frontend/views/previous_surveys_view.dart';
+import 'package:frontend/views/survey_view.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -55,7 +55,7 @@ class HomeView extends StatelessWidget {
 
               Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (_) => const LaunchView()),
+                MaterialPageRoute(builder: (_) => LaunchView()),
                 (route) => false,
               );
             },
@@ -71,8 +71,8 @@ class HomeView extends StatelessWidget {
             onPressed: () {
               AppDialog.showInfo(
                 context,
-                const Text("Titel"),
-                const Text(
+                Text("Titel"),
+                Text(
                   "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
                 ),
               );
@@ -101,10 +101,10 @@ class HomeView extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const SurveyView()),
+                MaterialPageRoute(builder: (context) => SurveyView()),
               );
             },
-            child: const Row(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(Icons.play_arrow, size: 24),
@@ -134,11 +134,11 @@ class HomeView extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const PreviousSurveysView(),
+                  builder: (context) => PreviousSurveysView(),
                 ),
               );
             },
-            child: const Row(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(Icons.history, size: 24),
@@ -161,12 +161,12 @@ class HomeView extends StatelessWidget {
           elevation: 3,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
           child: Padding(
-            padding: const EdgeInsets.all(30),
+            padding: EdgeInsets.all(30),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
+                Text(
                   "Ihr Zugangscode:",
                   style: TextStyle(
                     fontSize: 18,
@@ -174,24 +174,24 @@ class HomeView extends StatelessWidget {
                   ),
                 ),
 
-                const SizedBox(height: 15),
+                SizedBox(height: 15),
 
                 FutureBuilder<String?>(
                   future: SessionService().getCurrentParticipantId(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
-                      return const Text("Lade...");
+                      return Text("Lade...");
                     }
 
                     final id = snapshot.data;
 
                     if (id == null) {
-                      return const Text("kein Zugangscode vorhanden");
+                      return Text("kein Zugangscode vorhanden");
                     }
 
                     return SelectableText(
                       id,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'monospace',
                         fontSize: 16,
                         color: Colors.blueAccent,
@@ -201,9 +201,8 @@ class HomeView extends StatelessWidget {
                   },
                 ),
 
-                const SizedBox(height: 15),
-
-                const Text(
+                SizedBox(height: 15),
+                Text(
                   "Sichern Sie Ihren Zugangscode, um "
                   "geräteübergreifend auf Ihre Daten zuzugreifen.",
                   style: TextStyle(fontStyle: FontStyle.italic),

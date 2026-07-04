@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/shared/app_dialogs.dart';
-import 'package:frontend/shared/app_layout.dart';
-import 'package:frontend/shared/inputs.dart';
-import 'package:frontend/util/session.dart';
-import 'package:frontend/view/home_view.dart';
-import 'package:frontend/view/launch_view.dart';
+import 'package:frontend/shared_components/app_dialogs.dart';
+import 'package:frontend/shared_components/app_layout.dart';
+import 'package:frontend/shared_components/inputs.dart';
+import 'package:frontend/utils/session.dart';
+import 'package:frontend/views/home_view.dart';
+import 'package:frontend/views/launch_view.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -14,12 +14,12 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-  String _participantId = '';
-  String? _errorMessage;
+  String participantId = '';
+  String? errorMessage;
 
-  Future<void> _login() async {
+  Future<void> login() async {
     try {
-      await session.loginWithUuid(_participantId.trim());
+      await session.loginWithUuid(participantId.trim());
 
       if (!mounted) return;
 
@@ -31,21 +31,21 @@ class _LoginViewState extends State<LoginView> {
       );
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => const HomeView()),
+        MaterialPageRoute(builder: (context) => HomeView()),
       );
     } catch (e) {
       if (!mounted) return;
 
       if (e.toString().contains('INVALID_UUID_FORMAT')) {
         setState(() {
-          _errorMessage = 'Ungültiger Zugangscode: falsches Format!';
+          errorMessage = 'Ungültiger Zugangscode: falsches Format!';
         });
         return;
       }
 
       if (e.toString().contains('PARTICIPANT_NOT_FOUND')) {
         setState(() {
-          _errorMessage = 'Zugangscode nicht gefunden!';
+          errorMessage = 'Zugangscode nicht gefunden!';
         });
         return;
       }
@@ -63,20 +63,20 @@ class _LoginViewState extends State<LoginView> {
   Widget build(BuildContext context) {
     return AppLayout(
       children: [
-        Center(child: const Icon(Icons.fingerprint, size: 150)),
+        Center(child: Icon(Icons.fingerprint, size: 150)),
 
         SizedBox(height: 30),
 
         TextField(
           onChanged: (value) {
-            _participantId = value;
-            _errorMessage = null;
+            participantId = value;
+            errorMessage = null;
           },
           decoration: AppInputs.textField(
             label: "Zugangscode",
             hint: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
             accentColor: Colors.blueAccent,
-            errorText: _errorMessage,
+            errorText: errorMessage,
           ),
         ),
 
@@ -93,17 +93,13 @@ class _LoginViewState extends State<LoginView> {
                 borderRadius: BorderRadius.circular(5),
               ),
             ),
-            onPressed: _login,
-            child: const Text("Anmelden", style: TextStyle(fontSize: 20)),
+            onPressed: login,
+            child: Text("Anmelden", style: TextStyle(fontSize: 20)),
           ),
         ),
-
         SizedBox(height: 30),
-
-        Center(child: const Text("oder", style: TextStyle(fontSize: 16))),
-
+        Center(child: Text("oder", style: TextStyle(fontSize: 16))),
         SizedBox(height: 30),
-
         Center(
           child: TextButton(
             style: ButtonStyle(
@@ -112,10 +108,10 @@ class _LoginViewState extends State<LoginView> {
             onPressed: () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (_) => const LaunchView()),
+                MaterialPageRoute(builder: (context) => LaunchView()),
               );
             },
-            child: const Text(
+            child: Text(
               "zurück zum anmeldefreien Start",
               style: TextStyle(fontSize: 16),
             ),

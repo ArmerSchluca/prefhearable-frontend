@@ -14,13 +14,13 @@ class AppInputs {
 
       floatingLabelStyle: TextStyle(color: accentColor),
 
-      border: const OutlineInputBorder(),
+      border: OutlineInputBorder(),
 
       focusedBorder: OutlineInputBorder(
         borderSide: BorderSide(color: accentColor),
       ),
 
-      enabledBorder: const OutlineInputBorder(
+      enabledBorder: OutlineInputBorder(
         borderSide: BorderSide(color: Colors.grey),
       ),
 
@@ -31,7 +31,7 @@ class AppInputs {
   // DROPDOWN
   static InputDecoration dropdown({required Color accentColor}) {
     return InputDecoration(
-      border: const OutlineInputBorder(),
+      border: OutlineInputBorder(),
       focusedBorder: OutlineInputBorder(
         borderSide: BorderSide(color: accentColor),
       ),
