@@ -7,7 +7,5 @@ class SurveyService {
 
   Future submitSurvey() async {}
 
-  Future<void> _cacheSurveyInputs(String participantId) async {
-    // Falls App abstürzt, man pausieren will oder
-  }
+  Future cacheSurveyInputs(String participantId) async {}
 }

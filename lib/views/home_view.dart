@@ -29,19 +29,19 @@ class HomeView extends StatelessWidget {
             ),
             onPressed: () async {
               final uuid = await session.getCurrentParticipantId();
-
               if (uuid == null) return;
 
+              if (!context.mounted) return;
               final confirmed = await AppDialog.showUuidConfirmation(
                 context,
                 uuid,
                 "Wirklich abmelden? ",
-                "Laufende Umfragen werden abgebrochen! Wenn Sie künftig auf Ihre bisherigen Umfragen zugreifen können möchten, sichern Sie vorher Ihre UUID zur Anmeldung!"
+                "Laufende Umfragen werden abgebrochen! Wenn Sie künftig auf Ihre bisherigen Umfragen zugreifen können möchten, "
+                    " sichern Sie vorher Ihren Zugangscode zur Anmeldung!"
                     " Bitte geben Sie Ihren Zugangscode zur Bestätigung ein.",
               );
 
               if (!confirmed) return;
-
               await session.logoutParticipant();
 
               if (!context.mounted) return;
