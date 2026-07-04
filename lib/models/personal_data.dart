@@ -1,46 +1,46 @@
 import 'package:frontend/utils/session.dart';
 
 class PersonalData {
-  final int age;
-  final Gender gender;
-  final Occupation occupation;
-  final HearingAided hearingAided;
-  final DateTime? hearingAidSince;
-  final ResidentialArea residentialArea;
-  final PhysicalActivityType physicalActivityType;
-  final PhysicalActivityFrequency physicalActivityFrequency;
-  final int physicalActivityDuration;
-  final Diet diet;
-  final List<String> allergies;
-  final List<String> diseases;
+  int? age;
+  Gender? gender;
+  Occupation? occupation;
+  HearingAided? hearingAided;
+  DateTime? hearingAidSince;
+  ResidentialArea? residentialArea;
+  PhysicalActivityType? physicalActivityType;
+  PhysicalActivityFrequency? physicalActivityFrequency;
+  int? physicalActivityDuration;
+  Diet? diet;
+  List<String>? allergies;
+  List<String>? diseases;
 
   PersonalData({
-    required this.age,
-    required this.gender,
-    required this.occupation,
-    required this.hearingAided,
+    this.age,
+    this.gender,
+    this.occupation,
+    this.hearingAided,
     this.hearingAidSince,
-    required this.residentialArea,
-    required this.physicalActivityType,
-    required this.physicalActivityFrequency,
-    required this.physicalActivityDuration,
-    required this.diet,
-    required this.allergies,
-    required this.diseases,
+    this.residentialArea,
+    this.physicalActivityType,
+    this.physicalActivityFrequency,
+    this.physicalActivityDuration,
+    this.diet,
+    this.allergies,
+    this.diseases,
   });
 
   Map<String, dynamic> toJson() => {
     'id': session.getCurrentParticipantId(),
     'age': age,
-    'gender': gender.name,
-    'occupation': occupation.name,
-    'hearingAided': hearingAided.name,
+    'gender': gender?.name,
+    'occupation': occupation?.name,
+    'hearingAided': hearingAided?.name,
     'hearingAidedSince': hearingAidSince?.toIso8601String(),
-    'residentialArea': residentialArea.name,
-    'physicalActivityType': physicalActivityType.name,
-    'physicalActivityFrequency': physicalActivityFrequency.name,
+    'residentialArea': residentialArea?.name,
+    'physicalActivityType': physicalActivityType?.name,
+    'physicalActivityFrequency': physicalActivityFrequency?.name,
     'physicalActivityDuration': physicalActivityDuration,
-    'diet': diet.name,
+    'diet': diet?.name,
     'allergies': allergies,
     'diseases': diseases,
   };

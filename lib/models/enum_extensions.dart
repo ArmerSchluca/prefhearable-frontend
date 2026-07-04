@@ -17,12 +17,10 @@ extension GenderLabel on Gender {
 extension StatusLabel on SectionStatus {
   String get label {
     switch (this) {
-      case SectionStatus.open:
+      case SectionStatus.incomplete:
         return "Offen";
-      case SectionStatus.partial:
-        return "Teilweise";
-      case SectionStatus.completed:
-        return "Abgeschlossen";
+      case SectionStatus.complete:
+        return "Erfasst";
     }
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class AppInputs {
+class AppInputStyles {
   // TEXTFELD
   static InputDecoration textField({
     required String label,
@@ -29,12 +29,29 @@ class AppInputs {
   }
 
   // DROPDOWN
-  static InputDecoration dropdown({required Color accentColor}) {
+  static InputDecoration dropdown({
+    required String label,
+    String? hint,
+    Color accentColor = Colors.blue,
+    String? errorText,
+  }) {
     return InputDecoration(
-      border: OutlineInputBorder(),
+      labelText: label,
+      hintText: hint,
+
+      floatingLabelStyle: TextStyle(color: accentColor),
+
+      border: const OutlineInputBorder(),
+
+      enabledBorder: const OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.grey),
+      ),
+
       focusedBorder: OutlineInputBorder(
         borderSide: BorderSide(color: accentColor),
       ),
+
+      errorText: errorText,
     );
   }
 }

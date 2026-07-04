@@ -72,7 +72,7 @@ class _LoginViewState extends State<LoginView> {
             participantId = value;
             errorMessage = null;
           },
-          decoration: AppInputs.textField(
+          decoration: AppInputStyles.textField(
             label: "Zugangscode",
             hint: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
             accentColor: Colors.blueAccent,

@@ -104,7 +104,7 @@ class AppDialog {
               SizedBox(height: 12),
               TextField(
                 controller: controller,
-                decoration: AppInputs.textField(
+                decoration: AppInputStyles.textField(
                   label: "Zugangscode",
                   hint: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
                   accentColor: Colors.blueAccent,

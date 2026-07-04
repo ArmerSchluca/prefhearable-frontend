@@ -16,6 +16,7 @@ class PreviousSurveysView extends StatelessWidget {
     return AppLayout(
       footer: AppFooter(
         actions: [
+          Spacer(),
           // INFO BUTTON
           TextButton.icon(
             icon: Icon(Icons.info, size: 20, color: Colors.blueGrey),

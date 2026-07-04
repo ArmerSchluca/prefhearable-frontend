@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/models/enum_extensions.dart';
 import 'package:frontend/services/survey_service.dart';
 import 'package:frontend/shared/dialogs.dart';
 import 'package:frontend/shared/layout.dart';
@@ -78,34 +79,34 @@ class SurveyView extends StatelessWidget {
       ),
       children: [
         SectionCard(
-          title: "Personal Data",
+          title: "Personendaten",
           icon: Icon(Icons.person, color: Colors.orange, size: 40),
-          status: SectionStatus.open,
+          status: SectionStatus.incomplete,
           destination: PersonalDataView(),
         ),
         SizedBox(height: 12),
         SectionCard(
-          title: "Contextual Data",
+          title: "Kontextdaten",
           icon: Icon(Icons.public, color: Colors.green, size: 40),
-          status: SectionStatus.open,
+          status: SectionStatus.complete,
           destination: ContextDataView(),
         ),
         SizedBox(height: 12),
         SectionCard(
-          title: "Audio Tests",
+          title: "Hörtests",
           icon: Icon(Icons.headphones, color: Colors.pinkAccent, size: 40),
-          status: SectionStatus.open,
+          status: SectionStatus.complete,
           destination: AudioTestView(),
         ),
         SizedBox(height: 12),
         SectionCard(
-          title: "Questionnaires",
+          title: "Umfragebögen",
           icon: Icon(
             Icons.assignment,
             color: Colors.deepPurpleAccent,
             size: 40,
           ),
-          status: SectionStatus.open,
+          status: SectionStatus.complete,
           destination: QuestionnairesView(),
         ),
 
@@ -115,10 +116,10 @@ class SurveyView extends StatelessWidget {
           child: FilledButton(
             style: FilledButton.styleFrom(
               elevation: 3,
-              backgroundColor: const Color.fromARGB(255, 74, 149, 77),
+              backgroundColor: Colors.blueAccent,
               foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5.0), // eckig
+                borderRadius: BorderRadius.circular(5.0),
               ),
             ),
 
@@ -131,15 +132,15 @@ class SurveyView extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.send, size: 24),
                 SizedBox(width: 5),
                 Padding(
-                  padding: EdgeInsets.all(10),
+                  padding: EdgeInsets.all(15),
                   child: Text(
-                    "Ergebnisse absenden",
+                    "Umfrage abschließen",
                     style: TextStyle(fontSize: 20),
                   ),
                 ),
+                Icon(Icons.send, size: 24),
               ],
             ),
           ),
@@ -149,7 +150,7 @@ class SurveyView extends StatelessWidget {
   }
 }
 
-class SectionCard extends Card {
+class SectionCard extends StatelessWidget {
   final String title;
   final Icon icon;
   final SectionStatus status;
@@ -165,28 +166,30 @@ class SectionCard extends Card {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Card(
-        child: InkWell(
-          splashColor: Colors.blue.withAlpha(30),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => destination),
-            );
-          },
-          child: Column(
-            mainAxisSize: .min,
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.all(5),
-                child: ListTile(
-                  leading: icon,
-                  title: Text(title),
-                  subtitle: Text(status.toString()),
-                ),
-              ),
-            ],
+    return Card(
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        splashColor: Colors.blue.withAlpha(30),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => destination),
+          );
+        },
+        child: Padding(
+          padding: const EdgeInsets.only(top: 15, left: 5, right: 5, bottom: 15),
+          child: ListTile(
+            leading: icon,
+            title: Text(title, style: TextStyle(fontSize: 18)),
+            trailing: Icon(
+              status == SectionStatus.complete
+                  ? Icons.check_circle
+                  : Icons.radio_button_unchecked,
+              color: status == SectionStatus.complete
+                  ? Colors.blue
+                  : Colors.grey,
+              size: 30,
+            ),
           ),
         ),
       ),
@@ -194,4 +197,4 @@ class SectionCard extends Card {
   }
 }
 
-enum SectionStatus { open, partial, completed }
+enum SectionStatus { incomplete, complete }
