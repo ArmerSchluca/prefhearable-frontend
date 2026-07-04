@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/custom_components/input_styles.dart';
+import 'package:frontend/shared/input_styles.dart';
 
 class AppDialog {
   static Future<void> showServerError(BuildContext context) {

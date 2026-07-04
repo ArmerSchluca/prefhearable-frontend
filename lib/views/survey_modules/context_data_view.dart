@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/custom_components/layout.dart';
-import 'package:frontend/custom_components/appbar.dart';
+import 'package:frontend/shared/layout.dart';
+import 'package:frontend/shared/appbar.dart';
 
 class ContextDataView extends StatelessWidget {
   const ContextDataView({super.key});

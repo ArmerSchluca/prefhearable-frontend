@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/custom_components/dialogs.dart';
-import 'package:frontend/custom_components/layout.dart';
-import 'package:frontend/custom_components/appbar.dart';
-import 'package:frontend/custom_components/footer.dart';
+import 'package:frontend/shared/dialogs.dart';
+import 'package:frontend/shared/layout.dart';
+import 'package:frontend/shared/appbar.dart';
+import 'package:frontend/shared/footer.dart';
 import 'package:frontend/views/survey_modules/audiotest_view.dart';
 import 'package:frontend/views/survey_modules/context_data_view.dart';
 import 'package:frontend/views/survey_modules/personal_data_view.dart';

@@ -1,9 +1,9 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/services/session_service.dart';
-import 'package:frontend/custom_components/dialogs.dart';
-import 'package:frontend/custom_components/layout.dart';
-import 'package:frontend/custom_components/footer.dart';
+import 'package:frontend/shared/dialogs.dart';
+import 'package:frontend/shared/layout.dart';
+import 'package:frontend/shared/footer.dart';
 import 'package:frontend/utils/session.dart';
 import 'package:frontend/views/launch_view.dart';
 import 'package:frontend/views/previous_surveys_view.dart';
