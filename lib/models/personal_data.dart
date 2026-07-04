@@ -1,4 +1,4 @@
-import 'package:frontend/utils/session.dart';
+import 'package:frontend/utils/session_instance.dart';
 
 class PersonalData {
   int? age;

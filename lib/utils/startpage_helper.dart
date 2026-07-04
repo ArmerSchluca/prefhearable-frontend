@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/utils/session.dart';
+import 'package:frontend/utils/session_instance.dart';
 import 'package:frontend/views/home_view.dart';
 import 'package:frontend/views/launch_view.dart';
 

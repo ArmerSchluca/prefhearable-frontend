@@ -22,4 +22,6 @@ class Survey {
     'questionnaireData': questionnaireData?.toJson(),
     'audioTestData': audioTestData?.toJson(),
   };
+
+  Map<String, dynamic> fromJson(String json) => {};
 }

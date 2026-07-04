@@ -4,14 +4,20 @@ import 'package:frontend/services/session_service.dart';
 import 'package:frontend/shared/dialogs.dart';
 import 'package:frontend/shared/layout.dart';
 import 'package:frontend/shared/footer.dart';
-import 'package:frontend/utils/session.dart';
+import 'package:frontend/utils/session_instance.dart';
+import 'package:frontend/utils/survey_instance.dart';
 import 'package:frontend/views/launch_view.dart';
 import 'package:frontend/views/previous_surveys_view.dart';
 import 'package:frontend/views/survey_view.dart';
 
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
   const HomeView({super.key});
 
+    @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return AppLayout(
@@ -98,18 +104,33 @@ class HomeView extends StatelessWidget {
               ),
             ),
 
-            onPressed: () {
+            onPressed: () async {
+              if (survey.currentSurvey == null) {
+                await survey.createSurvey();
+                setState(() {});
+              } else {
+                await survey.loadCachedSurvey();
+                setState(() {});
+              }
+
+              if (!context.mounted) return;
+
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => SurveyView()),
+                MaterialPageRoute(builder: (context) => const SurveyView()),
               );
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.play_arrow, size: 24),
+                Icon(survey.currentSurvey != null ? Icons.pause : Icons.play_arrow, size: 24),
                 SizedBox(width: 8),
-                Text("Neue Umfrage starten", style: TextStyle(fontSize: 20)),
+                Text(
+                  survey.currentSurvey != null
+                      ? "Umfrage fortsetzen"
+                      : "Neue Umfrage starten",
+                  style: TextStyle(fontSize: 20),
+                ),
               ],
             ),
           ),

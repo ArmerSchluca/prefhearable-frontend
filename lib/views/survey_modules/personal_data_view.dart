@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/personal_data.dart';
-import 'package:frontend/services/survey_service.dart';
 import 'package:frontend/shared/appbar.dart';
 import 'package:frontend/shared/dialogs.dart';
 import 'package:frontend/shared/footer.dart';
 import 'package:frontend/shared/input_styles.dart';
 import 'package:frontend/shared/layout.dart';
 import 'package:frontend/utils/form_validator.dart';
+import 'package:frontend/utils/survey_instance.dart';
 
 class PersonalDataView extends StatefulWidget {
   const PersonalDataView({super.key});
@@ -103,16 +103,34 @@ class _PersonalDataViewState extends State<PersonalDataView> {
   }
 
   void _savePersonalData() {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
 
-      if (!_formKey.currentState!.validate()) {
-          return;
-      }
+    final personalData = PersonalData(
+      age: int.parse(ageController.text),
+      gender: gender!,
+    );
 
+    /*
       final personalData = PersonalData(
-          age: int.parse(ageController.text),
-          gender: gender!,
-      );
+        age: int.parse(ageController.text),
+        gender: gender!,
+        occupation: occupation!,
+        hearingAided: hearingAided!,
+        hearingAidSince: hearingAidSince,
+        residentialArea: residentialArea!,
+        physicalActivityType: physicalActivityType!,
+        physicalActivityFrequency: physicalActivityFrequency!,
+        physicalActivityDuration: physicalActivityDuration!,
+        diet: diet!,
+        allergies: allergies,
+        diseases: diseases,
+      ); 
+    */
 
-      SurveyService().savePersonalData(personalData);
+    survey.savePersonalData(personalData);
+
+    Navigator.pop(context);
   }
 }

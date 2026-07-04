@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/models/enum_extensions.dart';
-import 'package:frontend/services/survey_service.dart';
 import 'package:frontend/shared/dialogs.dart';
 import 'package:frontend/shared/layout.dart';
 import 'package:frontend/shared/appbar.dart';
 import 'package:frontend/shared/footer.dart';
+import 'package:frontend/utils/survey_instance.dart';
 import 'package:frontend/views/home_view.dart';
 import 'package:frontend/views/survey_modules/audiotest_view.dart';
 import 'package:frontend/views/survey_modules/context_data_view.dart';
@@ -16,8 +15,6 @@ class SurveyView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final SurveyService surveyService = SurveyService();
-
     return AppLayout(
       footer: AppFooter(
         actions: [
@@ -40,7 +37,7 @@ class SurveyView extends StatelessWidget {
               );
 
               if (result == true) {
-                await surveyService.cancelActiveSurvey();
+                await survey.cancelSurvey();
 
                 if (!context.mounted) return;
 

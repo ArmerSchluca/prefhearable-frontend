@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:frontend/utils/base_url.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:uuid/validation.dart';
 
 class SessionService {
-  final String baseUrl = _getBaseUrl();
-  final String storageKey = 'participant_uuid';
+  static final String storageKey = 'participant_uuid';
 
   Future<String> registerParticipant() async {
     final response = await http.post(Uri.parse('$baseUrl/participants'));
@@ -18,7 +18,7 @@ class SessionService {
     final data = jsonDecode(response.body);
     final participantId = data['participantId'] as String;
 
-    await _saveToLocal(participantId);
+    await _cacheId(participantId);
 
     return participantId;
   }
@@ -39,7 +39,7 @@ class SessionService {
         throw Exception("PARTICIPANT_NOT_FOUND");
       }
 
-      await _saveToLocal(participantId);
+      await _cacheId(participantId);
 
       return participantId;
     } on SocketException {
@@ -57,16 +57,8 @@ class SessionService {
     await prefs.remove(storageKey);
   }
 
-  Future<void> _saveToLocal(String participantId) async {
+  Future<void> _cacheId(String participantId) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(storageKey, participantId);
-  }
-
-  static String _getBaseUrl() {
-    if (Platform.isAndroid) {
-      return "http://10.0.2.2:3000";
-    }
-    // Windows / macOS / Linux / iOS / Browser
-    return "http://localhost:3000";
   }
 }
