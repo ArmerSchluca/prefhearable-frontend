@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/shared_components/app_dialogs.dart';
-import 'package:frontend/shared_components/app_layout.dart';
-import 'package:frontend/shared_components/inputs.dart';
+import 'package:frontend/custom_components/dialogs.dart';
+import 'package:frontend/custom_components/layout.dart';
+import 'package:frontend/custom_components/input_styles.dart';
 import 'package:frontend/utils/session.dart';
 import 'package:frontend/views/home_view.dart';
 import 'package:frontend/views/launch_view.dart';

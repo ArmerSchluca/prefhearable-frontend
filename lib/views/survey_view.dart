@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/services/survey_service.dart';
-import 'package:frontend/shared_components/app_dialogs.dart';
-import 'package:frontend/shared_components/app_layout.dart';
-import 'package:frontend/shared_components/custom_appbar.dart';
-import 'package:frontend/shared_components/footer.dart';
+import 'package:frontend/custom_components/dialogs.dart';
+import 'package:frontend/custom_components/layout.dart';
+import 'package:frontend/custom_components/appbar.dart';
+import 'package:frontend/custom_components/footer.dart';
 import 'package:frontend/views/home_view.dart';
 import 'package:frontend/views/survey_modules/audiotest_view.dart';
 import 'package:frontend/views/survey_modules/context_data_view.dart';
-import 'package:frontend/views/survey_modules/person_data_view.dart';
+import 'package:frontend/views/survey_modules/personal_data_view.dart';
 import 'package:frontend/views/survey_modules/questionnaires_view.dart';
 
 class SurveyView extends StatelessWidget {
