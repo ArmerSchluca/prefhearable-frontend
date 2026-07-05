@@ -11,8 +11,23 @@ class PersonalData {
   PhysicalActivityFrequency? physicalActivityFrequency;
   int? physicalActivityDuration;
   Diet? diet;
-  List<String>? allergies;
-  List<String>? diseases;
+  String? allergies;
+  String? diseases;
+
+  // Zum Abfragen des Status, ob alle Felder ausgefüllt
+  bool get isComplete =>
+      age != null &&
+      gender != null &&
+      occupation != null &&
+      hearingAided != null &&
+      hearingAidSince != null &&
+      residentialArea != null &&
+      physicalActivityType != null &&
+      physicalActivityFrequency != null &&
+      physicalActivityDuration != null &&
+      diet != null &&
+      allergies != null &&
+      diseases != null;
 
   PersonalData({
     this.age,

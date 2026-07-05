@@ -88,21 +88,27 @@ class SurveyView extends StatelessWidget {
         SectionCard(
           title: "Personendaten",
           icon: Icon(Icons.person, color: Colors.orange, size: 40),
-          status: SectionStatus.incomplete,
+          status: survey.currentSurvey!.isPersonalDataComplete
+              ? SectionStatus.complete
+              : SectionStatus.incomplete,
           destination: PersonalDataView(),
         ),
         SizedBox(height: 12),
         SectionCard(
           title: "Kontextdaten",
           icon: Icon(Icons.public, color: Colors.green, size: 40),
-          status: SectionStatus.complete,
+          status: survey.currentSurvey!.isContextDataComplete
+              ? SectionStatus.complete
+              : SectionStatus.incomplete,
           destination: ContextDataView(),
         ),
         SizedBox(height: 12),
         SectionCard(
           title: "Hörtests",
           icon: Icon(Icons.headphones, color: Colors.pinkAccent, size: 40),
-          status: SectionStatus.complete,
+          status: survey.currentSurvey!.isAudioTestDataComplete
+              ? SectionStatus.complete
+              : SectionStatus.incomplete,
           destination: AudioTestView(),
         ),
         SizedBox(height: 12),
@@ -113,7 +119,9 @@ class SurveyView extends StatelessWidget {
             color: Colors.deepPurpleAccent,
             size: 40,
           ),
-          status: SectionStatus.complete,
+          status: survey.currentSurvey!.isQuestionnaireDataComplete
+              ? SectionStatus.complete
+              : SectionStatus.incomplete,
           destination: QuestionnairesView(),
         ),
 
@@ -131,10 +139,23 @@ class SurveyView extends StatelessWidget {
             ),
 
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => HomeView()),
-              );
+              survey.currentSurvey!.isComplete
+                  ? {
+                      survey.submitSurvey(),
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => HomeView()),
+                      ),
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            "Daten übermittelt! Vielen Dank für die Teilnahme",
+                          ),
+                          backgroundColor: Colors.green,
+                        ),
+                      ),
+                    }
+                  : null;
             },
             child: Row(
               mainAxisSize: MainAxisSize.min,

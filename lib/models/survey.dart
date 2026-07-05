@@ -24,4 +24,22 @@ class Survey {
   };
 
   Map<String, dynamic> fromJson(String json) => {};
+
+  bool get isComplete =>
+      isPersonalDataComplete &&
+      isContextDataComplete &&
+      isAudioTestDataComplete &&
+      isQuestionnaireDataComplete;
+
+  bool get isPersonalDataComplete =>
+      personalData != null && personalData!.isComplete;
+
+  bool get isContextDataComplete =>
+      contextData != null && contextData!.isComplete;
+
+  bool get isAudioTestDataComplete =>
+      audioTestData != null && audioTestData!.isComplete;
+
+  bool get isQuestionnaireDataComplete =>
+      questionnaireData != null && questionnaireData!.isComplete;
 }
