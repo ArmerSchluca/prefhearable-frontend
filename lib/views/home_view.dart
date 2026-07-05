@@ -13,7 +13,7 @@ import 'package:frontend/views/survey_view.dart';
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
 
-    @override
+  @override
   State<HomeView> createState() => _HomeViewState();
 }
 
@@ -90,7 +90,7 @@ class _HomeViewState extends State<HomeView> {
       // INHALT DER SEITE
       children: [
         SizedBox(height: 20),
-        // NEUE UMFRAGEN BUTTOM
+        // NEUE UMFRAGEN BUTTON
         SizedBox(
           width: double.infinity,
           height: 80,
@@ -106,8 +106,14 @@ class _HomeViewState extends State<HomeView> {
 
             onPressed: () async {
               if (survey.currentSurvey == null) {
-                await survey.createSurvey();
+                await survey.startSurvey();
                 setState(() {});
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("Umfrage gestartet!"),
+                    backgroundColor: Colors.green,
+                  ),
+                );
               } else {
                 await survey.loadCachedSurvey();
                 setState(() {});
@@ -123,7 +129,10 @@ class _HomeViewState extends State<HomeView> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(survey.currentSurvey != null ? Icons.pause : Icons.play_arrow, size: 24),
+                Icon(
+                  survey.currentSurvey != null ? Icons.pause : Icons.play_arrow,
+                  size: 24,
+                ),
                 SizedBox(width: 8),
                 Text(
                   survey.currentSurvey != null

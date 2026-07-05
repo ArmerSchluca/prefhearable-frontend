@@ -12,13 +12,17 @@ class SurveyService {
   Survey? currentSurvey;
   String storageKey = 'current_survey';
 
-  Future<void> createSurvey() async {
+  Future<void> startSurvey() async {
     currentSurvey = Survey();
     debugPrint("SURVEY_CREATED");
     //await _cacheSurvey(currentSurvey!);
   }
 
-  Future<void> cancelSurvey() async {}
+  Future<void> cancelSurvey() async {
+    currentSurvey = null;
+
+    _clearCache();
+  }
 
   Future<void> submitSurvey() async {
     final participantId = await session.getCurrentParticipantId();
@@ -66,5 +70,10 @@ class SurveyService {
   Future<void> _cacheSurvey(Survey survey) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(storageKey, jsonEncode(survey.toJson()));
+  }
+
+  Future<void> _clearCache() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(storageKey);
   }
 }

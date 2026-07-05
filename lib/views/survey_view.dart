@@ -38,13 +38,20 @@ class SurveyView extends StatelessWidget {
 
               if (result == true) {
                 await survey.cancelSurvey();
+                debugPrint("SURVEY_CANCELT");
 
                 if (!context.mounted) return;
 
                 Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (_) => const HomeView()),
+                  MaterialPageRoute(builder: (context) => const HomeView()),
                   (route) => false,
+                );
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("Umfrage abbgebrochen!"),
+                    backgroundColor: Colors.green,
+                  ),
                 );
               }
             },
@@ -62,7 +69,10 @@ class SurveyView extends StatelessWidget {
                 context,
                 const Text("Infos zur Umfrage"),
                 const Text(
-                  "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
+                  "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut "
+                  "labore et dolore magna aliquyam erat, sed diam voluptua.At vero eos et accusam et justo duo dolores et ea rebum. "
+                  "Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. "
+                  "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore",
                 ),
               );
             },
@@ -174,7 +184,12 @@ class SectionCard extends StatelessWidget {
           );
         },
         child: Padding(
-          padding: const EdgeInsets.only(top: 15, left: 5, right: 5, bottom: 15),
+          padding: const EdgeInsets.only(
+            top: 15,
+            left: 5,
+            right: 5,
+            bottom: 15,
+          ),
           child: ListTile(
             leading: icon,
             title: Text(title, style: TextStyle(fontSize: 18)),

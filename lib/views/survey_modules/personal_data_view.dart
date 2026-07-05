@@ -28,6 +28,18 @@ class _PersonalDataViewState extends State<PersonalDataView> {
         title: "Personendaten",
         color: Colors.orange,
         nav: true,
+        onBackPressed: () {
+          if (_formKey.currentState!.validate()) {
+            _savePersonalData();
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text("Bitte überprüfen Sie Ihre Eingaben."),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+        },
       ),
       footer: AppFooter(
         actions: [
