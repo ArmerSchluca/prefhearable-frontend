@@ -10,27 +10,24 @@ class PersonalData {
   ResidentialArea? residentialArea;
   PhysicalActivityType? physicalActivityType;
   PhysicalActivityFrequency? physicalActivityFrequency;
-  int? physicalActivityDuration;
+  PhysicalActivityDuration? physicalActivityDuration;
   Diet? diet;
-  String? allergies;
-  String? diseases;
+  List<String>? allergies;
+  List<String>? diseases;
 
   // Zum Abfragen des Status, ob alle Felder ausgefüllt
   bool get isComplete =>
       InputValidator.validateAge(age) == null &&
       gender != null &&
-      occupation != null;
-  /*&&
+      occupation != null &&
       hearingAided != null &&
-      hearingAidSince != null &&
+      hearingAidDuration != null &&
       residentialArea != null &&
       physicalActivityType != null &&
       physicalActivityFrequency != null &&
       physicalActivityDuration != null &&
-      diet != null &&
-      allergies != null &&
-      diseases != null;
-      */
+      diet != null;
+      // allergies und diseases nicht verpflichtend
 
   PersonalData({
     this.age,
@@ -217,41 +214,18 @@ extension PhysicalActivityFrequencyLabel on PhysicalActivityFrequency {
   }
 }
 
-// Zum Anzeigen in der UI
-extension PhysicalActivityDurationLabel on PhysicalActivityDuration {
-  String get label {
-    switch (this) {
-      case PhysicalActivityDuration.min30:
-        return "30 Minuten";
-      case PhysicalActivityDuration.min60:
-        return "60 Minuten";
-      case PhysicalActivityDuration.min90:
-        return "90 Minuten";
-      case PhysicalActivityDuration.min120:
-        return "120 Minuten";
-      case PhysicalActivityDuration.min150:
-        return "150 Minuten";
-      case PhysicalActivityDuration.min180:
-        return "180 Minuten";
-    }
-  }
+extension PhysicalActivityDurationExtension on PhysicalActivityDuration {
+  String get label => "$minutes Minuten";
 
-  // Zum Speichern der Werte
   int get minutes {
-    switch (this) {
-      case PhysicalActivityDuration.min30:
-        return 30;
-      case PhysicalActivityDuration.min60:
-        return 60;
-      case PhysicalActivityDuration.min90:
-        return 90;
-      case PhysicalActivityDuration.min120:
-        return 120;
-      case PhysicalActivityDuration.min150:
-        return 150;
-      case PhysicalActivityDuration.min180:
-        return 180;
-    }
+    return switch (this) {
+      PhysicalActivityDuration.min30 => 30,
+      PhysicalActivityDuration.min60 => 60,
+      PhysicalActivityDuration.min90 => 90,
+      PhysicalActivityDuration.min120 => 120,
+      PhysicalActivityDuration.min150 => 150,
+      PhysicalActivityDuration.min180 => 180,
+    };
   }
 }
 

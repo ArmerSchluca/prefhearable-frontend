@@ -28,10 +28,10 @@ class _PersonalDataViewState extends State<PersonalDataView> {
   ResidentialArea? residentialArea;
   PhysicalActivityType? physicalActivityType;
   PhysicalActivityFrequency? physicalActivityFrequency;
-  int? physicalActivityDuration;
+  PhysicalActivityDuration? physicalActivityDuration;
   Diet? diet;
-  String? allergies;
-  String? diseases;
+  final allergiesController = TextEditingController();
+  final diseasesController = TextEditingController();
 
   // Hier werden die Felder mit den bereits gespeicherten Daten befüllt
   @override
@@ -51,8 +51,8 @@ class _PersonalDataViewState extends State<PersonalDataView> {
       physicalActivityFrequency = personalData.physicalActivityFrequency;
       physicalActivityDuration = personalData.physicalActivityDuration;
       diet = personalData.diet;
-      allergies = personalData.allergies;
-      diseases = personalData.diseases;
+      allergiesController.text = personalData.allergies?.join(", ") ?? "";
+      diseasesController.text = personalData.diseases?.join(", ") ?? "";
     }
   }
 
@@ -107,6 +107,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
           key: _formKey,
           child: Column(
             children: [
+              // ALTER (age)
               TextFormField(
                 controller: ageController,
                 keyboardType: TextInputType.number,
@@ -175,6 +176,228 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                 },
               ),
               SizedBox(height: 30),
+
+              // HÖRGERÄTE JA/NEIN (hearingAided)
+              DropdownButtonFormField<HearingAided>(
+                decoration: AppInputStyles.dropdown(
+                  label: "Nutzung von Hörgeräten",
+                  hint: "Bitte angeben, ob Sie Hörgeräte nutzen.",
+                  accentColor: Colors.orange,
+                ),
+                initialValue: hearingAided,
+                items: HearingAided.values.map((hearingAided) {
+                  return DropdownMenuItem(
+                    value: hearingAided,
+                    child: Text(hearingAided.label),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    hearingAided = value;
+                  });
+                },
+                validator: (value) {
+                  if (value == null) {
+                    return "Bitte Hörgerätenutzung auswählen";
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 30),
+
+              // HÖRGERÄTE NUTZUNGSZEITRAUM (hearingAidDuration)
+              DropdownButtonFormField<HearingAidDuration>(
+                decoration: AppInputStyles.dropdown(
+                  label: "Zeitraum der Hörgerätenutzung",
+                  hint: "Bitte angeben, seit wann Sie Hörgeräte tragen.",
+                  accentColor: Colors.orange,
+                ),
+                initialValue: hearingAidDuration,
+                items: HearingAidDuration.values.map((hearingAidDuration) {
+                  return DropdownMenuItem(
+                    value: hearingAidDuration,
+                    child: Text(hearingAidDuration.label),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    hearingAidDuration = value;
+                  });
+                },
+                validator: (value) {
+                  if (value == null) {
+                    return "Bitte Zeitraum auswählen";
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 30),
+
+              // WOHNRAUM (residentialArea)
+              DropdownButtonFormField<ResidentialArea>(
+                decoration: AppInputStyles.dropdown(
+                  label: "Wohnraum",
+                  hint: "Bitte Wohnraum auswählen",
+                  accentColor: Colors.orange,
+                ),
+                initialValue: residentialArea,
+                items: ResidentialArea.values.map((residentialArea) {
+                  return DropdownMenuItem(
+                    value: residentialArea,
+                    child: Text(residentialArea.label),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    residentialArea = value;
+                  });
+                },
+                validator: (value) {
+                  if (value == null) {
+                    return "Bitte Wohnraum auswählen";
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 30),
+
+              // SPORT ART (physicalActivityType)
+              DropdownButtonFormField<PhysicalActivityType>(
+                decoration: AppInputStyles.dropdown(
+                  label: "Sportart",
+                  hint: "Bitte Sportart auswählen",
+                  accentColor: Colors.orange,
+                ),
+                initialValue: physicalActivityType,
+                items: PhysicalActivityType.values.map((physicalActivityType) {
+                  return DropdownMenuItem(
+                    value: physicalActivityType,
+                    child: Text(physicalActivityType.label),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    physicalActivityType = value;
+                  });
+                },
+                validator: (value) {
+                  if (value == null) {
+                    return "Bitte Sportart auswählen";
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 30),
+
+              // SPORT FREQUENZ (physicalActivityFrequency)
+              DropdownButtonFormField<PhysicalActivityFrequency>(
+                decoration: AppInputStyles.dropdown(
+                  label: "Häufigkeit des Sportmachens",
+                  hint: "Bitte Häufigkeit des Sportmachens auswählen",
+                  accentColor: Colors.orange,
+                ),
+                initialValue: physicalActivityFrequency,
+                items: PhysicalActivityFrequency.values.map((
+                  physicalActivityFrequency,
+                ) {
+                  return DropdownMenuItem(
+                    value: physicalActivityFrequency,
+                    child: Text(physicalActivityFrequency.label),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    physicalActivityFrequency = value;
+                  });
+                },
+                validator: (value) {
+                  if (value == null) {
+                    return "Bitte Häufigkeit auswählen";
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 30),
+
+              // SPORT DAUER (physicalActivityDuration)
+              DropdownButtonFormField<PhysicalActivityDuration>(
+                decoration: AppInputStyles.dropdown(
+                  label: "Dauer einer Sporteinheit",
+                  hint: "Bitte Dauer einer Sporteinheit auswählen",
+                  accentColor: Colors.orange,
+                ),
+                initialValue: physicalActivityDuration,
+                items: PhysicalActivityDuration.values.map((
+                  physicalActivityDuration,
+                ) {
+                  return DropdownMenuItem(
+                    value: physicalActivityDuration,
+                    child: Text(physicalActivityDuration.label),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    physicalActivityDuration = value;
+                  });
+                },
+                validator: (value) {
+                  if (value == null) {
+                    return "Bitte Dauer einer Sporteinheit auswählen";
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 30),
+
+              // ERNÄHRUNG (diet)
+              DropdownButtonFormField<Diet>(
+                decoration: AppInputStyles.dropdown(
+                  label: "Ernährung",
+                  hint: "Bitte Ernährungsweise auswählen",
+                  accentColor: Colors.orange,
+                ),
+                initialValue: diet,
+                items: Diet.values.map((diet) {
+                  return DropdownMenuItem(value: diet, child: Text(diet.label));
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    diet = value;
+                  });
+                },
+                validator: (value) {
+                  if (value == null) {
+                    return "Bitte Ernährungsweise auswählen";
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 30),
+
+              // ALLERGIEN (allergies)
+              TextFormField(
+                controller: allergiesController,
+                keyboardType: TextInputType.number,
+                decoration: AppInputStyles.textField(
+                  label: "Allergien",
+                  hint: "Mit Komma trennen: Pollen, Nüssen, ...",
+                  accentColor: Colors.orange,
+                ),
+                validator: (_) => null,
+              ),
+              SizedBox(height: 30),
+
+              // VORERKRANKUNGEN (diseases)
+              TextFormField(
+                controller: allergiesController,
+                keyboardType: TextInputType.number,
+                decoration: AppInputStyles.textField(
+                  label: "(Vor-)Erkrankungen",
+                  hint: "Mit Komma trennen: Diabetes, Asthma, ...",
+                  accentColor: Colors.orange,
+                ),
+                validator: (_) => null,
+              ),
             ],
           ),
         ),
@@ -195,8 +418,17 @@ class _PersonalDataViewState extends State<PersonalDataView> {
       physicalActivityFrequency: physicalActivityFrequency,
       physicalActivityDuration: physicalActivityDuration,
       diet: diet,
-      allergies: allergies,
-      diseases: diseases,
+      // Macht aus den Kommagetrennten Einträgen Listenobjekte
+      allergies: allergiesController.text
+          .split(RegExp(r'[,;\n]'))
+          .map((e) => e.trim())
+          .where((e) => e.isNotEmpty)
+          .toList(),
+      diseases: diseasesController.text
+          .split(RegExp(r'[,;\n]'))
+          .map((e) => e.trim())
+          .where((e) => e.isNotEmpty)
+          .toList(),
     );
 
     await survey.savePersonalData(personalData);

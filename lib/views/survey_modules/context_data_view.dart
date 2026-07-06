@@ -57,7 +57,14 @@ class _ContextDataViewState extends State<ContextDataView> {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text("Es wurden noch nicht alle Felder ausgefüllt!"),
-                backgroundColor: Colors.orange,
+                backgroundColor: Colors.grey,
+              ),
+            );
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text("Personendaten erfasst!"),
+                backgroundColor: Colors.green,
               ),
             );
           }

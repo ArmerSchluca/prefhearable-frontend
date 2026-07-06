@@ -17,48 +17,6 @@ class _LoginViewState extends State<LoginView> {
   String participantId = '';
   String? errorMessage;
 
-  Future<void> login() async {
-    try {
-      await session.loginWithUuid(participantId.trim());
-
-      if (!mounted) return;
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Anmeldung erfolgreich!"),
-          backgroundColor: Colors.green,
-        ),
-      );
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => HomeView()),
-      );
-    } catch (e) {
-      if (!mounted) return;
-
-      if (e.toString().contains('INVALID_UUID_FORMAT')) {
-        setState(() {
-          errorMessage = 'Ungültiger Zugangscode: falsches Format!';
-        });
-        return;
-      }
-
-      if (e.toString().contains('PARTICIPANT_NOT_FOUND')) {
-        setState(() {
-          errorMessage = 'Zugangscode nicht gefunden!';
-        });
-        return;
-      }
-
-      if (e.toString().contains('SERVER_UNREACHABLE')) {
-        await AppDialog.showServerError(context);
-        return;
-      }
-
-      await AppDialog.showServerError(context);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return AppLayout(
@@ -119,5 +77,47 @@ class _LoginViewState extends State<LoginView> {
         ),
       ],
     );
+  }
+
+  Future<void> login() async {
+    try {
+      await session.loginWithUuid(participantId.trim());
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Anmeldung erfolgreich!"),
+          backgroundColor: Colors.green,
+        ),
+      );
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomeView()),
+      );
+    } catch (e) {
+      if (!mounted) return;
+
+      if (e.toString().contains('INVALID_UUID_FORMAT')) {
+        setState(() {
+          errorMessage = 'Ungültiger Zugangscode: falsches Format!';
+        });
+        return;
+      }
+
+      if (e.toString().contains('PARTICIPANT_NOT_FOUND')) {
+        setState(() {
+          errorMessage = 'Zugangscode nicht gefunden!';
+        });
+        return;
+      }
+
+      if (e.toString().contains('SERVER_UNREACHABLE')) {
+        await AppDialog.showServerError(context);
+        return;
+      }
+
+      await AppDialog.showServerError(context);
+    }
   }
 }
