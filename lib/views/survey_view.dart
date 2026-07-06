@@ -10,9 +10,14 @@ import 'package:frontend/views/survey_modules/context_data_view.dart';
 import 'package:frontend/views/survey_modules/personal_data_view.dart';
 import 'package:frontend/views/survey_modules/questionnaires_view.dart';
 
-class SurveyView extends StatelessWidget {
+class SurveyView extends StatefulWidget {
   const SurveyView({super.key});
 
+  @override
+  State<SurveyView> createState() => _SurveyViewState();
+}
+
+class _SurveyViewState extends State<SurveyView> {
   @override
   Widget build(BuildContext context) {
     return AppLayout(
@@ -91,7 +96,16 @@ class SurveyView extends StatelessWidget {
           status: survey.currentSurvey!.isPersonalDataComplete
               ? SectionStatus.complete
               : SectionStatus.incomplete,
-          destination: PersonalDataView(),
+          onTap: () async {
+            await Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const PersonalDataView()),
+            );
+
+            if (!mounted) return;
+
+            setState(() {});
+          },
         ),
         SizedBox(height: 12),
         SectionCard(
@@ -100,7 +114,16 @@ class SurveyView extends StatelessWidget {
           status: survey.currentSurvey!.isContextDataComplete
               ? SectionStatus.complete
               : SectionStatus.incomplete,
-          destination: ContextDataView(),
+          onTap: () async {
+            await Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const ContextDataView()),
+            );
+
+            if (!mounted) return;
+
+            setState(() {});
+          },
         ),
         SizedBox(height: 12),
         SectionCard(
@@ -109,7 +132,16 @@ class SurveyView extends StatelessWidget {
           status: survey.currentSurvey!.isAudioTestDataComplete
               ? SectionStatus.complete
               : SectionStatus.incomplete,
-          destination: AudioTestView(),
+          onTap: () async {
+            await Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const AudioTestView()),
+            );
+
+            if (!mounted) return;
+
+            setState(() {});
+          },
         ),
         SizedBox(height: 12),
         SectionCard(
@@ -122,41 +154,55 @@ class SurveyView extends StatelessWidget {
           status: survey.currentSurvey!.isQuestionnaireDataComplete
               ? SectionStatus.complete
               : SectionStatus.incomplete,
-          destination: QuestionnairesView(),
+          onTap: () async {
+            await Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const QuestionnairesView()),
+            );
+
+            if (!mounted) return;
+
+            setState(() {});
+          },
         ),
 
         SizedBox(height: 50),
 
+        //  SUBMIT BUTTON
         Center(
           child: FilledButton(
+            onPressed: survey.currentSurvey!.isComplete
+                ? () async {
+                    await survey.submitSurvey();
+
+                    if (!mounted) return;
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const HomeView()),
+                    );
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          "Daten übermittelt! Vielen Dank für die Teilnahme",
+                        ),
+                        backgroundColor: Colors.green,
+                      ),
+                    );
+                  }
+                : null,
             style: FilledButton.styleFrom(
               elevation: 3,
-              backgroundColor: Colors.blueAccent,
+              backgroundColor: Colors.blue,
               foregroundColor: Colors.white,
+              disabledBackgroundColor: Colors.grey,
+              disabledForegroundColor: Colors.grey.shade300,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(5.0),
               ),
             ),
 
-            onPressed: () {
-              survey.currentSurvey!.isComplete
-                  ? {
-                      survey.submitSurvey(),
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => HomeView()),
-                      ),
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            "Daten übermittelt! Vielen Dank für die Teilnahme",
-                          ),
-                          backgroundColor: Colors.green,
-                        ),
-                      ),
-                    }
-                  : null;
-            },
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -182,14 +228,14 @@ class SectionCard extends StatelessWidget {
   final String title;
   final Icon icon;
   final SectionStatus status;
-  final Widget destination;
+  final VoidCallback onTap;
 
   const SectionCard({
     super.key,
     required this.title,
     required this.icon,
     required this.status,
-    required this.destination,
+    required this.onTap,
   });
 
   @override
@@ -198,12 +244,7 @@ class SectionCard extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
         splashColor: Colors.blue.withAlpha(30),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => destination),
-          );
-        },
+        onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.only(
             top: 15,
@@ -231,3 +272,14 @@ class SectionCard extends StatelessWidget {
 }
 
 enum SectionStatus { incomplete, complete }
+
+extension StatusLabel on SectionStatus {
+  String get label {
+    switch (this) {
+      case SectionStatus.incomplete:
+        return "Offen";
+      case SectionStatus.complete:
+        return "Erfasst";
+    }
+  }
+}

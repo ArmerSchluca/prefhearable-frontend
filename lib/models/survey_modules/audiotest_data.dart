@@ -1,5 +1,7 @@
 class AudioTestData {
-  int age;
+  int? age;
+
+  bool get isComplete => age != null;
 
   AudioTestData({required this.age});
 

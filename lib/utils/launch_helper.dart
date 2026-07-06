@@ -2,22 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:frontend/utils/session_instance.dart';
 import 'package:frontend/views/home_view.dart';
 import 'package:frontend/views/launch_view.dart';
+import 'package:frontend/utils/base_url.dart';
+import 'package:http/http.dart' as http;
 
-class StartpageHelper extends StatefulWidget {
-  const StartpageHelper({super.key});
+class LaunchHelper extends StatefulWidget {
+  const LaunchHelper({super.key});
 
   @override
-  State<StartpageHelper> createState() => _StartpageHelpereState();
+  State<LaunchHelper> createState() => _LaunchHelperState();
 }
 
-class _StartpageHelpereState extends State<StartpageHelper> {
+class _LaunchHelperState extends State<LaunchHelper> {
   @override
   void initState() {
     super.initState();
-    checkSession();
+    _checkServerConnection();
+    _checkSession();
   }
 
-  Future<void> checkSession() async {
+  Future<void> _checkSession() async {
     final id = await session.getCurrentParticipantId();
 
     if (!mounted) return;
@@ -50,5 +53,15 @@ class _StartpageHelpereState extends State<StartpageHelper> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(body: Center(child: CircularProgressIndicator()));
+  }
+
+  Future<void> _checkServerConnection() async {
+    final response = await http.get(Uri.parse('$baseUrl/health'));
+
+    if (response.statusCode != 200) {
+      throw Exception("SERVER_CONNECTION_FAILED");
+    }
+
+    debugPrint('SERVER_CONNECTION_SUCCESSFUL');
   }
 }

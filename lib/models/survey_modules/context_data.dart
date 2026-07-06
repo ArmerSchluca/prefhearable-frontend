@@ -8,7 +8,6 @@ class ContextData {
   DateTime? timestamp;
   String? weather;
 
-  // Zum Abfragen des Status, ob alle Felder ausgefüllt
   bool get isComplete =>
       latitude != null &&
       longitude != null &&

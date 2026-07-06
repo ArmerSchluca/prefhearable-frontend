@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/utils/startpage_helper.dart';
+import 'package:frontend/utils/launch_helper.dart';
 
 void main() {
   runApp(const Main());
@@ -10,10 +10,6 @@ class Main extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      
-      debugShowCheckedModeBanner: false,
-      home: StartpageHelper(),
-    );
+    return MaterialApp(debugShowCheckedModeBanner: false, home: LaunchHelper());
   }
 }

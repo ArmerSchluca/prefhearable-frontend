@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/models/enum_labels.dart';
-import 'package:frontend/models/personal_data.dart';
+import 'package:frontend/models/survey_modules/context_data.dart';
 import 'package:frontend/shared/appbar.dart';
 import 'package:frontend/shared/dialogs.dart';
 import 'package:frontend/shared/footer.dart';
@@ -16,33 +15,33 @@ class ContextDataView extends StatefulWidget {
 }
 
 class _ContextDataViewState extends State<ContextDataView> {
-  // Zum Mappen der Felder auf das Formular
   final _formKey = GlobalKey<FormState>();
 
-  // TextEditingController observiert die Eingabe und speichert den aktuellen den Wert automatisch
-  final ageController = TextEditingController();
-  Gender? gender;
-  Occupation? occupation;
-  HearingAided? hearingAided;
-  DateTime? hearingAidSince;
-  ResidentialArea? residentialArea;
-  PhysicalActivityType? physicalActivityType;
-  PhysicalActivityFrequency? physicalActivityFrequency;
-  int? physicalActivityDuration;
-  Diet? diet;
-  String? allergies;
-  String? diseases;
+  double? latitude;
+  double? longitude;
+  LocationType? locationType;
+  String? climateZone;
+  Season? season;
+  double? noiseLevel;
+  DateTime? timestamp;
+  String? weather;
 
   // Hier werden die Felder mit den bereits gespeicherten Daten befüllt
   @override
   void initState() {
     super.initState();
 
-    final personalData = survey.currentSurvey?.personalData;
+    final contextData = survey.currentSurvey?.contextData;
 
-    if (personalData != null) {
-      ageController.text = personalData.age.toString();
-      gender = personalData.gender;
+    if (contextData != null) {
+      latitude = latitude;
+      longitude = longitude;
+      locationType = locationType;
+      climateZone = climateZone;
+      season = season;
+      noiseLevel = noiseLevel;
+      timestamp = timestamp;
+      weather = weather;
     }
   }
 
@@ -50,20 +49,20 @@ class _ContextDataViewState extends State<ContextDataView> {
   Widget build(BuildContext context) {
     return AppLayout(
       appBar: CustomAppBar(
-        title: "Personendaten",
-        color: Colors.orange,
+        title: "Kontextdaten",
+        color: Colors.green,
         nav: true,
         onBackPressed: () {
-          if (_formKey.currentState!.validate()) {
-            _savePersonalData();
-          } else {
+          if (!_formKey.currentState!.validate()) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
-                content: Text("Bitte überprüfen Sie Ihre Eingaben."),
-                backgroundColor: Colors.red,
+                content: Text("Es wurden noch nicht alle Felder ausgefüllt!"),
+                backgroundColor: Colors.orange,
               ),
             );
           }
+          _saveContextData();
+          Navigator.pop(context);
         },
       ),
       footer: AppFooter(
@@ -83,87 +82,21 @@ class _ContextDataViewState extends State<ContextDataView> {
         ],
       ),
       children: [
+        Center(child: Icon(Icons.public, size: 150, color: Colors.green)),
+        SizedBox(height: 30),
         Form(
           key: _formKey,
           child: Column(
             children: [
-              // ALTER (age)
+              // LÄNGENGRAD (latitude)
               TextFormField(
-                controller: ageController,
                 keyboardType: TextInputType.number,
                 decoration: AppInputStyles.textField(
-                  label: "Alter",
-                  hint: "z. B. 25",
-                  accentColor: Colors.orange,
+                  label: "Längengrad",
+                  hint: "",
+                  accentColor: Colors.green,
                 ),
-                validator: (value) {
-                  if (value != null) {
-                    final number = int.tryParse(value);
-
-                    if (number != null && number <= 0) {
-                      return "Bitte eine positive Ganzzahl eingeben.";
-                    }
-                  }
-                  return "Bitte Alter angeben.";
-                },
               ),
-              SizedBox(height: 30),
-
-              // GESCHLECHT (gender)
-              DropdownButtonFormField<Gender>(
-                decoration: AppInputStyles.dropdown(
-                  label: "Geschlecht",
-                  hint: "Bitte auswählen",
-                  accentColor: Colors.orange,
-                ),
-                initialValue: gender,
-                items: Gender.values.map((gender) {
-                  return DropdownMenuItem(
-                    value: gender,
-                    child: Text(gender.label),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    gender = value;
-                  });
-                },
-                validator: (value) {
-                  if (value == null) {
-                    return "Bitte Geschlecht auswählen.";
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 30),
-
-              // BERUF (occupation)
-              DropdownButtonFormField<Occupation>(
-                decoration: AppInputStyles.dropdown(
-                  label: "Beruf",
-                  hint: "Bitte Berufsparte auswählen",
-                  accentColor: Colors.orange,
-                ),
-                initialValue: occupation,
-                items: Occupation.values.map((occupation) {
-                  return DropdownMenuItem(
-                    value: occupation,
-                    child: Text(occupation.label),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    occupation = value;
-                  });
-                },
-                validator: (value) {
-                  if (value == null) {
-                    return "Bitte Beruf auswählen";
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 30),
             ],
           ),
         ),
@@ -171,27 +104,19 @@ class _ContextDataViewState extends State<ContextDataView> {
     );
   }
 
-  Future<void> _savePersonalData() async {
+  Future<void> _saveContextData() async {
     // Alle Eingaben gesammelt in ein Objekt speichern
-    final personalData = PersonalData(
-      age: int.parse(ageController.text),
-      gender: gender!,
-      occupation: occupation!,
-      hearingAided: hearingAided!,
-      hearingAidSince: hearingAidSince,
-      residentialArea: residentialArea!,
-      physicalActivityType: physicalActivityType!,
-      physicalActivityFrequency: physicalActivityFrequency!,
-      physicalActivityDuration: physicalActivityDuration!,
-      diet: diet!,
-      allergies: allergies,
-      diseases: diseases,
+    final contextData = ContextData(
+      latitude: latitude,
+      longitude: longitude,
+      locationType: locationType,
+      climateZone: climateZone,
+      season: season,
+      noiseLevel: noiseLevel,
+      timestamp: timestamp,
+      weather: weather,
     );
 
-    await survey.savePersonalData(personalData);
-
-    if (!mounted) return;
-
-    Navigator.pop(context);
+    await survey.saveContextData(contextData);
   }
 }

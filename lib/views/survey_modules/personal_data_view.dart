@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/models/enum_labels.dart';
-import 'package:frontend/models/personal_data.dart';
+import 'package:frontend/models/survey_modules/personal_data.dart';
 import 'package:frontend/shared/appbar.dart';
 import 'package:frontend/shared/dialogs.dart';
 import 'package:frontend/shared/footer.dart';
 import 'package:frontend/shared/input_styles.dart';
 import 'package:frontend/shared/layout.dart';
+import 'package:frontend/utils/input_validator.dart';
 import 'package:frontend/utils/survey_instance.dart';
 
 class PersonalDataView extends StatefulWidget {
@@ -24,7 +24,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
   Gender? gender;
   Occupation? occupation;
   HearingAided? hearingAided;
-  DateTime? hearingAidSince;
+  HearingAidDuration? hearingAidDuration;
   ResidentialArea? residentialArea;
   PhysicalActivityType? physicalActivityType;
   PhysicalActivityFrequency? physicalActivityFrequency;
@@ -41,8 +41,18 @@ class _PersonalDataViewState extends State<PersonalDataView> {
     final personalData = survey.currentSurvey?.personalData;
 
     if (personalData != null) {
-      ageController.text = personalData.age.toString();
+      ageController.text = personalData.age?.toString() ?? "";
       gender = personalData.gender;
+      occupation = personalData.occupation;
+      hearingAided = personalData.hearingAided;
+      hearingAidDuration = personalData.hearingAidDuration;
+      residentialArea = personalData.residentialArea;
+      physicalActivityType = personalData.physicalActivityType;
+      physicalActivityFrequency = personalData.physicalActivityFrequency;
+      physicalActivityDuration = personalData.physicalActivityDuration;
+      diet = personalData.diet;
+      allergies = personalData.allergies;
+      diseases = personalData.diseases;
     }
   }
 
@@ -54,16 +64,23 @@ class _PersonalDataViewState extends State<PersonalDataView> {
         color: Colors.orange,
         nav: true,
         onBackPressed: () {
-          if (_formKey.currentState!.validate()) {
-            _savePersonalData();
+          if (!_formKey.currentState!.validate()) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text("Es wurden noch nicht alle Felder ausgefüllt!"),
+                backgroundColor: Colors.grey,
+              ),
+            );
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
-                content: Text("Bitte überprüfen Sie Ihre Eingaben."),
-                backgroundColor: Colors.red,
+                content: Text("Personendaten erfasst!"),
+                backgroundColor: Colors.green,
               ),
             );
           }
+          _savePersonalData();
+          Navigator.pop(context);
         },
       ),
       footer: AppFooter(
@@ -83,11 +100,13 @@ class _PersonalDataViewState extends State<PersonalDataView> {
         ],
       ),
       children: [
+        Center(child: Icon(Icons.person, size: 150, color: Colors.orange)),
+        SizedBox(height: 30),
         Form(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           key: _formKey,
           child: Column(
             children: [
-              // ALTER (age)
               TextFormField(
                 controller: ageController,
                 keyboardType: TextInputType.number,
@@ -96,16 +115,8 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                   hint: "z. B. 25",
                   accentColor: Colors.orange,
                 ),
-                validator: (value) {
-                  if (value != null) {
-                    final number = int.tryParse(value);
-
-                    if (number != null && number <= 0) {
-                      return "Bitte eine positive Ganzzahl eingeben.";
-                    }
-                  }
-                  return "Bitte Alter angeben.";
-                },
+                validator: (value) =>
+                    InputValidator.validateAge(int.tryParse(value ?? "")),
               ),
               SizedBox(height: 30),
 
@@ -141,7 +152,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
               DropdownButtonFormField<Occupation>(
                 decoration: AppInputStyles.dropdown(
                   label: "Beruf",
-                  hint: "Bitte Berufsparte auswählen",
+                  hint: "Bitte Berufssparte auswählen",
                   accentColor: Colors.orange,
                 ),
                 initialValue: occupation,
@@ -174,24 +185,20 @@ class _PersonalDataViewState extends State<PersonalDataView> {
   Future<void> _savePersonalData() async {
     // Alle Eingaben gesammelt in ein Objekt speichern
     final personalData = PersonalData(
-      age: int.parse(ageController.text),
-      gender: gender!,
-      occupation: occupation!,
-      hearingAided: hearingAided!,
-      hearingAidSince: hearingAidSince,
-      residentialArea: residentialArea!,
-      physicalActivityType: physicalActivityType!,
-      physicalActivityFrequency: physicalActivityFrequency!,
-      physicalActivityDuration: physicalActivityDuration!,
-      diet: diet!,
+      age: int.tryParse(ageController.text),
+      gender: gender,
+      occupation: occupation,
+      hearingAided: hearingAided,
+      hearingAidDuration: hearingAidDuration,
+      residentialArea: residentialArea,
+      physicalActivityType: physicalActivityType,
+      physicalActivityFrequency: physicalActivityFrequency,
+      physicalActivityDuration: physicalActivityDuration,
+      diet: diet,
       allergies: allergies,
       diseases: diseases,
     );
 
     await survey.savePersonalData(personalData);
-
-    if (!mounted) return;
-
-    Navigator.pop(context);
   }
 }

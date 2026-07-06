@@ -1,7 +1,7 @@
-import 'package:frontend/models/audiotest_data.dart';
-import 'package:frontend/models/context_data.dart';
-import 'package:frontend/models/questionnaire_data.dart';
-import 'package:frontend/models/personal_data.dart';
+import 'package:frontend/models/survey_modules/audiotest_data.dart';
+import 'package:frontend/models/survey_modules/context_data.dart';
+import 'package:frontend/models/survey_modules/questionnaire_data.dart';
+import 'package:frontend/models/survey_modules/personal_data.dart';
 
 class Survey {
   PersonalData? personalData;
@@ -27,9 +27,9 @@ class Survey {
 
   bool get isComplete =>
       isPersonalDataComplete &&
-      isContextDataComplete &&
-      isAudioTestDataComplete &&
-      isQuestionnaireDataComplete;
+      isContextDataComplete;
+      //isAudioTestDataComplete &&
+      //isQuestionnaireDataComplete;
 
   bool get isPersonalDataComplete =>
       personalData != null && personalData!.isComplete;
@@ -37,6 +37,7 @@ class Survey {
   bool get isContextDataComplete =>
       contextData != null && contextData!.isComplete;
 
+  
   bool get isAudioTestDataComplete =>
       audioTestData != null && audioTestData!.isComplete;
 

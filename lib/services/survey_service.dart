@@ -1,7 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/widgets.dart';
-import 'package:frontend/models/personal_data.dart';
+import 'package:frontend/models/survey_modules/audiotest_data.dart';
+import 'package:frontend/models/survey_modules/context_data.dart';
+import 'package:frontend/models/survey_modules/personal_data.dart';
+import 'package:frontend/models/survey_modules/questionnaire_data.dart';
 import 'package:frontend/models/survey.dart';
 import 'package:frontend/utils/base_url.dart';
 import 'package:frontend/utils/session_instance.dart';
@@ -19,9 +22,13 @@ class SurveyService {
   }
 
   Future<void> cancelSurvey() async {
-    currentSurvey = null;
+    try {
+      currentSurvey = null;
 
-    _clearCache();
+      _clearCache();
+    } catch (e) {
+      throw Exception("CANCEL_SURVEY_ERROR: $e");
+    }
   }
 
   Future<void> submitSurvey() async {
@@ -61,11 +68,37 @@ class SurveyService {
     // await _cacheSurvey(currentSurvey!);
   }
 
-  Future<void> saveContextData() async {}
+  Future<void> saveContextData(ContextData contextData) async {
+    if (currentSurvey == null) {
+      throw Exception("NO_ACTIVE_SURVEY");
+    }
 
-  Future<void> saveAudioTest() async {}
+    currentSurvey!.contextData = contextData;
 
-  Future<void> saveQuestionnaires() async {}
+    // await _cacheSurvey(currentSurvey!);
+  }
+
+  Future<void> saveAudioTestData(AudioTestData audiotestData) async {
+    if (currentSurvey == null) {
+      throw Exception("NO_ACTIVE_SURVEY");
+    }
+
+    currentSurvey!.audioTestData = audiotestData;
+
+    // await _cacheSurvey(currentSurvey!);
+  }
+
+  Future<void> saveQuestionnairesData(
+    QuestionnaireData questionnaireData,
+  ) async {
+    if (currentSurvey == null) {
+      throw Exception("NO_ACTIVE_SURVEY");
+    }
+
+    currentSurvey!.questionnaireData = questionnaireData;
+
+    // await _cacheSurvey(currentSurvey!);
+  }
 
   Future<void> _cacheSurvey(Survey survey) async {
     final prefs = await SharedPreferences.getInstance();
