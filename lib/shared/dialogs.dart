@@ -30,6 +30,8 @@ class AppDialog {
     BuildContext context,
     Text title,
     Text content,
+    Color? colorYes,
+    Color? colorNo,
   ) {
     return showDialog(
       context: context,
@@ -43,14 +45,14 @@ class AppDialog {
               onPressed: () => Navigator.pop(context, false),
               child: Text(
                 'Nein',
-                style: TextStyle(color: Colors.blueAccent, fontSize: 18),
+                style: TextStyle(color: colorNo ?? Colors.blueAccent, fontSize: 18),
               ),
             ),
             TextButton(
               onPressed: () => Navigator.pop(context, true),
               child: Text(
                 'Ja',
-                style: TextStyle(color: Colors.red, fontSize: 18),
+                style: TextStyle(color: colorYes ?? Colors.red, fontSize: 18),
               ),
             ),
           ],

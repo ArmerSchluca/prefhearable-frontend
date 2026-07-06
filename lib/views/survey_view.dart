@@ -39,6 +39,8 @@ class _SurveyViewState extends State<SurveyView> {
                 context,
                 Text("Umfrage wirklich abbrechen?"),
                 Text("Jegliche Eingaben gehen unwiderruflich verloren!"),
+                null,
+                null,
               );
 
               if (result == true) {

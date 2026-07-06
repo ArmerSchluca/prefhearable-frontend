@@ -44,3 +44,29 @@ class ContextData {
 enum LocationType { indoor, outdoor }
 
 enum Season { spring, summer, autumn, winter }
+
+extension LocationTypeLabel on LocationType {
+  String get label {
+    switch (this) {
+      case LocationType.indoor:
+        return "Innen";
+      case LocationType.outdoor:
+        return "Außen";
+    }
+  }
+}
+
+extension SeasonLabel on Season {
+  String get label {
+    switch (this) {
+      case Season.spring:
+        return "Frühling";
+      case Season.summer:
+        return "Sommer";
+      case Season.autumn:
+        return "Herbst";
+      case Season.winter:
+        return "Winter";
+    }
+  }
+}

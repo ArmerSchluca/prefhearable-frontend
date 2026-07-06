@@ -5,6 +5,7 @@ import 'package:frontend/shared/dialogs.dart';
 import 'package:frontend/shared/footer.dart';
 import 'package:frontend/shared/input_styles.dart';
 import 'package:frontend/shared/layout.dart';
+import 'package:frontend/utils/input_validator.dart';
 import 'package:frontend/utils/survey_instance.dart';
 
 class ContextDataView extends StatefulWidget {
@@ -17,14 +18,14 @@ class ContextDataView extends StatefulWidget {
 class _ContextDataViewState extends State<ContextDataView> {
   final _formKey = GlobalKey<FormState>();
 
-  double? latitude;
-  double? longitude;
+  final latitudeController = TextEditingController();
+  final longitudeController = TextEditingController();
   LocationType? locationType;
   String? climateZone;
   Season? season;
-  double? noiseLevel;
+  final noiseLevelController = TextEditingController();
   DateTime? timestamp;
-  String? weather;
+  final weatherController = TextEditingController();
 
   // Hier werden die Felder mit den bereits gespeicherten Daten befüllt
   @override
@@ -34,14 +35,14 @@ class _ContextDataViewState extends State<ContextDataView> {
     final contextData = survey.currentSurvey?.contextData;
 
     if (contextData != null) {
-      latitude = latitude;
-      longitude = longitude;
-      locationType = locationType;
-      climateZone = climateZone;
-      season = season;
-      noiseLevel = noiseLevel;
-      timestamp = timestamp;
-      weather = weather;
+      latitudeController.text = contextData.latitude?.toString() ?? "";
+      longitudeController.text = contextData.longitude?.toString() ?? "";
+      locationType = contextData.locationType;
+      climateZone = contextData.climateZone;
+      season = contextData.season;
+      noiseLevelController.text = contextData.noiseLevel?.toString() ?? "";
+      timestamp = contextData.timestamp;
+      weatherController.text = contextData.weather?.toString() ?? "";
     }
   }
 
@@ -63,7 +64,7 @@ class _ContextDataViewState extends State<ContextDataView> {
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
-                content: Text("Personendaten erfasst!"),
+                content: Text("Kontextdaten erfasst!"),
                 backgroundColor: Colors.green,
               ),
             );
@@ -92,15 +93,193 @@ class _ContextDataViewState extends State<ContextDataView> {
         Center(child: Icon(Icons.public, size: 150, color: Colors.green)),
         SizedBox(height: 30),
         Form(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           key: _formKey,
           child: Column(
             children: [
+              // AUFENTHALTSORT (locationType)
+              DropdownButtonFormField<LocationType>(
+                decoration: AppInputStyles.dropdown(
+                  label: "Aufenthaltsort",
+                  hint: "Bitte Aufenthaltsort auswählen",
+                  accentColor: Colors.green,
+                ),
+                initialValue: locationType,
+                items: LocationType.values.map((locationType) {
+                  return DropdownMenuItem(
+                    value: locationType,
+                    child: Text(locationType.label),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    locationType = value;
+                  });
+                },
+                validator: (value) {
+                  if (value == null) {
+                    return "Bitte Aufenthaltsort auswählen.";
+                  }
+                  return null;
+                },
+              ),
+
+              SizedBox(height: 30),
+
+              // JAHRESZEIT (season)
+              DropdownButtonFormField<Season>(
+                decoration: AppInputStyles.dropdown(
+                  label: "Jahreszeit",
+                  hint: "Bitte die aktuelle Jahreszeit auswählen",
+                  accentColor: Colors.green,
+                ),
+                initialValue: season,
+                items: Season.values.map((season) {
+                  return DropdownMenuItem(
+                    value: season,
+                    child: Text(season.label),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    season = value;
+                  });
+                },
+                validator: (value) {
+                  if (value == null) {
+                    return "Bitte Jahreszeit auswählen.";
+                  }
+                  return null;
+                },
+              ),
+
+              SizedBox(height: 70),
+
+              // STANDORT UND WETTER ERFASSEN
+              Center(
+                child: FilledButton(
+                  onPressed: getApiData,
+                  style: FilledButton.styleFrom(
+                    elevation: 3,
+                    backgroundColor: Colors.green,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                  ),
+
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.add_location_alt_outlined, size: 28),
+                      Padding(
+                        padding: EdgeInsets.all(15),
+                        child: Text(
+                          "Hier drücken für GPS-Erfassung",
+                          style: TextStyle(fontSize: 20),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              SizedBox(height: 30),
+
               // LÄNGENGRAD (latitude)
               TextFormField(
                 keyboardType: TextInputType.number,
+                readOnly: true,
                 decoration: AppInputStyles.textField(
                   label: "Längengrad",
-                  hint: "",
+                  hint: "Wird automatisch erfasst",
+                  accentColor: Colors.green,
+                ),
+              ),
+
+              SizedBox(height: 30),
+
+              // KLIMAZONE (climateZone)
+              TextFormField(
+                initialValue: climateZone,
+                readOnly: true,
+                decoration: AppInputStyles.textField(
+                  label: "Klimaregion",
+                  hint: "Wird automatisch erfasst",
+                  accentColor: Colors.green,
+                ),
+              ),
+
+              SizedBox(height: 30),
+
+              // WETTER (weather)
+              TextFormField(
+                controller: weatherController,
+                readOnly: true,
+                decoration: AppInputStyles.textField(
+                  label: "Wetter",
+                  hint: "wird automatisch erfasst",
+                  accentColor: Colors.green,
+                ),
+              ),
+
+              SizedBox(height: 30),
+
+              // ZEITSTEMPEL (timestamp)
+              TextFormField(
+                readOnly: true,
+                controller: TextEditingController(
+                  text: timestamp?.toString() ?? "",
+                ),
+                decoration: AppInputStyles.textField(
+                  label: "Zeitpunkt",
+                  hint: "wird automatisch erfasst",
+                  accentColor: Colors.green,
+                ),
+              ),
+
+              SizedBox(height: 70),
+
+              // UMGEBUNGSLAUTSTÄRKE
+              Center(
+                child: FilledButton(
+                  onPressed: getNoiseLevel,
+                  style: FilledButton.styleFrom(
+                    elevation: 3,
+                    backgroundColor: Colors.green,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: const [
+                      Icon(Icons.graphic_eq, size: 28),
+                      Padding(
+                        padding: EdgeInsets.all(15),
+                        child: Text(
+                          "Hier drücken für Dezibelmessung",
+                          style: TextStyle(fontSize: 20),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              SizedBox(height: 30),
+
+              // LAUTSTÄRKE (noiseLevel)
+              TextFormField(
+                controller: noiseLevelController,
+                readOnly: true,
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
+                decoration: AppInputStyles.textField(
+                  label: "Umgebungslautstärke",
+                  hint: "wird automatisch erfasst",
                   accentColor: Colors.green,
                 ),
               ),
@@ -114,16 +293,38 @@ class _ContextDataViewState extends State<ContextDataView> {
   Future<void> _saveContextData() async {
     // Alle Eingaben gesammelt in ein Objekt speichern
     final contextData = ContextData(
-      latitude: latitude,
-      longitude: longitude,
+      latitude: double.tryParse(latitudeController.text),
+      longitude: double.tryParse(longitudeController.text),
       locationType: locationType,
       climateZone: climateZone,
       season: season,
-      noiseLevel: noiseLevel,
+      noiseLevel: double.tryParse(noiseLevelController.text),
       timestamp: timestamp,
-      weather: weather,
+      weather: weatherController.text,
     );
 
     await survey.saveContextData(contextData);
+  }
+
+  Future<void> getApiData() async {
+    AppDialog.showSelection(
+      context,
+      Text("GPS zulassen?"),
+      Text("GPS zulassen, um alle Felder automatisch auszufüllen?"),
+      Colors.green,
+      Colors.grey,
+    );
+    timestamp = null;
+    timestamp = DateTime.now();
+  }
+
+  Future<void> getNoiseLevel() async {
+    AppDialog.showInfo(
+      context,
+      const Text("Umgebungslautstärke"),
+      const Text(
+        "Hier wird später die Lautstärke über das Mikrofon automatisch gemessen.",
+      ),
+    );
   }
 }
