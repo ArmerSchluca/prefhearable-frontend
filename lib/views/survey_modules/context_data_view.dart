@@ -7,6 +7,7 @@ import 'package:frontend/shared/input_styles.dart';
 import 'package:frontend/shared/layout.dart';
 import 'package:frontend/utils/input_validator.dart';
 import 'package:frontend/utils/survey_instance.dart';
+import 'package:intl/intl.dart';
 
 class ContextDataView extends StatefulWidget {
   const ContextDataView({super.key});
@@ -24,6 +25,7 @@ class _ContextDataViewState extends State<ContextDataView> {
   String? climateZone;
   Season? season;
   final noiseLevelController = TextEditingController();
+  final timestampController = TextEditingController();
   DateTime? timestamp;
   final weatherController = TextEditingController();
 
@@ -42,6 +44,7 @@ class _ContextDataViewState extends State<ContextDataView> {
       season = contextData.season;
       noiseLevelController.text = contextData.noiseLevel?.toString() ?? "";
       timestamp = contextData.timestamp;
+      timestampController.text = contextData.timestamp?.toString() ?? "";
       weatherController.text = contextData.weather?.toString() ?? "";
     }
   }
@@ -118,7 +121,7 @@ class _ContextDataViewState extends State<ContextDataView> {
                 },
                 validator: (value) {
                   if (value == null) {
-                    return "Bitte Aufenthaltsort auswählen.";
+                    return "";
                   }
                   return null;
                 },
@@ -147,7 +150,7 @@ class _ContextDataViewState extends State<ContextDataView> {
                 },
                 validator: (value) {
                   if (value == null) {
-                    return "Bitte Jahreszeit auswählen.";
+                    return "";
                   }
                   return null;
                 },
@@ -155,7 +158,7 @@ class _ContextDataViewState extends State<ContextDataView> {
 
               SizedBox(height: 70),
 
-              // STANDORT UND WETTER ERFASSEN
+              // BUTTON FÜR STANDORT UND WETTER ERFASSEN
               Center(
                 child: FilledButton(
                   onPressed: getApiData,
@@ -188,6 +191,7 @@ class _ContextDataViewState extends State<ContextDataView> {
 
               // LÄNGENGRAD (latitude)
               TextFormField(
+                controller: latitudeController,
                 keyboardType: TextInputType.number,
                 readOnly: true,
                 decoration: AppInputStyles.textField(
@@ -195,6 +199,32 @@ class _ContextDataViewState extends State<ContextDataView> {
                   hint: "Wird automatisch erfasst",
                   accentColor: Colors.green,
                 ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "";
+                  }
+                  return null;
+                },
+              ),
+
+              SizedBox(height: 30),
+
+              // BREITENGRAD (longitude)
+              TextFormField(
+                controller: longitudeController,
+                keyboardType: TextInputType.number,
+                readOnly: true,
+                decoration: AppInputStyles.textField(
+                  label: "Breitengrad",
+                  hint: "Wird automatisch erfasst",
+                  accentColor: Colors.green,
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "";
+                  }
+                  return null;
+                },
               ),
 
               SizedBox(height: 30),
@@ -208,6 +238,12 @@ class _ContextDataViewState extends State<ContextDataView> {
                   hint: "Wird automatisch erfasst",
                   accentColor: Colors.green,
                 ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "";
+                  }
+                  return null;
+                },
               ),
 
               SizedBox(height: 30),
@@ -221,6 +257,12 @@ class _ContextDataViewState extends State<ContextDataView> {
                   hint: "wird automatisch erfasst",
                   accentColor: Colors.green,
                 ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "";
+                  }
+                  return null;
+                },
               ),
 
               SizedBox(height: 30),
@@ -228,19 +270,23 @@ class _ContextDataViewState extends State<ContextDataView> {
               // ZEITSTEMPEL (timestamp)
               TextFormField(
                 readOnly: true,
-                controller: TextEditingController(
-                  text: timestamp?.toString() ?? "",
-                ),
+                controller: timestampController,
                 decoration: AppInputStyles.textField(
                   label: "Zeitpunkt",
                   hint: "wird automatisch erfasst",
                   accentColor: Colors.green,
                 ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "";
+                  }
+                  return null;
+                },
               ),
 
               SizedBox(height: 70),
 
-              // UMGEBUNGSLAUTSTÄRKE
+              // BUTTON FÜR UMGEBUNGSLAUTSTÄRKE MESSEN
               Center(
                 child: FilledButton(
                   onPressed: getNoiseLevel,
@@ -282,6 +328,12 @@ class _ContextDataViewState extends State<ContextDataView> {
                   hint: "wird automatisch erfasst",
                   accentColor: Colors.green,
                 ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "";
+                  }
+                  return null;
+                },
               ),
             ],
           ),
@@ -314,8 +366,12 @@ class _ContextDataViewState extends State<ContextDataView> {
       Colors.green,
       Colors.grey,
     );
-    timestamp = null;
-    timestamp = DateTime.now();
+    final now = DateTime.now();
+
+    setState(() {
+      timestamp = now;
+      timestampController.text = DateFormat("dd.MM.yyyy HH:mm:ss").format(now);
+    });
   }
 
   Future<void> getNoiseLevel() async {

@@ -142,7 +142,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                 },
                 validator: (value) {
                   if (value == null) {
-                    return "Bitte Geschlecht auswählen.";
+                    return "";
                   }
                   return null;
                 },
@@ -170,7 +170,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                 },
                 validator: (value) {
                   if (value == null) {
-                    return "Bitte Beruf auswählen";
+                    return "";
                   }
                   return null;
                 },
@@ -198,7 +198,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                 },
                 validator: (value) {
                   if (value == null) {
-                    return "Bitte Hörgerätenutzung auswählen";
+                    return "";
                   }
                   return null;
                 },
@@ -226,7 +226,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                 },
                 validator: (value) {
                   if (value == null) {
-                    return "Bitte Zeitraum auswählen";
+                    return "";
                   }
                   return null;
                 },
@@ -254,7 +254,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                 },
                 validator: (value) {
                   if (value == null) {
-                    return "Bitte Wohnraum auswählen";
+                    return "";
                   }
                   return null;
                 },
@@ -282,7 +282,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                 },
                 validator: (value) {
                   if (value == null) {
-                    return "Bitte Sportart auswählen";
+                    return "";
                   }
                   return null;
                 },
@@ -312,7 +312,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                 },
                 validator: (value) {
                   if (value == null) {
-                    return "Bitte Häufigkeit auswählen";
+                    return "";
                   }
                   return null;
                 },
@@ -342,7 +342,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                 },
                 validator: (value) {
                   if (value == null) {
-                    return "Bitte Dauer einer Sporteinheit auswählen";
+                    return "";
                   }
                   return null;
                 },
@@ -367,7 +367,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                 },
                 validator: (value) {
                   if (value == null) {
-                    return "Bitte Ernährungsweise auswählen";
+                    return "";
                   }
                   return null;
                 },
