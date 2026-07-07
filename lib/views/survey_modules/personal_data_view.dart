@@ -140,12 +140,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                     gender = value;
                   });
                 },
-                validator: (value) {
-                  if (value == null) {
-                    return "";
-                  }
-                  return null;
-                },
+                validator: InputValidator.required,
               ),
               SizedBox(height: 30),
 
@@ -168,12 +163,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                     occupation = value;
                   });
                 },
-                validator: (value) {
-                  if (value == null) {
-                    return "";
-                  }
-                  return null;
-                },
+                validator: InputValidator.required,
               ),
               SizedBox(height: 30),
 
@@ -196,12 +186,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                     hearingAided = value;
                   });
                 },
-                validator: (value) {
-                  if (value == null) {
-                    return "";
-                  }
-                  return null;
-                },
+                validator: InputValidator.required,
               ),
               SizedBox(height: 30),
 
@@ -224,12 +209,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                     hearingAidDuration = value;
                   });
                 },
-                validator: (value) {
-                  if (value == null) {
-                    return "";
-                  }
-                  return null;
-                },
+                validator: InputValidator.required,
               ),
               SizedBox(height: 30),
 
@@ -252,12 +232,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                     residentialArea = value;
                   });
                 },
-                validator: (value) {
-                  if (value == null) {
-                    return "";
-                  }
-                  return null;
-                },
+                validator: InputValidator.required,
               ),
               SizedBox(height: 30),
 
@@ -280,12 +255,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                     physicalActivityType = value;
                   });
                 },
-                validator: (value) {
-                  if (value == null) {
-                    return "";
-                  }
-                  return null;
-                },
+                validator: InputValidator.required,
               ),
               SizedBox(height: 30),
 
@@ -310,12 +280,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                     physicalActivityFrequency = value;
                   });
                 },
-                validator: (value) {
-                  if (value == null) {
-                    return "";
-                  }
-                  return null;
-                },
+                validator: InputValidator.required,
               ),
               SizedBox(height: 30),
 
@@ -340,12 +305,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                     physicalActivityDuration = value;
                   });
                 },
-                validator: (value) {
-                  if (value == null) {
-                    return "";
-                  }
-                  return null;
-                },
+                validator: InputValidator.required,
               ),
               SizedBox(height: 30),
 
@@ -365,12 +325,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                     diet = value;
                   });
                 },
-                validator: (value) {
-                  if (value == null) {
-                    return "";
-                  }
-                  return null;
-                },
+                validator: InputValidator.required,
               ),
               SizedBox(height: 30),
 

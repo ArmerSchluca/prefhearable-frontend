@@ -119,12 +119,7 @@ class _ContextDataViewState extends State<ContextDataView> {
                     locationType = value;
                   });
                 },
-                validator: (value) {
-                  if (value == null) {
-                    return "";
-                  }
-                  return null;
-                },
+                validator: InputValidator.required,
               ),
 
               SizedBox(height: 30),
@@ -148,12 +143,7 @@ class _ContextDataViewState extends State<ContextDataView> {
                     season = value;
                   });
                 },
-                validator: (value) {
-                  if (value == null) {
-                    return "";
-                  }
-                  return null;
-                },
+                validator: InputValidator.required,
               ),
 
               SizedBox(height: 70),
@@ -199,12 +189,7 @@ class _ContextDataViewState extends State<ContextDataView> {
                   hint: "Wird automatisch erfasst",
                   accentColor: Colors.green,
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "";
-                  }
-                  return null;
-                },
+                validator: InputValidator.required,
               ),
 
               SizedBox(height: 30),
@@ -219,12 +204,7 @@ class _ContextDataViewState extends State<ContextDataView> {
                   hint: "Wird automatisch erfasst",
                   accentColor: Colors.green,
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "";
-                  }
-                  return null;
-                },
+                validator: InputValidator.required,
               ),
 
               SizedBox(height: 30),
@@ -238,12 +218,7 @@ class _ContextDataViewState extends State<ContextDataView> {
                   hint: "Wird automatisch erfasst",
                   accentColor: Colors.green,
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "";
-                  }
-                  return null;
-                },
+                validator: InputValidator.required,
               ),
 
               SizedBox(height: 30),
@@ -257,12 +232,7 @@ class _ContextDataViewState extends State<ContextDataView> {
                   hint: "wird automatisch erfasst",
                   accentColor: Colors.green,
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "";
-                  }
-                  return null;
-                },
+                validator: InputValidator.required,
               ),
 
               SizedBox(height: 30),
@@ -276,12 +246,7 @@ class _ContextDataViewState extends State<ContextDataView> {
                   hint: "wird automatisch erfasst",
                   accentColor: Colors.green,
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "";
-                  }
-                  return null;
-                },
+                validator: InputValidator.required,
               ),
 
               SizedBox(height: 70),
@@ -328,12 +293,7 @@ class _ContextDataViewState extends State<ContextDataView> {
                   hint: "wird automatisch erfasst",
                   accentColor: Colors.green,
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "";
-                  }
-                  return null;
-                },
+                validator: InputValidator.required,
               ),
             ],
           ),

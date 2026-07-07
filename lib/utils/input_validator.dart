@@ -14,4 +14,16 @@ class InputValidator {
 
     return null;
   }
+
+  static String? required(dynamic value) {
+    if (value == null) {
+      return "Pflichtfeld";
+    }
+
+    if (value is String && value.trim().isEmpty) {
+      return "Pflichtfeld";
+    }
+
+    return null;
+  }
 }
