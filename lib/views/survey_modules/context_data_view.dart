@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/models/survey_modules/context_data.dart';
 import 'package:frontend/services/external_api_service.dart';
@@ -22,12 +23,16 @@ class _ContextDataViewState extends State<ContextDataView> {
   final latitudeController = TextEditingController();
   final longitudeController = TextEditingController();
   LocationType? locationType;
-  String? climateZone;
   Season? season;
   final noiseLevelController = TextEditingController();
   final timestampController = TextEditingController();
   DateTime? timestamp;
-  final weatherController = TextEditingController();
+  // Wetter
+  final temperatureController = TextEditingController();
+  final humidityController = TextEditingController();
+  final windSpeedController = TextEditingController();
+  final uvIndexController = TextEditingController();
+  final descriptionController = TextEditingController();
 
   // Hier werden die Felder mit den bereits gespeicherten Daten befüllt
   @override
@@ -39,12 +44,21 @@ class _ContextDataViewState extends State<ContextDataView> {
     latitudeController.text = contextData.latitude?.toString() ?? "";
     longitudeController.text = contextData.longitude?.toString() ?? "";
     locationType = contextData.locationType;
-    climateZone = contextData.climateZone;
     season = contextData.season;
     noiseLevelController.text = contextData.noiseLevel?.toString() ?? "";
+
     timestamp = contextData.timestamp;
-    timestampController.text = contextData.timestamp?.toString() ?? "";
-    weatherController.text = contextData.weather?.toString() ?? "";
+    timestampController.text = contextData.timestamp == null
+        ? ""
+        : DateFormat("dd.MM.yyyy HH:mm:ss").format(contextData.timestamp!);
+
+    if (contextData.weather != null) {
+      temperatureController.text = contextData.weather!.temperature.toString();
+      humidityController.text = contextData.weather!.humidity.toString();
+      windSpeedController.text = contextData.weather!.windSpeed.toString();
+      uvIndexController.text = contextData.weather!.uvIndex.toString();
+      descriptionController.text = contextData.weather!.description.toString();
+    }
   }
 
   @override
@@ -59,7 +73,7 @@ class _ContextDataViewState extends State<ContextDataView> {
 
           Navigator.pop(context);
 
-          if (surveyService.currentSurvey!.contextData.isComplete) {
+          if (!surveyService.currentSurvey!.contextData.isComplete) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text("Es wurden noch nicht alle Felder ausgefüllt!"),
@@ -151,6 +165,7 @@ class _ContextDataViewState extends State<ContextDataView> {
                 child: FilledButton(
                   onPressed: getApiData,
                   style: FilledButton.styleFrom(
+                    minimumSize: const Size(double.infinity, 60),
                     elevation: 3,
                     backgroundColor: Colors.green,
                     foregroundColor: Colors.white,
@@ -161,17 +176,32 @@ class _ContextDataViewState extends State<ContextDataView> {
 
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
-                    children: [
+                    children: const [
                       Icon(Icons.add_location_alt_outlined, size: 28),
-                      Padding(
-                        padding: EdgeInsets.all(15),
-                        child: Text(
+                      SizedBox(width: 12),
+                      Flexible(
+                        child: AutoSizeText(
                           "Drücken für GPS-Erfassung",
+                          maxLines: 1,
+                          minFontSize: 12,
                           style: TextStyle(fontSize: 20),
                         ),
                       ),
                     ],
                   ),
+                ),
+              ),
+
+              SizedBox(height: 30),
+
+              // ZEITSTEMPEL (timestamp)
+              TextFormField(
+                readOnly: true,
+                controller: timestampController,
+                decoration: AppInputStyles.textField(
+                  label: "Zeitpunkt",
+                  hint: "wird automatisch erfasst",
+                  accentColor: Colors.green,
                 ),
               ),
 
@@ -206,12 +236,59 @@ class _ContextDataViewState extends State<ContextDataView> {
               SizedBox(height: 30),
 
               // KLIMAZONE (climateZone)
+              Text(
+                "Wetterdaten",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+
+              SizedBox(height: 10),
+
+              // TEMPERATUR (temprature)
               TextFormField(
-                initialValue: climateZone,
+                controller: temperatureController,
                 readOnly: true,
                 decoration: AppInputStyles.textField(
-                  label: "Klimaregion",
-                  hint: "Wird automatisch erfasst",
+                  label: "Temperatur",
+                  hint: "wird automatisch erfasst",
+                  accentColor: Colors.green,
+                ),
+              ),
+
+              SizedBox(height: 30),
+
+              // LUFTFEUCHTIGKEIT (humidity)
+              TextFormField(
+                controller: humidityController,
+                readOnly: true,
+                decoration: AppInputStyles.textField(
+                  label: "Luftfeuchtigkeit",
+                  hint: "wird automatisch erfasst",
+                  accentColor: Colors.green,
+                ),
+              ),
+
+              SizedBox(height: 30),
+
+              // WINDGESCHWINDKEIT (windSpeed)
+              TextFormField(
+                controller: windSpeedController,
+                readOnly: true,
+                decoration: AppInputStyles.textField(
+                  label: "Windgeschwindigkeit",
+                  hint: "wird automatisch erfasst",
+                  accentColor: Colors.green,
+                ),
+              ),
+
+              SizedBox(height: 30),
+
+              // UV-INDEX (uvIndex)
+              TextFormField(
+                controller: uvIndexController,
+                readOnly: true,
+                decoration: AppInputStyles.textField(
+                  label: "UV-Index",
+                  hint: "wird automatisch erfasst",
                   accentColor: Colors.green,
                 ),
               ),
@@ -220,23 +297,10 @@ class _ContextDataViewState extends State<ContextDataView> {
 
               // WETTER (weather)
               TextFormField(
-                controller: weatherController,
+                controller: descriptionController,
                 readOnly: true,
                 decoration: AppInputStyles.textField(
                   label: "Wetter",
-                  hint: "wird automatisch erfasst",
-                  accentColor: Colors.green,
-                ),
-              ),
-
-              SizedBox(height: 30),
-
-              // ZEITSTEMPEL (timestamp)
-              TextFormField(
-                readOnly: true,
-                controller: timestampController,
-                decoration: AppInputStyles.textField(
-                  label: "Zeitpunkt",
                   hint: "wird automatisch erfasst",
                   accentColor: Colors.green,
                 ),
@@ -249,6 +313,7 @@ class _ContextDataViewState extends State<ContextDataView> {
                 child: FilledButton(
                   onPressed: getNoiseLevel,
                   style: FilledButton.styleFrom(
+                    minimumSize: const Size(double.infinity, 60),
                     elevation: 3,
                     backgroundColor: Colors.green,
                     foregroundColor: Colors.white,
@@ -260,10 +325,12 @@ class _ContextDataViewState extends State<ContextDataView> {
                     mainAxisSize: MainAxisSize.min,
                     children: const [
                       Icon(Icons.mic, size: 28),
-                      Padding(
-                        padding: EdgeInsets.all(15),
-                        child: Text(
+                      SizedBox(width: 12),
+                      Flexible(
+                        child: AutoSizeText(
                           "Drücken für Dezibelmessung",
+                          maxLines: 1,
+                          minFontSize: 12,
                           style: TextStyle(fontSize: 20),
                         ),
                       ),
@@ -295,16 +362,22 @@ class _ContextDataViewState extends State<ContextDataView> {
   }
 
   Future<void> _saveContextData() async {
-    // Alle Eingaben gesammelt in ein Objekt speichern
+    final weather = WeatherData(
+      description: descriptionController.text,
+      temperature: double.tryParse(temperatureController.text) ?? 0,
+      humidity: double.tryParse(humidityController.text) ?? 0,
+      windSpeed: double.tryParse(windSpeedController.text) ?? 0,
+      uvIndex: double.tryParse(uvIndexController.text) ?? 0,
+    );
+
     final contextData = ContextData(
       latitude: double.tryParse(latitudeController.text),
       longitude: double.tryParse(longitudeController.text),
       locationType: locationType,
-      climateZone: climateZone,
       season: season,
       noiseLevel: double.tryParse(noiseLevelController.text),
       timestamp: timestamp,
-      weather: weatherController.text,
+      weather: weather,
     );
 
     await surveyService.saveContextData(contextData);
@@ -318,19 +391,54 @@ class _ContextDataViewState extends State<ContextDataView> {
       Colors.green,
       Colors.grey,
     );
-    
+
+    // Ladebalken vor API-Call öffnen
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => const Center(child: CircularProgressIndicator()),
+    );
+
     if (confirmed != true) return;
 
-    final position = await ExternalApiService.getCurrentPosition();
-    final now = DateTime.now();
+    try {
+      final position = await ExternalApiService.getCurrentPosition();
+      final weather = await ExternalApiService.getWeather(
+        position.latitude,
+        position.longitude,
+      );
 
-    setState(() {
-      latitudeController.text = position.latitude.toStringAsFixed(6);
-      longitudeController.text = position.longitude.toStringAsFixed(6);
+      // Ladebalken nach Abschluss der API-Calls schließen
+      if (mounted) {
+        Navigator.pop(context);
+      }
 
-      timestamp = now;
-      timestampController.text = DateFormat("dd.MM.yyyy HH:mm:ss").format(now);
-    });
+      final timeNow = DateTime.now();
+
+      setState(() {
+        latitudeController.text = position.latitude.toStringAsFixed(6);
+        longitudeController.text = position.longitude.toStringAsFixed(6);
+
+        temperatureController.text = weather.temperature!.toStringAsFixed(1);
+        humidityController.text = weather.humidity!.toStringAsFixed(0);
+        windSpeedController.text = weather.windSpeed!.toStringAsFixed(1);
+        uvIndexController.text = weather.uvIndex!.toStringAsFixed(1);
+        descriptionController.text = weather.description!;
+
+        timestamp = timeNow;
+        timestampController.text = DateFormat(
+          "dd.MM.yyyy HH:mm:ss",
+        ).format(timeNow);
+      });
+    } on Exception catch (_) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Standort konnte nicht automatisch ermittelt werden."),
+        ),
+      );
+    }
   }
 
   Future<void> getNoiseLevel() async {

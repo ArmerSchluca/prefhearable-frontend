@@ -2,27 +2,24 @@ class ContextData {
   double? latitude;
   double? longitude;
   LocationType? locationType;
-  String? climateZone;
   Season? season;
   double? noiseLevel;
   DateTime? timestamp;
-  String? weather;
+  WeatherData? weather;
 
   bool get isComplete =>
       latitude != null &&
       longitude != null &&
       locationType != null &&
-      climateZone != null &&
       season != null &&
       noiseLevel != null &&
       timestamp != null &&
-      weather != null;
+      weather!.isWeatherComplete;
 
   ContextData({
     this.latitude,
     this.longitude,
     this.locationType,
-    this.climateZone,
     this.season,
     this.noiseLevel,
     this.timestamp,
@@ -33,11 +30,10 @@ class ContextData {
     'latitude': latitude,
     'longitude': longitude,
     'locationType': locationType?.name,
-    'climateZone': climateZone,
     'season': season?.name,
     'noiseLevel': noiseLevel,
     'timestamp': timestamp?.toIso8601String(),
-    'weather': weather,
+    'weather': weather?.toJson(),
   };
 }
 
@@ -69,4 +65,35 @@ extension SeasonLabel on Season {
         return "Winter";
     }
   }
+}
+
+class WeatherData {
+  final String? description;
+  final double? temperature;
+  final double? humidity;
+  final double? windSpeed;
+  final double? uvIndex;
+
+  const WeatherData({
+    required this.description,
+    required this.temperature,
+    required this.humidity,
+    required this.windSpeed,
+    required this.uvIndex,
+  });
+
+  Map<String, dynamic> toJson() => {
+    'description': description,
+    'temperature': temperature,
+    'humidity': humidity,
+    'windSpeed': windSpeed,
+    'uvIndex': uvIndex,
+  };
+
+  bool get isWeatherComplete =>
+      description != null &&
+      temperature != null &&
+      humidity != null &&
+      windSpeed != null &&
+      uvIndex != null;
 }
