@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/survey_modules/context_data.dart';
+import 'package:frontend/services/external_api_service.dart';
 import 'package:frontend/shared/appbar.dart';
 import 'package:frontend/shared/dialogs.dart';
 import 'package:frontend/shared/footer.dart';
@@ -165,7 +166,7 @@ class _ContextDataViewState extends State<ContextDataView> {
                       Padding(
                         padding: EdgeInsets.all(15),
                         child: Text(
-                          "Hier drücken für GPS-Erfassung",
+                          "Drücken für GPS-Erfassung",
                           style: TextStyle(fontSize: 20),
                         ),
                       ),
@@ -258,11 +259,11 @@ class _ContextDataViewState extends State<ContextDataView> {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: const [
-                      Icon(Icons.graphic_eq, size: 28),
+                      Icon(Icons.mic, size: 28),
                       Padding(
                         padding: EdgeInsets.all(15),
                         child: Text(
-                          "Hier drücken für Dezibelmessung",
+                          "Drücken für Dezibelmessung",
                           style: TextStyle(fontSize: 20),
                         ),
                       ),
@@ -310,16 +311,23 @@ class _ContextDataViewState extends State<ContextDataView> {
   }
 
   Future<void> getApiData() async {
-    AppDialog.showSelection(
+    final confirmed = await AppDialog.showSelection(
       context,
-      Text("GPS zulassen?"),
-      Text("GPS zulassen, um alle Felder automatisch auszufüllen?"),
+      const Text("GPS zulassen?"),
+      const Text("GPS zulassen, um alle Felder automatisch auszufüllen?"),
       Colors.green,
       Colors.grey,
     );
+    
+    if (confirmed != true) return;
+
+    final position = await ExternalApiService.getCurrentPosition();
     final now = DateTime.now();
 
     setState(() {
+      latitudeController.text = position.latitude.toStringAsFixed(6);
+      longitudeController.text = position.longitude.toStringAsFixed(6);
+
       timestamp = now;
       timestampController.text = DateFormat("dd.MM.yyyy HH:mm:ss").format(now);
     });
