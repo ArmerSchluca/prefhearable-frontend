@@ -19,21 +19,25 @@ class PersonalData {
       surveyService.validateAge(age) == null &&
       gender != null &&
       occupation != null &&
-      hearingAided != null &&
-      hearingAidDuration != null &&
+      isHearingAidComplete &&
       residentialArea != null &&
       isSportComplete &&
       diet != null;
   // allergies und diseases nicht verpflichtend
 
-  // Wenn Sport = none ist, dann...
+  // Wenn Sport = none oder null ist, sollen beide anderen Felder null sein
   bool get isSportRequired => physicalActivityType != PhysicalActivityType.none;
-  // ...sollen die beiden Felder hier ebenfalls null sein
   bool get isSportComplete {
     if (!isSportRequired) return true;
-
     return physicalActivityFrequency != null &&
         physicalActivityDuration != null;
+  }
+
+  // Wenn HearingAided = none oder null ist, soll auch HearingAidDuration null sein
+  bool get isHearingAided => hearingAided != HearingAided.none;
+  bool get isHearingAidComplete {
+    if (!isHearingAided) return true;
+    return hearingAidDuration != null;
   }
 
   PersonalData({

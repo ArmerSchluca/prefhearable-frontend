@@ -163,7 +163,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
               ),
               SizedBox(height: 30),
 
-              // HÖRGERÄTE JA/NEIN (hearingAided)
+              // HÖRGERÄTE NUTZUNG (hearingAided)
               DropdownButtonFormField<HearingAided>(
                 decoration: AppInputStyles.dropdown(
                   label: "Nutzung von Hörgeräten",
@@ -180,32 +180,38 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                 onChanged: (value) {
                   setState(() {
                     hearingAided = value;
+                    if (value == HearingAided.none) {
+                      hearingAidDuration = null;
+                    }
                   });
                 },
               ),
               SizedBox(height: 30),
 
-              // HÖRGERÄTE NUTZUNGSZEITRAUM (hearingAidDuration)
-              DropdownButtonFormField<HearingAidDuration>(
-                decoration: AppInputStyles.dropdown(
-                  label: "Zeitraum der Hörgerätenutzung",
-                  hint: "Bitte angeben, seit wann Sie Hörgeräte tragen.",
-                  accentColor: Colors.orange,
+              if (hearingAided != HearingAided.none &&
+                  hearingAided != null) ...[
+                // HÖRGERÄTE NUTZUNGSZEITRAUM (hearingAidDuration)
+                DropdownButtonFormField<HearingAidDuration>(
+                  decoration: AppInputStyles.dropdown(
+                    label: "Zeitraum der Hörgerätenutzung",
+                    hint: "Bitte angeben, seit wann Sie Hörgeräte tragen.",
+                    accentColor: Colors.orange,
+                  ),
+                  initialValue: hearingAidDuration,
+                  items: HearingAidDuration.values.map((hearingAidDuration) {
+                    return DropdownMenuItem(
+                      value: hearingAidDuration,
+                      child: Text(hearingAidDuration.label),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      hearingAidDuration = value;
+                    });
+                  },
                 ),
-                initialValue: hearingAidDuration,
-                items: HearingAidDuration.values.map((hearingAidDuration) {
-                  return DropdownMenuItem(
-                    value: hearingAidDuration,
-                    child: Text(hearingAidDuration.label),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    hearingAidDuration = value;
-                  });
-                },
-              ),
-              SizedBox(height: 30),
+                SizedBox(height: 30),
+              ],
 
               // WOHNRAUM (residentialArea)
               DropdownButtonFormField<ResidentialArea>(
