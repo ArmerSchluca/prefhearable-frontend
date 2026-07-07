@@ -6,6 +6,8 @@ import 'package:frontend/models/survey_modules/context_data.dart';
 import 'package:frontend/models/survey_modules/personal_data.dart';
 import 'package:frontend/models/survey_modules/questionnaire_data.dart';
 import 'package:frontend/models/survey.dart';
+import 'package:frontend/models/survey_modules/questionnaires/eq5d.dart';
+import 'package:frontend/models/survey_modules/questionnaires/who5.dart';
 import 'package:frontend/utils/base_url.dart';
 import 'package:frontend/utils/session_instance.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -100,9 +102,31 @@ class SurveyService {
     // await _cacheSurvey(currentSurvey!);
   }
 
-  Future<void> _cacheSurvey(Survey survey) async {
+  Future<void> saveEq5d(Eq5d eq5d) async {
+    currentSurvey?.questionnaireData ??= QuestionnaireData(
+      eq5d: Eq5d(),
+      who5: Who5(),
+    );
+
+    currentSurvey!.questionnaireData!.eq5d = eq5d;
+
+    await _cacheSurvey();
+  }
+
+  Future<void> saveWho5(Who5 who5) async {
+    currentSurvey?.questionnaireData ??= QuestionnaireData(
+      eq5d: Eq5d(),
+      who5: Who5(),
+    );
+
+    currentSurvey!.questionnaireData!.who5 = who5;
+
+    await _cacheSurvey();
+  }
+
+  Future<void> _cacheSurvey() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(storageKey, jsonEncode(survey.toJson()));
+    await prefs.setString(storageKey, jsonEncode(currentSurvey!.toJson()));
   }
 
   Future<void> _clearCache() async {

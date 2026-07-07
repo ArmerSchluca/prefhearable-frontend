@@ -108,12 +108,14 @@ class _HomeViewState extends State<HomeView> {
               if (survey.currentSurvey == null) {
                 await survey.startSurvey();
                 setState(() {});
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text("Umfrage gestartet!"),
-                    backgroundColor: Colors.green,
-                  ),
-                );
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("Umfrage gestartet!"),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                }
               } else {
                 await survey.loadCachedSurvey();
                 setState(() {});

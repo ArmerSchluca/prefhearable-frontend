@@ -1,0 +1,173 @@
+import 'package:flutter/material.dart';
+import 'package:frontend/models/survey_modules/questionnaires/who5.dart';
+import 'package:frontend/shared/appbar.dart';
+import 'package:frontend/shared/dialogs.dart';
+import 'package:frontend/shared/footer.dart';
+import 'package:frontend/shared/layout.dart';
+import 'package:frontend/utils/survey_instance.dart';
+
+class Who5View extends StatefulWidget {
+  const Who5View({super.key});
+
+  @override
+  State<Who5View> createState() => _Who5ViewState();
+}
+
+class _Who5ViewState extends State<Who5View> {
+  Who5Answer? positiveAffect;
+  Who5Answer? calmness;
+  Who5Answer? vitality;
+  Who5Answer? restedness;
+  Who5Answer? lifeInterest;
+
+  @override
+  void initState() {
+    super.initState();
+
+    final who5 = survey.currentSurvey?.questionnaireData?.who5;
+
+    if (who5 != null) {
+      positiveAffect = who5.positiveAffect;
+      calmness = who5.calmness;
+      vitality = who5.vitality;
+      restedness = who5.restedness;
+      lifeInterest = who5.lifeInterest;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AppLayout(
+      appBar: CustomAppBar(
+        title: "WHO-5",
+        color: Colors.deepPurple,
+        nav: true,
+        onBackPressed: () async {
+          await _saveWho5();
+          if (context.mounted) Navigator.pop(context);
+        },
+      ),
+      footer: AppFooter(
+        actions: [
+          const Spacer(),
+          TextButton.icon(
+            icon: const Icon(Icons.info, color: Colors.blueGrey),
+            label: const Text("Info", style: TextStyle(color: Colors.blueGrey)),
+            onPressed: () {
+              AppDialog.showInfo(
+                context,
+                const Text("WHO-5"),
+                const Text(
+                  "Die folgenden Aussagen betreffen Ihr Wohlbefinden in den letzten zwei Wochen. Bitte markieren "
+                  "Sie bei jeder Aussage die Rubrik, die Ihrer Meinung nach am besten beschreibt, wie Sie sich in den "
+                  "letzten zwei Wochen gefühlt haben",
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+      children: [
+        const Center(
+          child: Icon(Icons.assignment, size: 120, color: Colors.deepPurple),
+        ),
+
+        SizedBox(height: 30),
+
+        Text(
+          "In den letzten zwei Wochen...",
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+
+        SizedBox(height: 20),
+
+        _question(
+          "...war ich froh und guter Laune",
+          positiveAffect,
+          (value) => setState(() => positiveAffect = value),
+        ),
+
+        _question(
+          "...habe ich mich ruhig und entspannt gefühlt",
+          calmness,
+          (value) => setState(() => calmness = value),
+        ),
+
+        _question(
+          "...habe ich mich energisch und aktiv gefühlt",
+          vitality,
+          (value) => setState(() => vitality = value),
+        ),
+
+        _question(
+          "...habe ich mich beim Aufwachen frisch und ausgeruht gefühlt",
+          restedness,
+          (value) => setState(() => restedness = value),
+        ),
+
+        _question(
+          "...war mein Alltag voller Dinge, die mich interessieren",
+          lifeInterest,
+          (value) => setState(() => lifeInterest = value),
+        ),
+      ],
+    );
+  }
+
+  Widget _question(
+    String title,
+    Who5Answer? value,
+    ValueChanged<Who5Answer> onChanged,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 28),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(title, style: const TextStyle(fontSize: 16)),
+
+          const SizedBox(height: 12),
+
+          SegmentedButton<Who5Answer>(
+            showSelectedIcon: false,
+            emptySelectionAllowed: true,
+            segments: Who5Answer.values
+                .map(
+                  (answer) => ButtonSegment(
+                    value: answer,
+                    label: Text(answer.value.toString()),
+                    tooltip: answer.label,
+                  ),
+                )
+                .toList(),
+            selected: value == null ? {} : {value},
+            onSelectionChanged: (selection) {
+              onChanged(selection.first);
+            },
+          ),
+
+          if (value != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Text(
+                value.label,
+                style: const TextStyle(color: Colors.grey),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _saveWho5() async {
+    final who5 = Who5(
+      positiveAffect: positiveAffect,
+      calmness: calmness,
+      vitality: vitality,
+      restedness: restedness,
+      lifeInterest: lifeInterest,
+    );
+
+    survey.saveWho5(who5);
+  }
+}

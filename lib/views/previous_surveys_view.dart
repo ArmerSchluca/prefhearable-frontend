@@ -3,10 +3,6 @@ import 'package:frontend/shared/dialogs.dart';
 import 'package:frontend/shared/layout.dart';
 import 'package:frontend/shared/appbar.dart';
 import 'package:frontend/shared/footer.dart';
-import 'package:frontend/views/survey_modules/audiotest_view.dart';
-import 'package:frontend/views/survey_modules/context_data_view.dart';
-import 'package:frontend/views/survey_modules/personal_data_view.dart';
-import 'package:frontend/views/survey_modules/questionnaires_view.dart';
 
 class PreviousSurveysView extends StatelessWidget {
   const PreviousSurveysView({super.key});
@@ -41,86 +37,7 @@ class PreviousSurveysView extends StatelessWidget {
         color: Colors.teal,
         nav: true,
       ),
-      children: [
-        SectionCard(
-          title: "Personal Data",
-          icon: Icon(Icons.person, color: Colors.orange, size: 40),
-          status: SectionStatus.open,
-          destination: PersonalDataView(),
-        ),
-        SizedBox(height: 12),
-        SectionCard(
-          title: "Contextual Data",
-          icon: Icon(Icons.public, color: Colors.green, size: 40),
-          status: SectionStatus.open,
-          destination: ContextDataView(),
-        ),
-        SizedBox(height: 12),
-        SectionCard(
-          title: "Audio Tests",
-          icon: Icon(Icons.headphones, color: Colors.pinkAccent, size: 40),
-          status: SectionStatus.open,
-          destination: AudioTestView(),
-        ),
-        SizedBox(height: 12),
-        SectionCard(
-          title: "Questionnaires",
-          icon: Icon(
-            Icons.assignment,
-            color: Colors.deepPurpleAccent,
-            size: 40,
-          ),
-          status: SectionStatus.open,
-          destination: QuestionnairesView(),
-        ),
-
-        SizedBox(height: 12),
-      ],
+      children: [],
     );
   }
 }
-
-class SectionCard extends Card {
-  final String title;
-  final Icon icon;
-  final SectionStatus status;
-  final Widget destination;
-
-  const SectionCard({
-    super.key,
-    required this.title,
-    required this.icon,
-    required this.status,
-    required this.destination,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Card(
-        clipBehavior: .hardEdge,
-        child: InkWell(
-          splashColor: Colors.blue.withAlpha(30),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => destination),
-            );
-          },
-          child: Column(
-            mainAxisSize: .min,
-            children: <Widget>[
-              ListTile(
-                leading: icon,
-                title: Text(title),
-                subtitle: Text(status.toString()),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-enum SectionStatus { open, partial, completed }

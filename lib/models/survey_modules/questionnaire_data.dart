@@ -1,6 +1,9 @@
+import 'package:frontend/models/survey_modules/questionnaires/eq5d.dart';
+import 'package:frontend/models/survey_modules/questionnaires/who5.dart';
+
 class QuestionnaireData {
-  final Eq5d eq5d;
-  final Who5 who5;
+  Eq5d eq5d;
+  Who5 who5;
 
   bool get isComplete => eq5d.isComplete && who5.isComplete;
 
@@ -10,24 +13,4 @@ class QuestionnaireData {
     'eq5d_responses': eq5d.toJson(),
     'who5_responses': who5.toJson(),
   };
-}
-
-class Eq5d {
-  final String? question1;
-
-  bool get isComplete => question1 != null;
-
-  Eq5d({required this.question1});
-
-  Map<String, dynamic> toJson() => {'question1': question1};
-}
-
-class Who5 {
-  final String? question1;
-
-  bool get isComplete => question1 != null;
-
-  Who5({required this.question1});
-
-  Map<String, dynamic> toJson() => {'question1': question1};
 }
