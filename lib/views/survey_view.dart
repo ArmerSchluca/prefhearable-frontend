@@ -45,7 +45,7 @@ class _SurveyViewState extends State<SurveyView> {
               );
 
               if (result == true) {
-                await survey.cancelSurvey();
+                await surveyService.cancelSurvey();
                 debugPrint("SURVEY_CANCELT");
 
                 if (!context.mounted) return;
@@ -96,7 +96,7 @@ class _SurveyViewState extends State<SurveyView> {
         SectionCard(
           title: "Personendaten",
           icon: Icon(Icons.person, color: Colors.orange, size: 40),
-          status: survey.currentSurvey!.isPersonalDataComplete
+          status: surveyService.currentSurvey!.personalData.isComplete
               ? SectionStatus.complete
               : SectionStatus.incomplete,
           onTap: () async {
@@ -114,7 +114,7 @@ class _SurveyViewState extends State<SurveyView> {
         SectionCard(
           title: "Kontextdaten",
           icon: Icon(Icons.public, color: Colors.green, size: 40),
-          status: survey.currentSurvey!.isContextDataComplete
+          status: surveyService.currentSurvey!.contextData.isComplete
               ? SectionStatus.complete
               : SectionStatus.incomplete,
           onTap: () async {
@@ -132,7 +132,7 @@ class _SurveyViewState extends State<SurveyView> {
         SectionCard(
           title: "Hörtests",
           icon: Icon(Icons.headphones, color: Colors.pinkAccent, size: 40),
-          status: survey.currentSurvey!.isAudioTestDataComplete
+          status: surveyService.currentSurvey!.audioTestData.isComplete
               ? SectionStatus.complete
               : SectionStatus.incomplete,
           onTap: () async {
@@ -154,7 +154,7 @@ class _SurveyViewState extends State<SurveyView> {
             color: Colors.deepPurpleAccent,
             size: 40,
           ),
-          status: survey.currentSurvey!.isQuestionnaireDataComplete
+          status: surveyService.currentSurvey!.questionnaireData.isComplete
               ? SectionStatus.complete
               : SectionStatus.incomplete,
           onTap: () async {
@@ -174,9 +174,9 @@ class _SurveyViewState extends State<SurveyView> {
         //  SUBMIT BUTTON
         Center(
           child: FilledButton(
-            onPressed: survey.currentSurvey!.isComplete
+            onPressed: surveyService.currentSurvey!.isComplete
                 ? () async {
-                    await survey.submitSurvey();
+                    await surveyService.submitSurvey();
 
                     if (!context.mounted) return;
 
@@ -226,5 +226,3 @@ class _SurveyViewState extends State<SurveyView> {
     );
   }
 }
-
-

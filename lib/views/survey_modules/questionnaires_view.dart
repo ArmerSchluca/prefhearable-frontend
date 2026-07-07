@@ -57,7 +57,7 @@ class _QuestionnairesViewState extends State<QuestionnairesView> {
             color: Colors.deepPurpleAccent,
             size: 40,
           ),
-          status: survey.currentSurvey!.questionnaireData!.eq5d.isComplete
+          status: surveyService.currentSurvey!.questionnaireData.eq5d.isComplete
               ? SectionStatus.complete
               : SectionStatus.incomplete,
           onTap: () async {
@@ -81,7 +81,7 @@ class _QuestionnairesViewState extends State<QuestionnairesView> {
             color: Colors.deepPurpleAccent,
             size: 40,
           ),
-          status: survey.currentSurvey!.questionnaireData!.who5.isComplete
+          status: surveyService.currentSurvey!.questionnaireData.who5.isComplete
               ? SectionStatus.complete
               : SectionStatus.incomplete,
           onTap: () async {

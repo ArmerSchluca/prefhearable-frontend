@@ -5,7 +5,6 @@ import 'package:frontend/shared/dialogs.dart';
 import 'package:frontend/shared/footer.dart';
 import 'package:frontend/shared/input_styles.dart';
 import 'package:frontend/shared/layout.dart';
-import 'package:frontend/utils/input_validator.dart';
 import 'package:frontend/utils/survey_instance.dart';
 import 'package:intl/intl.dart';
 
@@ -34,19 +33,17 @@ class _ContextDataViewState extends State<ContextDataView> {
   void initState() {
     super.initState();
 
-    final contextData = survey.currentSurvey?.contextData;
+    final contextData = surveyService.currentSurvey!.contextData;
 
-    if (contextData != null) {
-      latitudeController.text = contextData.latitude?.toString() ?? "";
-      longitudeController.text = contextData.longitude?.toString() ?? "";
-      locationType = contextData.locationType;
-      climateZone = contextData.climateZone;
-      season = contextData.season;
-      noiseLevelController.text = contextData.noiseLevel?.toString() ?? "";
-      timestamp = contextData.timestamp;
-      timestampController.text = contextData.timestamp?.toString() ?? "";
-      weatherController.text = contextData.weather?.toString() ?? "";
-    }
+    latitudeController.text = contextData.latitude?.toString() ?? "";
+    longitudeController.text = contextData.longitude?.toString() ?? "";
+    locationType = contextData.locationType;
+    climateZone = contextData.climateZone;
+    season = contextData.season;
+    noiseLevelController.text = contextData.noiseLevel?.toString() ?? "";
+    timestamp = contextData.timestamp;
+    timestampController.text = contextData.timestamp?.toString() ?? "";
+    weatherController.text = contextData.weather?.toString() ?? "";
   }
 
   @override
@@ -57,7 +54,11 @@ class _ContextDataViewState extends State<ContextDataView> {
         color: Colors.green,
         nav: true,
         onBackPressed: () {
-          if (!_formKey.currentState!.validate()) {
+          _saveContextData();
+
+          Navigator.pop(context);
+
+          if (surveyService.currentSurvey!.contextData.isComplete) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text("Es wurden noch nicht alle Felder ausgefüllt!"),
@@ -72,8 +73,6 @@ class _ContextDataViewState extends State<ContextDataView> {
               ),
             );
           }
-          _saveContextData();
-          Navigator.pop(context);
         },
       ),
       footer: AppFooter(
@@ -119,7 +118,6 @@ class _ContextDataViewState extends State<ContextDataView> {
                     locationType = value;
                   });
                 },
-                validator: InputValidator.required,
               ),
 
               SizedBox(height: 30),
@@ -143,7 +141,6 @@ class _ContextDataViewState extends State<ContextDataView> {
                     season = value;
                   });
                 },
-                validator: InputValidator.required,
               ),
 
               SizedBox(height: 70),
@@ -189,7 +186,6 @@ class _ContextDataViewState extends State<ContextDataView> {
                   hint: "Wird automatisch erfasst",
                   accentColor: Colors.green,
                 ),
-                validator: InputValidator.required,
               ),
 
               SizedBox(height: 30),
@@ -204,7 +200,6 @@ class _ContextDataViewState extends State<ContextDataView> {
                   hint: "Wird automatisch erfasst",
                   accentColor: Colors.green,
                 ),
-                validator: InputValidator.required,
               ),
 
               SizedBox(height: 30),
@@ -218,7 +213,6 @@ class _ContextDataViewState extends State<ContextDataView> {
                   hint: "Wird automatisch erfasst",
                   accentColor: Colors.green,
                 ),
-                validator: InputValidator.required,
               ),
 
               SizedBox(height: 30),
@@ -232,7 +226,6 @@ class _ContextDataViewState extends State<ContextDataView> {
                   hint: "wird automatisch erfasst",
                   accentColor: Colors.green,
                 ),
-                validator: InputValidator.required,
               ),
 
               SizedBox(height: 30),
@@ -246,7 +239,6 @@ class _ContextDataViewState extends State<ContextDataView> {
                   hint: "wird automatisch erfasst",
                   accentColor: Colors.green,
                 ),
-                validator: InputValidator.required,
               ),
 
               SizedBox(height: 70),
@@ -293,7 +285,6 @@ class _ContextDataViewState extends State<ContextDataView> {
                   hint: "wird automatisch erfasst",
                   accentColor: Colors.green,
                 ),
-                validator: InputValidator.required,
               ),
             ],
           ),
@@ -315,7 +306,7 @@ class _ContextDataViewState extends State<ContextDataView> {
       weather: weatherController.text,
     );
 
-    await survey.saveContextData(contextData);
+    await surveyService.saveContextData(contextData);
   }
 
   Future<void> getApiData() async {

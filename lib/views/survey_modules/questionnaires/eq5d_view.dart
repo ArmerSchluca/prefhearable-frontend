@@ -64,15 +64,13 @@ class _Eq5dViewState extends State<Eq5dView> {
   void initState() {
     super.initState();
 
-    final eq5d = survey.currentSurvey?.questionnaireData?.eq5d;
+    final eq5d = surveyService.currentSurvey!.questionnaireData.eq5d;
 
-    if (eq5d != null) {
-      mobility = eq5d.mobility;
-      selfCare = eq5d.selfCare;
-      usualActivities = eq5d.usualActivities;
-      pain = eq5d.pain;
-      anxiety = eq5d.anxiety;
-    }
+    mobility = eq5d.mobility;
+    selfCare = eq5d.selfCare;
+    usualActivities = eq5d.usualActivities;
+    pain = eq5d.pain;
+    anxiety = eq5d.anxiety;
   }
 
   @override
@@ -82,9 +80,26 @@ class _Eq5dViewState extends State<Eq5dView> {
         title: "EQ-5D-5L",
         color: Colors.deepPurple,
         nav: true,
-        onBackPressed: () async {
-          await _saveEq5d();
-          if (context.mounted) Navigator.pop(context);
+        onBackPressed: () {
+          _saveEq5d();
+
+          Navigator.pop(context);
+
+          if (!surveyService.currentSurvey!.questionnaireData.eq5d.isComplete) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text("Es wurden noch nicht alle Fragen beantworten!"),
+                backgroundColor: Colors.grey,
+              ),
+            );
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text("EQ-5D Umfragebogen abgeschlossen!"),
+                backgroundColor: Colors.green,
+              ),
+            );
+          }
         },
       ),
       footer: AppFooter(
@@ -229,6 +244,6 @@ class _Eq5dViewState extends State<Eq5dView> {
       anxiety: anxiety,
     );
 
-    survey.saveEq5d(eq5d);
+    surveyService.saveEq5d(eq5d);
   }
 }

@@ -88,14 +88,11 @@ class _LaunchViewState extends State<LaunchView> {
                       final id = await session.registerParticipant();
                       debugPrint("REGISTERED: $id");
 
-                      if (context.mounted) {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => HomeView()),
-                        );
-                      } else {
-                        return;
-                      }
+                      if (!context.mounted) return;
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => HomeView()),
+                      );
                     } catch (e) {
                       AppDialog.showServerError(context);
                       debugPrint("REGISTER ERROR: $e");

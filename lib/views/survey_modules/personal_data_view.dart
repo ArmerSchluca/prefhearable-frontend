@@ -5,7 +5,6 @@ import 'package:frontend/shared/dialogs.dart';
 import 'package:frontend/shared/footer.dart';
 import 'package:frontend/shared/input_styles.dart';
 import 'package:frontend/shared/layout.dart';
-import 'package:frontend/utils/input_validator.dart';
 import 'package:frontend/utils/survey_instance.dart';
 
 class PersonalDataView extends StatefulWidget {
@@ -38,22 +37,20 @@ class _PersonalDataViewState extends State<PersonalDataView> {
   void initState() {
     super.initState();
 
-    final personalData = survey.currentSurvey?.personalData;
+    final personalData = surveyService.currentSurvey!.personalData;
 
-    if (personalData != null) {
-      ageController.text = personalData.age?.toString() ?? "";
-      gender = personalData.gender;
-      occupation = personalData.occupation;
-      hearingAided = personalData.hearingAided;
-      hearingAidDuration = personalData.hearingAidDuration;
-      residentialArea = personalData.residentialArea;
-      physicalActivityType = personalData.physicalActivityType;
-      physicalActivityFrequency = personalData.physicalActivityFrequency;
-      physicalActivityDuration = personalData.physicalActivityDuration;
-      diet = personalData.diet;
-      allergiesController.text = personalData.allergies?.join(", ") ?? "";
-      diseasesController.text = personalData.diseases?.join(", ") ?? "";
-    }
+    ageController.text = personalData.age?.toString() ?? "";
+    gender = personalData.gender;
+    occupation = personalData.occupation;
+    hearingAided = personalData.hearingAided;
+    hearingAidDuration = personalData.hearingAidDuration;
+    residentialArea = personalData.residentialArea;
+    physicalActivityType = personalData.physicalActivityType;
+    physicalActivityFrequency = personalData.physicalActivityFrequency;
+    physicalActivityDuration = personalData.physicalActivityDuration;
+    diet = personalData.diet;
+    allergiesController.text = personalData.allergies?.join(", ") ?? "";
+    diseasesController.text = personalData.diseases?.join(", ") ?? "";
   }
 
   @override
@@ -64,7 +61,11 @@ class _PersonalDataViewState extends State<PersonalDataView> {
         color: Colors.orange,
         nav: true,
         onBackPressed: () {
-          if (!_formKey.currentState!.validate()) {
+          _savePersonalData();
+
+          Navigator.pop(context);
+
+          if (!surveyService.currentSurvey!.personalData.isComplete) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text("Es wurden noch nicht alle Felder ausgefüllt!"),
@@ -79,8 +80,6 @@ class _PersonalDataViewState extends State<PersonalDataView> {
               ),
             );
           }
-          _savePersonalData();
-          Navigator.pop(context);
         },
       ),
       footer: AppFooter(
@@ -103,7 +102,6 @@ class _PersonalDataViewState extends State<PersonalDataView> {
         Center(child: Icon(Icons.person, size: 150, color: Colors.orange)),
         SizedBox(height: 30),
         Form(
-          autovalidateMode: AutovalidateMode.onUserInteraction,
           key: _formKey,
           child: Column(
             children: [
@@ -117,7 +115,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                   accentColor: Colors.orange,
                 ),
                 validator: (value) =>
-                    InputValidator.validateAge(int.tryParse(value ?? "")),
+                    surveyService.validateAge(int.tryParse(value ?? "")),
               ),
               SizedBox(height: 30),
 
@@ -140,7 +138,6 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                     gender = value;
                   });
                 },
-                validator: InputValidator.required,
               ),
               SizedBox(height: 30),
 
@@ -163,7 +160,6 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                     occupation = value;
                   });
                 },
-                validator: InputValidator.required,
               ),
               SizedBox(height: 30),
 
@@ -186,7 +182,6 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                     hearingAided = value;
                   });
                 },
-                validator: InputValidator.required,
               ),
               SizedBox(height: 30),
 
@@ -209,7 +204,6 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                     hearingAidDuration = value;
                   });
                 },
-                validator: InputValidator.required,
               ),
               SizedBox(height: 30),
 
@@ -232,7 +226,6 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                     residentialArea = value;
                   });
                 },
-                validator: InputValidator.required,
               ),
               SizedBox(height: 30),
 
@@ -253,61 +246,66 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                 onChanged: (value) {
                   setState(() {
                     physicalActivityType = value;
+                    if (value == PhysicalActivityType.none) {
+                      physicalActivityFrequency = null;
+                      physicalActivityDuration = null;
+                    }
                   });
                 },
-                validator: InputValidator.required,
               ),
               SizedBox(height: 30),
 
-              // SPORT FREQUENZ (physicalActivityFrequency)
-              DropdownButtonFormField<PhysicalActivityFrequency>(
-                decoration: AppInputStyles.dropdown(
-                  label: "Häufigkeit des Sportmachens",
-                  hint: "Bitte Häufigkeit des Sportmachens auswählen",
-                  accentColor: Colors.orange,
+              // Die drei Punkte sind wichtig, weil sonst eine Liste<Widget> draus gemacht wird.
+              if (physicalActivityType != PhysicalActivityType.none &&
+                  physicalActivityType != null) ...[
+                // SPORT FREQUENZ (physicalActivityFrequency)
+                DropdownButtonFormField<PhysicalActivityFrequency>(
+                  decoration: AppInputStyles.dropdown(
+                    label: "Häufigkeit des Sportmachens",
+                    hint: "Bitte Häufigkeit des Sportmachens auswählen",
+                    accentColor: Colors.orange,
+                  ),
+                  initialValue: physicalActivityFrequency,
+                  items: PhysicalActivityFrequency.values.map((
+                    physicalActivityFrequency,
+                  ) {
+                    return DropdownMenuItem(
+                      value: physicalActivityFrequency,
+                      child: Text(physicalActivityFrequency.label),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      physicalActivityFrequency = value;
+                    });
+                  },
                 ),
-                initialValue: physicalActivityFrequency,
-                items: PhysicalActivityFrequency.values.map((
-                  physicalActivityFrequency,
-                ) {
-                  return DropdownMenuItem(
-                    value: physicalActivityFrequency,
-                    child: Text(physicalActivityFrequency.label),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    physicalActivityFrequency = value;
-                  });
-                },
-                validator: InputValidator.required,
-              ),
-              SizedBox(height: 30),
+                SizedBox(height: 30),
 
-              // SPORT DAUER (physicalActivityDuration)
-              DropdownButtonFormField<PhysicalActivityDuration>(
-                decoration: AppInputStyles.dropdown(
-                  label: "Dauer einer Sporteinheit",
-                  hint: "Bitte Dauer einer Sporteinheit auswählen",
-                  accentColor: Colors.orange,
+                // SPORT DAUER (physicalActivityDuration)
+                DropdownButtonFormField<PhysicalActivityDuration>(
+                  decoration: AppInputStyles.dropdown(
+                    label: "Dauer einer Sporteinheit",
+                    hint: "Bitte Dauer einer Sporteinheit auswählen",
+                    accentColor: Colors.orange,
+                  ),
+                  initialValue: physicalActivityDuration,
+                  items: PhysicalActivityDuration.values.map((
+                    physicalActivityDuration,
+                  ) {
+                    return DropdownMenuItem(
+                      value: physicalActivityDuration,
+                      child: Text(physicalActivityDuration.label),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      physicalActivityDuration = value;
+                    });
+                  },
                 ),
-                initialValue: physicalActivityDuration,
-                items: PhysicalActivityDuration.values.map((
-                  physicalActivityDuration,
-                ) {
-                  return DropdownMenuItem(
-                    value: physicalActivityDuration,
-                    child: Text(physicalActivityDuration.label),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    physicalActivityDuration = value;
-                  });
-                },
-                validator: InputValidator.required,
-              ),
-              SizedBox(height: 30),
+                SizedBox(height: 30),
+              ],
 
               // ERNÄHRUNG (diet)
               DropdownButtonFormField<Diet>(
@@ -325,7 +323,6 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                     diet = value;
                   });
                 },
-                validator: InputValidator.required,
               ),
               SizedBox(height: 30),
 
@@ -335,23 +332,21 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                 keyboardType: TextInputType.number,
                 decoration: AppInputStyles.textField(
                   label: "Allergien",
-                  hint: "Mit Komma trennen: Pollen, Nüssen, ...",
+                  hint: "Mit Komma trennen: Pollen, Nüsse, ...",
                   accentColor: Colors.orange,
                 ),
-                validator: (_) => null,
               ),
               SizedBox(height: 30),
 
               // VORERKRANKUNGEN (diseases)
               TextFormField(
-                controller: allergiesController,
+                controller: diseasesController,
                 keyboardType: TextInputType.number,
                 decoration: AppInputStyles.textField(
                   label: "(Vor-)Erkrankungen",
                   hint: "Mit Komma trennen: Diabetes, Asthma, ...",
                   accentColor: Colors.orange,
                 ),
-                validator: (_) => null,
               ),
             ],
           ),
@@ -386,6 +381,6 @@ class _PersonalDataViewState extends State<PersonalDataView> {
           .toList(),
     );
 
-    await survey.savePersonalData(personalData);
+    await surveyService.savePersonalData(personalData);
   }
 }

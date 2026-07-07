@@ -105,19 +105,18 @@ class _HomeViewState extends State<HomeView> {
             ),
 
             onPressed: () async {
-              if (survey.currentSurvey == null) {
-                await survey.startSurvey();
+              if (surveyService.currentSurvey == null) {
+                await surveyService.startSurvey();
                 setState(() {});
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Umfrage gestartet!"),
-                      backgroundColor: Colors.green,
-                    ),
-                  );
-                }
+                if (!context.mounted) return;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("Umfrage gestartet!"),
+                    backgroundColor: Colors.green,
+                  ),
+                );
               } else {
-                await survey.loadCachedSurvey();
+                await surveyService.loadCachedSurvey();
                 setState(() {});
               }
 
@@ -132,12 +131,14 @@ class _HomeViewState extends State<HomeView> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
-                  survey.currentSurvey != null ? Icons.pause : Icons.play_arrow,
+                  surveyService.currentSurvey != null
+                      ? Icons.pause
+                      : Icons.play_arrow,
                   size: 24,
                 ),
                 SizedBox(width: 8),
                 Text(
-                  survey.currentSurvey != null
+                  surveyService.currentSurvey != null
                       ? "Umfrage fortsetzen"
                       : "Neue Umfrage starten",
                   style: TextStyle(fontSize: 20),

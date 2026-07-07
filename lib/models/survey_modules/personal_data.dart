@@ -1,5 +1,4 @@
-import 'package:frontend/utils/input_validator.dart';
-import 'package:frontend/utils/session_instance.dart';
+import 'package:frontend/utils/survey_instance.dart';
 
 class PersonalData {
   int? age;
@@ -17,17 +16,25 @@ class PersonalData {
 
   // Zum Abfragen des Status, ob alle Felder ausgefüllt
   bool get isComplete =>
-      InputValidator.validateAge(age) == null &&
+      surveyService.validateAge(age) == null &&
       gender != null &&
       occupation != null &&
       hearingAided != null &&
       hearingAidDuration != null &&
       residentialArea != null &&
-      physicalActivityType != null &&
-      physicalActivityFrequency != null &&
-      physicalActivityDuration != null &&
+      isSportComplete &&
       diet != null;
-      // allergies und diseases nicht verpflichtend
+  // allergies und diseases nicht verpflichtend
+
+  // Wenn Sport = none ist, dann...
+  bool get isSportRequired => physicalActivityType != PhysicalActivityType.none;
+  // ...sollen die beiden Felder hier ebenfalls null sein
+  bool get isSportComplete {
+    if (!isSportRequired) return true;
+
+    return physicalActivityFrequency != null &&
+        physicalActivityDuration != null;
+  }
 
   PersonalData({
     this.age,
@@ -45,7 +52,6 @@ class PersonalData {
   });
 
   Map<String, dynamic> toJson() => {
-    'id': session.getCurrentParticipantId(),
     'age': age,
     'gender': gender?.name,
     'occupation': occupation?.name,
@@ -54,7 +60,7 @@ class PersonalData {
     'residentialArea': residentialArea?.name,
     'physicalActivityType': physicalActivityType?.name,
     'physicalActivityFrequency': physicalActivityFrequency?.name,
-    'physicalActivityDuration': physicalActivityDuration,
+    'physicalActivityDuration': physicalActivityDuration?.minutes,
     'diet': diet?.name,
     'allergies': allergies,
     'diseases': diseases,

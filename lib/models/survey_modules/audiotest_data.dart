@@ -1,13 +1,11 @@
 class AudioTestData {
-  int? age;
+  CcsmAudioTest ccsm = CcsmAudioTest();
 
-  bool get isComplete => age != null;
+  bool get isComplete => ccsm.isComplete;
 
-  AudioTestData({required this.age});
-
-  Map<String, dynamic> toJson() => {'age': age};
+  Map<String, dynamic> toJson() => {'ccsm': ccsm};
 }
 
 class CcsmAudioTest {
-  
+  bool get isComplete => true;
 }

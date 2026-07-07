@@ -24,15 +24,13 @@ class _Who5ViewState extends State<Who5View> {
   void initState() {
     super.initState();
 
-    final who5 = survey.currentSurvey?.questionnaireData?.who5;
+    final who5 = surveyService.currentSurvey!.questionnaireData.who5;
 
-    if (who5 != null) {
-      positiveAffect = who5.positiveAffect;
-      calmness = who5.calmness;
-      vitality = who5.vitality;
-      restedness = who5.restedness;
-      lifeInterest = who5.lifeInterest;
-    }
+    positiveAffect = who5.positiveAffect;
+    calmness = who5.calmness;
+    vitality = who5.vitality;
+    restedness = who5.restedness;
+    lifeInterest = who5.lifeInterest;
   }
 
   @override
@@ -42,9 +40,26 @@ class _Who5ViewState extends State<Who5View> {
         title: "WHO-5",
         color: Colors.deepPurple,
         nav: true,
-        onBackPressed: () async {
-          await _saveWho5();
-          if (context.mounted) Navigator.pop(context);
+        onBackPressed: () {
+          _saveWho5();
+
+          Navigator.pop(context);
+
+          if (!surveyService.currentSurvey!.questionnaireData.who5.isComplete) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text("Es wurden noch nicht alle Fragen beantworten!"),
+                backgroundColor: Colors.grey,
+              ),
+            );
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text("WHO-5 Umfragebogen abgeschlossen!"),
+                backgroundColor: Colors.green,
+              ),
+            );
+          }
         },
       ),
       footer: AppFooter(
@@ -168,6 +183,6 @@ class _Who5ViewState extends State<Who5View> {
       lifeInterest: lifeInterest,
     );
 
-    survey.saveWho5(who5);
+    surveyService.saveWho5(who5);
   }
 }

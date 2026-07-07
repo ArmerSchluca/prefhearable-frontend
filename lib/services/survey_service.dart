@@ -102,24 +102,20 @@ class SurveyService {
     // await _cacheSurvey(currentSurvey!);
   }
 
-  Future<void> saveEq5d(Eq5d eq5d) async {
-    currentSurvey?.questionnaireData ??= QuestionnaireData(
-      eq5d: Eq5d(),
-      who5: Who5(),
-    );
+  Future<void> saveCcsm(CcsmAudioTest ccsm) async {
+    currentSurvey!.audioTestData.ccsm = ccsm;
 
-    currentSurvey!.questionnaireData!.eq5d = eq5d;
+    await _cacheSurvey();
+  }
+
+  Future<void> saveEq5d(Eq5d eq5d) async {
+    currentSurvey!.questionnaireData.eq5d = eq5d;
 
     await _cacheSurvey();
   }
 
   Future<void> saveWho5(Who5 who5) async {
-    currentSurvey?.questionnaireData ??= QuestionnaireData(
-      eq5d: Eq5d(),
-      who5: Who5(),
-    );
-
-    currentSurvey!.questionnaireData!.who5 = who5;
+    currentSurvey!.questionnaireData.who5 = who5;
 
     await _cacheSurvey();
   }
@@ -132,5 +128,21 @@ class SurveyService {
   Future<void> _clearCache() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(storageKey);
+  }
+
+  String? validateAge(int? age) {
+    if (age == null) {
+      return "Bitte Alter angeben.";
+    }
+
+    if (age <= 0) {
+      return "Bitte eine positive Ganzzahl eingeben.";
+    }
+
+    if (age >= 120 || age <= 5) {
+      return "Bitte ein realistisches Alter angeben.";
+    }
+
+    return null;
   }
 }
