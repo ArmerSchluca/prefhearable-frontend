@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/models/survey_modules/context_data.dart';
@@ -75,14 +77,14 @@ class _ContextDataViewState extends State<ContextDataView> {
 
           if (!surveyService.currentSurvey!.contextData.isComplete) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
+              SnackBar(
                 content: Text("Es wurden noch nicht alle Felder ausgefüllt!"),
                 backgroundColor: Colors.grey,
               ),
             );
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
+              SnackBar(
                 content: Text("Kontextdaten erfasst!"),
                 backgroundColor: Colors.green,
               ),
@@ -165,7 +167,7 @@ class _ContextDataViewState extends State<ContextDataView> {
                 child: FilledButton(
                   onPressed: getApiData,
                   style: FilledButton.styleFrom(
-                    minimumSize: const Size(double.infinity, 60),
+                    minimumSize: Size(double.infinity, 60),
                     elevation: 3,
                     backgroundColor: Colors.green,
                     foregroundColor: Colors.white,
@@ -176,7 +178,7 @@ class _ContextDataViewState extends State<ContextDataView> {
 
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
-                    children: const [
+                    children: [
                       Icon(Icons.add_location_alt_outlined, size: 28),
                       SizedBox(width: 12),
                       Flexible(
@@ -313,7 +315,7 @@ class _ContextDataViewState extends State<ContextDataView> {
                 child: FilledButton(
                   onPressed: getNoiseLevel,
                   style: FilledButton.styleFrom(
-                    minimumSize: const Size(double.infinity, 60),
+                    minimumSize: Size(double.infinity, 60),
                     elevation: 3,
                     backgroundColor: Colors.green,
                     foregroundColor: Colors.white,
@@ -323,7 +325,7 @@ class _ContextDataViewState extends State<ContextDataView> {
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
-                    children: const [
+                    children: [
                       Icon(Icons.mic, size: 28),
                       SizedBox(width: 12),
                       Flexible(
@@ -345,9 +347,7 @@ class _ContextDataViewState extends State<ContextDataView> {
               TextFormField(
                 controller: noiseLevelController,
                 readOnly: true,
-                keyboardType: const TextInputType.numberWithOptions(
-                  decimal: true,
-                ),
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
                 decoration: AppInputStyles.textField(
                   label: "Umgebungslautstärke",
                   hint: "wird automatisch erfasst",
@@ -386,27 +386,32 @@ class _ContextDataViewState extends State<ContextDataView> {
   Future<void> getApiData() async {
     final confirmed = await AppDialog.showSelection(
       context,
-      const Text("GPS zulassen?"),
-      const Text("GPS zulassen, um alle Felder automatisch auszufüllen?"),
+      Text("GPS zulassen?"),
+      Text("GPS zulassen, um alle Felder automatisch auszufüllen?"),
       Colors.green,
       Colors.grey,
     );
 
+    if (confirmed != true) return;
+
     // Ladebalken vor API-Call öffnen
+    if (!mounted) return;
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (_) => const Center(child: CircularProgressIndicator()),
+      builder: (_) =>
+          Center(child: CircularProgressIndicator(color: Colors.green)),
     );
 
-    if (confirmed != true) return;
-
     try {
-      final position = await ExternalApiService.getCurrentPosition();
+      final position = await ExternalApiService.getCurrentPosition().timeout(
+        Duration(seconds: 15),
+      );
+
       final weather = await ExternalApiService.getWeather(
         position.latitude,
         position.longitude,
-      );
+      ).timeout(Duration(seconds: 15));
 
       // Ladebalken nach Abschluss der API-Calls schließen
       if (mounted) {
@@ -430,22 +435,34 @@ class _ContextDataViewState extends State<ContextDataView> {
           "dd.MM.yyyy HH:mm:ss",
         ).format(timeNow);
       });
-    } on Exception catch (_) {
-      if (!mounted) return;
 
+      // Bei Zeitüberschreitung entsprechedne Fehlermeldung
+    } on TimeoutException {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Standort konnte nicht automatisch ermittelt werden."),
-        ),
+        SnackBar(content: Text("Zeitüberschreitung beim Erfassen der Daten.")),
       );
+
+      // Für sonstige Fehler, z.B. Permission denied
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Standort konnte nicht ermittelt werden.")),
+      );
+
+      // Damit der Ladebalken immer verschwindet, egal ob Success oder Error
+    } finally {
+      if (mounted) {
+        Navigator.of(context, rootNavigator: true).pop();
+      }
     }
   }
 
   Future<void> getNoiseLevel() async {
     AppDialog.showInfo(
       context,
-      const Text("Umgebungslautstärke"),
-      const Text(
+      Text("Umgebungslautstärke"),
+      Text(
         "Hier wird später die Lautstärke über das Mikrofon automatisch gemessen.",
       ),
     );

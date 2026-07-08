@@ -110,7 +110,7 @@ class _HomeViewState extends State<HomeView> {
                 setState(() {});
                 if (!context.mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
+                  SnackBar(
                     content: Text("Umfrage gestartet!"),
                     backgroundColor: Colors.green,
                   ),
@@ -124,7 +124,7 @@ class _HomeViewState extends State<HomeView> {
 
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const SurveyView()),
+                MaterialPageRoute(builder: (context) => SurveyView()),
               );
             },
             child: Row(

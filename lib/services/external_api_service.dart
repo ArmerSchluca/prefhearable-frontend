@@ -27,7 +27,7 @@ class ExternalApiService {
     }
 
     return await Geolocator.getCurrentPosition(
-      locationSettings: const LocationSettings(
+      locationSettings: LocationSettings(
         accuracy: LocationAccuracy.high,
         timeLimit: Duration(seconds: 15),
       ),

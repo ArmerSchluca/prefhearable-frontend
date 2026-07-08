@@ -67,14 +67,14 @@ class _PersonalDataViewState extends State<PersonalDataView> {
 
           if (!surveyService.currentSurvey!.personalData.isComplete) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
+              SnackBar(
                 content: Text("Es wurden noch nicht alle Felder ausgefüllt!"),
                 backgroundColor: Colors.grey,
               ),
             );
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
+              SnackBar(
                 content: Text("Personendaten erfasst!"),
                 backgroundColor: Colors.green,
               ),

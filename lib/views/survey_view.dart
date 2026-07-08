@@ -52,11 +52,11 @@ class _SurveyViewState extends State<SurveyView> {
 
                 Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => const HomeView()),
+                  MaterialPageRoute(builder: (context) => HomeView()),
                   (route) => false,
                 );
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
+                  SnackBar(
                     content: Text("Umfrage abbgebrochen!"),
                     backgroundColor: Colors.green,
                   ),
@@ -75,8 +75,8 @@ class _SurveyViewState extends State<SurveyView> {
             onPressed: () {
               AppDialog.showInfo(
                 context,
-                const Text("Infos zur Umfrage"),
-                const Text(
+                Text("Infos zur Umfrage"),
+                Text(
                   "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut "
                   "labore et dolore magna aliquyam erat, sed diam voluptua.At vero eos et accusam et justo duo dolores et ea rebum. "
                   "Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. "
@@ -102,7 +102,7 @@ class _SurveyViewState extends State<SurveyView> {
           onTap: () async {
             await Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => const PersonalDataView()),
+              MaterialPageRoute(builder: (_) => PersonalDataView()),
             );
 
             if (!mounted) return;
@@ -120,7 +120,7 @@ class _SurveyViewState extends State<SurveyView> {
           onTap: () async {
             await Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => const ContextDataView()),
+              MaterialPageRoute(builder: (_) => ContextDataView()),
             );
 
             if (!mounted) return;
@@ -138,7 +138,7 @@ class _SurveyViewState extends State<SurveyView> {
           onTap: () async {
             await Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => const AudioTestView()),
+              MaterialPageRoute(builder: (_) => AudioTestView()),
             );
 
             if (!mounted) return;
@@ -160,7 +160,7 @@ class _SurveyViewState extends State<SurveyView> {
           onTap: () async {
             await Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => const QuestionnairesView()),
+              MaterialPageRoute(builder: (_) => QuestionnairesView()),
             );
 
             if (!mounted) return;
@@ -182,7 +182,7 @@ class _SurveyViewState extends State<SurveyView> {
 
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => const HomeView()),
+                      MaterialPageRoute(builder: (_) => HomeView()),
                     );
 
                     ScaffoldMessenger.of(context).showSnackBar(

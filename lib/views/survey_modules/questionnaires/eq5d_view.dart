@@ -87,14 +87,14 @@ class _Eq5dViewState extends State<Eq5dView> {
 
           if (!surveyService.currentSurvey!.questionnaireData.eq5d.isComplete) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
+              SnackBar(
                 content: Text("Es wurden noch nicht alle Fragen beantworten!"),
                 backgroundColor: Colors.grey,
               ),
             );
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
+              SnackBar(
                 content: Text("EQ-5D Umfragebogen abgeschlossen!"),
                 backgroundColor: Colors.green,
               ),
@@ -104,15 +104,15 @@ class _Eq5dViewState extends State<Eq5dView> {
       ),
       footer: AppFooter(
         actions: [
-          const Spacer(),
+          Spacer(),
           TextButton.icon(
-            icon: const Icon(Icons.info, color: Colors.blueGrey),
-            label: const Text("Info", style: TextStyle(color: Colors.blueGrey)),
+            icon: Icon(Icons.info, color: Colors.blueGrey),
+            label: Text("Info", style: TextStyle(color: Colors.blueGrey)),
             onPressed: () {
               AppDialog.showInfo(
                 context,
-                const Text("EQ-5D-5L"),
-                const Text(
+                Text("EQ-5D-5L"),
+                Text(
                   "Bitte wählen Sie für jede Aussage die Antwort aus, die Ihre aktuelle Situation am besten beschreibt.",
                 ),
               );
@@ -121,7 +121,7 @@ class _Eq5dViewState extends State<Eq5dView> {
         ],
       ),
       children: [
-        const Center(
+        Center(
           child: Icon(Icons.assignment, size: 120, color: Colors.deepPurple),
         ),
 
@@ -137,7 +137,7 @@ class _Eq5dViewState extends State<Eq5dView> {
         _question(
           Text(
             "BEWEGLICHKEIT / MOBILITÄT",
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           mobility,
           (v) => setState(() => mobility = v),
@@ -147,7 +147,7 @@ class _Eq5dViewState extends State<Eq5dView> {
         _question(
           Text(
             "FÜR SICH SELBST SORGEN",
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           selfCare,
           (v) => setState(() => selfCare = v),
@@ -158,7 +158,7 @@ class _Eq5dViewState extends State<Eq5dView> {
           Text.rich(
             TextSpan(
               children: [
-                const TextSpan(
+                TextSpan(
                   text: "ALLTÄGLICHE TÄTIGKEITEN",
                   style: TextStyle(
                     fontSize: 16,
@@ -186,7 +186,7 @@ class _Eq5dViewState extends State<Eq5dView> {
         _question(
           Text(
             "SCHMERZEN / KÖRPERLICHE BESCHWERDEN",
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
 
           pain,
@@ -197,7 +197,7 @@ class _Eq5dViewState extends State<Eq5dView> {
         _question(
           Text(
             "ANGST / NIEDERGESCHLAGENHEIT",
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           anxiety,
           (v) => setState(() => anxiety = v),

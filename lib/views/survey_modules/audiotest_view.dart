@@ -32,8 +32,8 @@ class _AudioTestViewState extends State<AudioTestView> {
             onPressed: () {
               AppDialog.showInfo(
                 context,
-                const Text("Infos zu Hörtests"),
-                const Text(
+                Text("Infos zu Hörtests"),
+                Text(
                   "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut "
                   "labore et dolore magna aliquyam erat, sed diam voluptua.At vero eos et accusam et justo duo dolores et ea rebum. ",
                 ),
@@ -58,7 +58,7 @@ class _AudioTestViewState extends State<AudioTestView> {
           onTap: () async {
             await Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => const CcsmAudioTestView()),
+              MaterialPageRoute(builder: (_) => CcsmAudioTestView()),
             );
 
             if (!mounted) return;

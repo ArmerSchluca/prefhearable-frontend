@@ -33,8 +33,8 @@ class _QuestionnairesViewState extends State<QuestionnairesView> {
             onPressed: () {
               AppDialog.showInfo(
                 context,
-                const Text("Infos zur Umfrage"),
-                const Text(
+                Text("Infos zur Umfrage"),
+                Text(
                   "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut "
                   "labore et dolore magna aliquyam erat, sed diam voluptua.At vero eos et accusam et justo duo dolores et ea rebum. ",
                 ),
@@ -63,7 +63,7 @@ class _QuestionnairesViewState extends State<QuestionnairesView> {
           onTap: () async {
             await Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => const Eq5dView()),
+              MaterialPageRoute(builder: (_) => Eq5dView()),
             );
 
             if (!mounted) return;
@@ -87,7 +87,7 @@ class _QuestionnairesViewState extends State<QuestionnairesView> {
           onTap: () async {
             await Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => const Who5View()),
+              MaterialPageRoute(builder: (_) => Who5View()),
             );
 
             if (!mounted) return;

@@ -52,7 +52,7 @@ class _LaunchHelperState extends State<LaunchHelper> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    return Scaffold(body: Center(child: CircularProgressIndicator()));
   }
 
   Future<void> _checkServerConnection() async {

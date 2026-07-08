@@ -74,7 +74,7 @@ class WeatherData {
   final double? windSpeed;
   final double? uvIndex;
 
-  const WeatherData({
+  WeatherData({
     required this.description,
     required this.temperature,
     required this.humidity,

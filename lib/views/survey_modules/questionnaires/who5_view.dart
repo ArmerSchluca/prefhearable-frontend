@@ -47,14 +47,14 @@ class _Who5ViewState extends State<Who5View> {
 
           if (!surveyService.currentSurvey!.questionnaireData.who5.isComplete) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
+              SnackBar(
                 content: Text("Es wurden noch nicht alle Fragen beantworten!"),
                 backgroundColor: Colors.grey,
               ),
             );
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
+              SnackBar(
                 content: Text("WHO-5 Umfragebogen abgeschlossen!"),
                 backgroundColor: Colors.green,
               ),
@@ -64,15 +64,15 @@ class _Who5ViewState extends State<Who5View> {
       ),
       footer: AppFooter(
         actions: [
-          const Spacer(),
+          Spacer(),
           TextButton.icon(
-            icon: const Icon(Icons.info, color: Colors.blueGrey),
-            label: const Text("Info", style: TextStyle(color: Colors.blueGrey)),
+            icon: Icon(Icons.info, color: Colors.blueGrey),
+            label: Text("Info", style: TextStyle(color: Colors.blueGrey)),
             onPressed: () {
               AppDialog.showInfo(
                 context,
-                const Text("WHO-5"),
-                const Text(
+                Text("WHO-5"),
+                Text(
                   "Die folgenden Aussagen betreffen Ihr Wohlbefinden in den letzten zwei Wochen. Bitte markieren "
                   "Sie bei jeder Aussage die Rubrik, die Ihrer Meinung nach am besten beschreibt, wie Sie sich in den "
                   "letzten zwei Wochen gefühlt haben",
@@ -83,7 +83,7 @@ class _Who5ViewState extends State<Who5View> {
         ],
       ),
       children: [
-        const Center(
+        Center(
           child: Icon(Icons.assignment, size: 120, color: Colors.deepPurple),
         ),
 
@@ -135,13 +135,13 @@ class _Who5ViewState extends State<Who5View> {
     ValueChanged<Who5Answer> onChanged,
   ) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 28),
+      padding: EdgeInsets.only(bottom: 28),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(title, style: const TextStyle(fontSize: 16)),
+          Text(title, style: TextStyle(fontSize: 16)),
 
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
 
           SegmentedButton<Who5Answer>(
             showSelectedIcon: false,
@@ -163,11 +163,8 @@ class _Who5ViewState extends State<Who5View> {
 
           if (value != null)
             Padding(
-              padding: const EdgeInsets.only(top: 8),
-              child: Text(
-                value.label,
-                style: const TextStyle(color: Colors.grey),
-              ),
+              padding: EdgeInsets.only(top: 8),
+              child: Text(value.label, style: TextStyle(color: Colors.grey)),
             ),
         ],
       ),

@@ -36,22 +36,22 @@ class _CcsmAudioTestViewState extends State<CcsmAudioTestView> {
       ),
       footer: AppFooter(
         actions: [
-          const Spacer(),
+          Spacer(),
           TextButton.icon(
-            icon: const Icon(Icons.info, color: Colors.blueGrey),
-            label: const Text("Info", style: TextStyle(color: Colors.blueGrey)),
+            icon: Icon(Icons.info, color: Colors.blueGrey),
+            label: Text("Info", style: TextStyle(color: Colors.blueGrey)),
             onPressed: () {
               AppDialog.showInfo(
                 context,
-                const Text("CCSM Audio Test"),
-                const Text("Lorem Ipsum"),
+                Text("CCSM Audio Test"),
+                Text("Lorem Ipsum"),
               );
             },
           ),
         ],
       ),
       children: [
-        const Center(
+        Center(
           child: Icon(Icons.headphones, size: 120, color: Colors.pinkAccent),
         ),
 

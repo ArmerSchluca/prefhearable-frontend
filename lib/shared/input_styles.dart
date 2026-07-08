@@ -41,9 +41,9 @@ class AppInputStyles {
 
       floatingLabelStyle: TextStyle(color: accentColor),
 
-      border: const OutlineInputBorder(),
+      border: OutlineInputBorder(),
 
-      enabledBorder: const OutlineInputBorder(
+      enabledBorder: OutlineInputBorder(
         borderSide: BorderSide(color: Colors.grey),
       ),
 
