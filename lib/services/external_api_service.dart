@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:frontend/models/survey_modules/context_data.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
@@ -13,6 +14,10 @@ class ExternalApiService {
     }
 
     LocationPermission permission = await Geolocator.checkPermission();
+    debugPrint("Permission: $permission");
+
+    final enabled = await Geolocator.isLocationServiceEnabled();
+    debugPrint("Location enabled: $enabled");
 
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();

@@ -165,7 +165,7 @@ class _ContextDataViewState extends State<ContextDataView> {
               // BUTTON FÜR STANDORT UND WETTER ERFASSEN
               Center(
                 child: FilledButton(
-                  onPressed: getApiData,
+                  onPressed: _getApiData,
                   style: FilledButton.styleFrom(
                     minimumSize: Size(double.infinity, 60),
                     elevation: 3,
@@ -383,7 +383,7 @@ class _ContextDataViewState extends State<ContextDataView> {
     await surveyService.saveContextData(contextData);
   }
 
-  Future<void> getApiData() async {
+  Future<void> _getApiData() async {
     final confirmed = await AppDialog.showSelection(
       context,
       Text("GPS zulassen?"),
@@ -449,13 +449,10 @@ class _ContextDataViewState extends State<ContextDataView> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Standort konnte nicht ermittelt werden.")),
       );
+      debugPrint(e.toString());
 
-      // Damit der Ladebalken immer verschwindet, egal ob Success oder Error
-    } finally {
-      if (mounted) {
-        Navigator.of(context, rootNavigator: true).pop();
-      }
-    }
+
+    } 
   }
 
   Future<void> getNoiseLevel() async {
