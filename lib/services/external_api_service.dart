@@ -1,11 +1,68 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:frontend/models/survey_modules/context_data.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
+import 'package:noise_meter/noise_meter.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class ExternalApiService {
+static Future<double> measureDecibels() async {
+    if (!await Permission.microphone.isGranted) {
+      final result = await Permission.microphone.request();
+
+      if (!result.isGranted) {
+        throw Exception("MIC_PERMISSION_DENIED");
+      }
+    }
+
+    final noiseMeter = NoiseMeter();
+
+    final values = <double>[];
+    final completer = Completer<double>();
+
+    late final StreamSubscription<NoiseReading> subscription;
+
+    subscription = noiseMeter.noise.listen(
+      (NoiseReading reading) async {
+        values.add(reading.meanDecibel);
+      },
+
+      onError: (Object error) async {
+        debugPrint("NoiseMeter Error: $error");
+
+        await subscription.cancel();
+
+        if (!completer.isCompleted) {
+          completer.completeError(error);
+        }
+      },
+    );
+
+    // 3 Sekunden messen
+    Future.delayed(const Duration(seconds: 3), () async {
+      await subscription.cancel();
+
+      if (values.isEmpty) {
+        if (!completer.isCompleted) {
+          completer.completeError(Exception("NO_NOISE_DATA"));
+        }
+        return;
+      }
+
+      final average =
+          values.reduce((a, b) => a + b) / values.length;
+
+      if (!completer.isCompleted) {
+        completer.complete(average);
+      }
+    });
+
+    return completer.future;
+  }
+
   static Future<Position> getCurrentPosition() async {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
 

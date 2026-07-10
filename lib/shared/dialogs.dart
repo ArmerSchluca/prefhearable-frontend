@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:frontend/shared/input_styles.dart';
 
@@ -45,7 +46,10 @@ class AppDialog {
               onPressed: () => Navigator.pop(context, false),
               child: Text(
                 'Nein',
-                style: TextStyle(color: colorNo ?? Colors.blueAccent, fontSize: 18),
+                style: TextStyle(
+                  color: colorNo ?? Colors.blueAccent,
+                  fontSize: 18,
+                ),
               ),
             ),
             TextButton(
@@ -149,5 +153,50 @@ class AppDialog {
     );
 
     return result ?? false;
+  }
+
+  static Future<bool> showNoiseCountdown(BuildContext context) async {
+    int seconds = 3;
+
+    return await showDialog<bool>(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) {
+            Timer? timer;
+
+            return StatefulBuilder(
+              builder: (context, setState) {
+                timer ??= Timer.periodic(const Duration(seconds: 1), (t) {
+                  if (seconds == 1) {
+                    t.cancel();
+                    Navigator.pop(context, true);
+                  } else {
+                    setState(() {
+                      seconds--;
+                    });
+                  }
+                });
+
+                return AlertDialog(
+                  title: const Text("Umgebungslautstärke"),
+                  content: Text(
+                    "Die Dezibelmessung beginnt in $seconds Sekunden.\n\n"
+                    "Bitte halten Sie das Gerät ruhig und vermeiden Sie Gespräche.",
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        timer?.cancel();
+                        Navigator.pop(context, false);
+                      },
+                      child: const Text("Abbrechen"),
+                    ),
+                  ],
+                );
+              },
+            );
+          },
+        ) ??
+        false;
   }
 }

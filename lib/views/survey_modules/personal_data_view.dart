@@ -123,7 +123,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
               DropdownButtonFormField<Gender>(
                 decoration: AppInputStyles.dropdown(
                   label: "Geschlecht",
-                  hint: "Bitte auswählen",
+                  hint: "Geschlecht angeben",
                   accentColor: Colors.orange,
                 ),
                 initialValue: gender,
@@ -145,7 +145,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
               DropdownButtonFormField<Occupation>(
                 decoration: AppInputStyles.dropdown(
                   label: "Beruf",
-                  hint: "Bitte Berufssparte auswählen",
+                  hint: "Berufssparte angeben",
                   accentColor: Colors.orange,
                 ),
                 initialValue: occupation,
@@ -167,7 +167,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
               DropdownButtonFormField<HearingAided>(
                 decoration: AppInputStyles.dropdown(
                   label: "Nutzung von Hörgeräten",
-                  hint: "Bitte angeben, ob Sie Hörgeräte nutzen.",
+                  hint: "Angeben, ob Sie Hörgeräte nutzen.",
                   accentColor: Colors.orange,
                 ),
                 initialValue: hearingAided,
@@ -194,7 +194,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                 DropdownButtonFormField<HearingAidDuration>(
                   decoration: AppInputStyles.dropdown(
                     label: "Zeitraum der Hörgerätenutzung",
-                    hint: "Bitte angeben, seit wann Sie Hörgeräte tragen.",
+                    hint: "Nutzungszeitraum auswählen",
                     accentColor: Colors.orange,
                   ),
                   initialValue: hearingAidDuration,
@@ -217,7 +217,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
               DropdownButtonFormField<ResidentialArea>(
                 decoration: AppInputStyles.dropdown(
                   label: "Wohnraum",
-                  hint: "Bitte Wohnraum auswählen",
+                  hint: "Wohnraum angeben",
                   accentColor: Colors.orange,
                 ),
                 initialValue: residentialArea,
@@ -239,7 +239,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
               DropdownButtonFormField<PhysicalActivityType>(
                 decoration: AppInputStyles.dropdown(
                   label: "Sportart",
-                  hint: "Bitte Sportart auswählen",
+                  hint: "Sportart angeben",
                   accentColor: Colors.orange,
                 ),
                 initialValue: physicalActivityType,
@@ -268,7 +268,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                 DropdownButtonFormField<PhysicalActivityFrequency>(
                   decoration: AppInputStyles.dropdown(
                     label: "Häufigkeit des Sportmachens",
-                    hint: "Bitte Häufigkeit des Sportmachens auswählen",
+                    hint: "Häufigkeit angeben",
                     accentColor: Colors.orange,
                   ),
                   initialValue: physicalActivityFrequency,
@@ -292,7 +292,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                 DropdownButtonFormField<PhysicalActivityDuration>(
                   decoration: AppInputStyles.dropdown(
                     label: "Dauer einer Sporteinheit",
-                    hint: "Bitte Dauer einer Sporteinheit auswählen",
+                    hint: "Dauer pro Sporteinheit angeben",
                     accentColor: Colors.orange,
                   ),
                   initialValue: physicalActivityDuration,
@@ -317,7 +317,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
               DropdownButtonFormField<Diet>(
                 decoration: AppInputStyles.dropdown(
                   label: "Ernährung",
-                  hint: "Bitte Ernährungsweise auswählen",
+                  hint: "Ernährungsweise angeben",
                   accentColor: Colors.orange,
                 ),
                 initialValue: diet,
@@ -338,7 +338,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                 keyboardType: TextInputType.number,
                 decoration: AppInputStyles.textField(
                   label: "Allergien",
-                  hint: "Mit Komma trennen: Pollen, Nüsse, ...",
+                  hint: "Kommagetrennt: Pollen, Nüsse, ...",
                   accentColor: Colors.orange,
                 ),
               ),
@@ -350,7 +350,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                 keyboardType: TextInputType.number,
                 decoration: AppInputStyles.textField(
                   label: "(Vor-)Erkrankungen",
-                  hint: "Mit Komma trennen: Diabetes, Asthma, ...",
+                  hint: "Kommagetrennt: Diabetes, Asthma, ...",
                   accentColor: Colors.orange,
                 ),
               ),

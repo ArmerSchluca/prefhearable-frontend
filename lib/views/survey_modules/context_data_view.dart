@@ -455,13 +455,15 @@ class _ContextDataViewState extends State<ContextDataView> {
     } 
   }
 
-  Future<void> getNoiseLevel() async {
-    AppDialog.showInfo(
-      context,
-      Text("Umgebungslautstärke"),
-      Text(
-        "Hier wird später die Lautstärke über das Mikrofon automatisch gemessen.",
-      ),
-    );
+Future<void> getNoiseLevel() async {
+    final start = await AppDialog.showNoiseCountdown(context);
+
+    if (!start || !mounted) return;
+
+    final noise = await ExternalApiService.measureDecibels();
+
+    setState(() {
+      noiseLevelController.text = noise.toStringAsFixed(1);
+    });
   }
 }

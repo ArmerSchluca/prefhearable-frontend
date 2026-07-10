@@ -138,7 +138,10 @@ class _CcsmAudioTestViewState extends State<CcsmAudioTestView> {
 
             SizedBox(height: 20),
 
-            Text("Klingt das Geräusch...", style: TextStyle(fontWeight: FontWeight.bold),),
+            Text(
+              "Klingt das Geräusch...",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
             SizedBox(height: 20),
 
             _slider(
