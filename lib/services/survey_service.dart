@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/widgets.dart';
+import 'package:frontend/models/survey_modules/audio_tests/ccsm.dart';
 import 'package:frontend/models/survey_modules/audiotest_data.dart';
 import 'package:frontend/models/survey_modules/context_data.dart';
 import 'package:frontend/models/survey_modules/personal_data.dart';
@@ -20,7 +21,7 @@ class SurveyService {
   Future<void> startSurvey() async {
     currentSurvey = Survey();
     debugPrint("SURVEY_CREATED");
-    //await _cacheSurvey(currentSurvey!);
+    await _cacheSurvey();
   }
 
   Future<void> cancelSurvey() async {
@@ -67,7 +68,7 @@ class SurveyService {
 
     currentSurvey!.personalData = personalData;
 
-    // await _cacheSurvey(currentSurvey!);
+    await _cacheSurvey();
   }
 
   Future<void> saveContextData(ContextData contextData) async {
@@ -76,8 +77,7 @@ class SurveyService {
     }
 
     currentSurvey!.contextData = contextData;
-
-    // await _cacheSurvey(currentSurvey!);
+    await _cacheSurvey();
   }
 
   Future<void> saveAudioTestData(AudioTestData audiotestData) async {
@@ -86,8 +86,7 @@ class SurveyService {
     }
 
     currentSurvey!.audioTestData = audiotestData;
-
-    // await _cacheSurvey(currentSurvey!);
+    await _cacheSurvey();
   }
 
   Future<void> saveQuestionnairesData(
@@ -98,25 +97,21 @@ class SurveyService {
     }
 
     currentSurvey!.questionnaireData = questionnaireData;
-
-    // await _cacheSurvey(currentSurvey!);
+    await _cacheSurvey();
   }
 
   Future<void> saveCcsm(CcsmAudioTest ccsm) async {
     currentSurvey!.audioTestData.ccsm = ccsm;
-
     await _cacheSurvey();
   }
 
   Future<void> saveEq5d(Eq5d eq5d) async {
     currentSurvey!.questionnaireData.eq5d = eq5d;
-
     await _cacheSurvey();
   }
 
   Future<void> saveWho5(Who5 who5) async {
     currentSurvey!.questionnaireData.who5 = who5;
-
     await _cacheSurvey();
   }
 
