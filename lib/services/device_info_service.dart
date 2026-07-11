@@ -70,34 +70,25 @@ class DeviceInformationService {
   }
 
   static Future<String> getAudioDevice() async {
-    debugPrint("getAudioDevice() aufgerufen");
     try {
       final output = await FlutterAudioOutput.getCurrentOutput();
 
       switch (output.port) {
         case AudioPort.bluetooth:
-          debugPrint("Port: ${output.port}");
-          debugPrint("Name: ${output.name}");
           debugPrint("Bluetooth (${output.name})");
           return "Bluetooth (${output.name})";
 
         case AudioPort.headphones:
-          debugPrint("Port: ${output.port}");
-          debugPrint("Name: ${output.name}");
           debugPrint("Kabelgebundene Kopfhörer");
           return "Kabelgebundene Kopfhörer";
 
         case AudioPort.speaker:
-          debugPrint("Port: ${output.port}");
-          debugPrint("Name: ${output.name}");
           debugPrint("Lautsprecher");
           return "Lautsprecher";
 
         case AudioPort.receiver:
-          debugPrint("Port: ${output.port}");
-          debugPrint("Name: ${output.name}");
           debugPrint("Hörmuschel");
-          return "Hörmusche";
+          return "Hörmuschel";
 
         default:
           return output.name;

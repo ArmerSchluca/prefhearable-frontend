@@ -133,6 +133,7 @@ class SurveyService {
   Future<void> clearCache() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(storageKey);
+    currentSurvey = null;
   }
 
   String? validateAge(int? age) {

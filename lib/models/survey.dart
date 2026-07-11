@@ -10,7 +10,7 @@ class Survey {
   DateTime startedAt = DateTime.now();
   DateTime? finishedAt;
 
-  DeviceInformation deviceInfo = DeviceInformation();
+  DeviceInformation deviceInformation = DeviceInformation();
 
   PersonalData personalData = PersonalData();
   ContextData contextData = ContextData();
@@ -21,7 +21,7 @@ class Survey {
     'surveyVersion': surveyVersion,
     'startedAt': startedAt.toIso8601String(),
     'finishedAt': finishedAt?.toIso8601String(),
-    'deviceInfo': deviceInfo,
+    'deviceInformation': deviceInformation,
     'personalData': personalData,
     'contextData': contextData,
     'questionnaireData': questionnaireData,

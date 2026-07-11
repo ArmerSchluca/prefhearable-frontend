@@ -109,7 +109,7 @@ class _HomeViewState extends State<HomeView> {
               if (surveyService.currentSurvey == null) {
                 await surveyService.startSurvey();
 
-                surveyService.currentSurvey!.deviceInfo =
+                surveyService.currentSurvey!.deviceInformation =
                     await DeviceInformationService.getDeviceInformation();
                 setState(() {});
                 if (!context.mounted) return;
