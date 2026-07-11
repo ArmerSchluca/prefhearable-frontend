@@ -26,8 +26,6 @@ class _CcsmAudioTestViewState extends State<CcsmAudioTestView> {
   void initState() {
     super.initState();
 
-    _loadAudioDevice();
-
     final ccsm = surveyService.currentSurvey!.audioTestData.ccsm;
 
     artificialSound1 = ccsm.artificialSound1;
@@ -130,8 +128,10 @@ class _CcsmAudioTestViewState extends State<CcsmAudioTestView> {
               icon: Icon(Icons.play_arrow),
               label: Text("Sound abspielen"),
               onPressed: () async {
-                surveyService.currentSurvey!.audioTestData.ccsm.audioDevice ??=
-                    await DeviceInformationService.getAudioDevice();
+                final device = await DeviceInformationService.getAudioDevice();
+
+                surveyService.currentSurvey!.audioTestData.ccsm.audioDevice =
+                    device;
 
                 await player.stop();
                 await player.play(asset);
@@ -218,13 +218,5 @@ class _CcsmAudioTestViewState extends State<CcsmAudioTestView> {
         SizedBox(height: 8),
       ],
     );
-  }
-
-  Future<void> _loadAudioDevice() async {
-    final device = await DeviceInformationService.getAudioDevice();
-
-    if (!mounted) return;
-
-    surveyService.currentSurvey!.audioTestData.ccsm.audioDevice = device;
   }
 }

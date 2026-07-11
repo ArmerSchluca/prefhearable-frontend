@@ -4,7 +4,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:frontend/models/device_information.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:audio_output_manager/audio_output_manager.dart';
+import 'package:flutter_audio_output/flutter_audio_output.dart';
 
 class DeviceInformationService {
   static final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
@@ -70,26 +70,41 @@ class DeviceInformationService {
   }
 
   static Future<String> getAudioDevice() async {
+    debugPrint("getAudioDevice() aufgerufen");
     try {
-      final output = await FlutterAudioManager.getCurrentOutput();
+      final output = await FlutterAudioOutput.getCurrentOutput();
 
       switch (output.port) {
         case AudioPort.bluetooth:
+          debugPrint("Port: ${output.port}");
+          debugPrint("Name: ${output.name}");
           debugPrint("Bluetooth (${output.name})");
           return "Bluetooth (${output.name})";
 
         case AudioPort.headphones:
+          debugPrint("Port: ${output.port}");
+          debugPrint("Name: ${output.name}");
           debugPrint("Kabelgebundene Kopfhörer");
           return "Kabelgebundene Kopfhörer";
 
         case AudioPort.speaker:
+          debugPrint("Port: ${output.port}");
+          debugPrint("Name: ${output.name}");
           debugPrint("Lautsprecher");
           return "Lautsprecher";
+
+        case AudioPort.receiver:
+          debugPrint("Port: ${output.port}");
+          debugPrint("Name: ${output.name}");
+          debugPrint("Hörmuschel");
+          return "Hörmusche";
 
         default:
           return output.name;
       }
-    } catch (_) {
+    } catch (e, stackTrace) {
+      debugPrint("AudioDevice Error: $e");
+      debugPrint(stackTrace.toString());
       return "Unknown";
     }
   }
