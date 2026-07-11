@@ -109,8 +109,8 @@ class _HomeViewState extends State<HomeView> {
               if (surveyService.currentSurvey == null) {
                 await surveyService.startSurvey();
 
-                surveyService.currentSurvey!.deviceInformation =
-    await DeviceInformationService.getDeviceInformation();
+                surveyService.currentSurvey!.deviceInfo =
+                    await DeviceInformationService.getDeviceInformation();
                 setState(() {});
                 if (!context.mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(

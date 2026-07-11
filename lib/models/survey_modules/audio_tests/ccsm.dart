@@ -11,10 +11,10 @@ class CcsmAudioTest {
       naturalSound2.isComplete;
 
   Map<String, dynamic> toJson() => {
-    'audio_device': audioDevice,
-    'artificial_sound_1': artificialSound1.toJson(),
-    'natural_sound_1': naturalSound1.toJson(),
-    'natural_sound_2': naturalSound2.toJson(),
+    'audioDevice': audioDevice,
+    'artificialSound1': artificialSound1.toJson(),
+    'naturalSound1': naturalSound1.toJson(),
+    'naturalSound2': naturalSound2.toJson(),
   };
 }
 

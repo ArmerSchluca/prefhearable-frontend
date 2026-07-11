@@ -21,11 +21,11 @@ class Who5 {
   });
 
   Map<String, dynamic> toJson() => {
-    'positive_affect': positiveAffect?.value,
+    'positiveAffect': positiveAffect?.value,
     'calmness': calmness?.value,
     'vitality': vitality?.value,
     'restedness': restedness?.value,
-    'life_interest': lifeInterest?.value,
+    'lifeInterest': lifeInterest?.value,
   };
 }
 

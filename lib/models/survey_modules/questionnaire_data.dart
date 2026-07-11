@@ -8,7 +8,7 @@ class QuestionnaireData {
   bool get isComplete => eq5d.isComplete && who5.isComplete;
 
   Map<String, dynamic> toJson() => {
-    'eq5d_responses': eq5d.toJson(),
-    'who5_responses': who5.toJson(),
+    'eq5dResponses': eq5d.toJson(),
+    'who5Responses': who5.toJson(),
   };
 }

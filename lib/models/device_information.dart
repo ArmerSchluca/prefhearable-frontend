@@ -12,8 +12,8 @@ class DeviceInformation {
   );
 
   Map<String, dynamic> toJson() => {
-    'app_version': appVersion,
-    'operating_system': operatingSystem,
+    'appVersion': appVersion,
+    'operatingSystem': operatingSystem,
     'model': model,
   };
 }

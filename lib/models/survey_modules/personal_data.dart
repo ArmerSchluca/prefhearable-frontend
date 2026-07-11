@@ -11,8 +11,8 @@ class PersonalData {
   PhysicalActivityFrequency? physicalActivityFrequency;
   PhysicalActivityDuration? physicalActivityDuration;
   Diet? diet;
-  List<String>? allergies;
-  List<String>? diseases;
+  String? allergies;
+  String? diseases;
 
   // Zum Abfragen des Status, ob alle Felder ausgefüllt
   bool get isComplete =>
@@ -60,7 +60,7 @@ class PersonalData {
     'gender': gender?.name,
     'occupation': occupation?.name,
     'hearingAided': hearingAided?.name,
-    'hearingAidedSince': hearingAidDuration?.name,
+    'hearingAidDuration': hearingAidDuration?.name,
     'residentialArea': residentialArea?.name,
     'physicalActivityType': physicalActivityType?.name,
     'physicalActivityFrequency': physicalActivityFrequency?.name,

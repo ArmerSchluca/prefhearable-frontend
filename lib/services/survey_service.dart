@@ -41,6 +41,8 @@ class SurveyService {
       throw Exception("NO_PARTICIPANT");
     }
 
+    currentSurvey!.finishedAt = DateTime.now();
+
     final response = await http.post(
       Uri.parse("$baseUrl/surveys"),
       headers: {

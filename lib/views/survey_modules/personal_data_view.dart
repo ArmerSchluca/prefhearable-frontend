@@ -49,8 +49,8 @@ class _PersonalDataViewState extends State<PersonalDataView> {
     physicalActivityFrequency = personalData.physicalActivityFrequency;
     physicalActivityDuration = personalData.physicalActivityDuration;
     diet = personalData.diet;
-    allergiesController.text = personalData.allergies?.join(", ") ?? "";
-    diseasesController.text = personalData.diseases?.join(", ") ?? "";
+    allergiesController.text = personalData.allergies ?? "";
+    diseasesController.text = personalData.diseases ?? "";
   }
 
   @override
@@ -335,7 +335,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
               // ALLERGIEN (allergies)
               TextFormField(
                 controller: allergiesController,
-                keyboardType: TextInputType.number,
+                keyboardType: TextInputType.text,
                 decoration: AppInputStyles.textField(
                   label: "Allergien",
                   hint: "Kommagetrennt: Pollen, Nüsse, ...",
@@ -347,7 +347,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
               // VORERKRANKUNGEN (diseases)
               TextFormField(
                 controller: diseasesController,
-                keyboardType: TextInputType.number,
+                keyboardType: TextInputType.text,
                 decoration: AppInputStyles.textField(
                   label: "(Vor-)Erkrankungen",
                   hint: "Kommagetrennt: Diabetes, Asthma, ...",
@@ -375,16 +375,8 @@ class _PersonalDataViewState extends State<PersonalDataView> {
       physicalActivityDuration: physicalActivityDuration,
       diet: diet,
       // Macht aus den Kommagetrennten Einträgen Listenobjekte
-      allergies: allergiesController.text
-          .split(RegExp(r'[,;\n]'))
-          .map((e) => e.trim())
-          .where((e) => e.isNotEmpty)
-          .toList(),
-      diseases: diseasesController.text
-          .split(RegExp(r'[,;\n]'))
-          .map((e) => e.trim())
-          .where((e) => e.isNotEmpty)
-          .toList(),
+      allergies: allergiesController.text,
+      diseases: diseasesController.text,
     );
 
     await surveyService.savePersonalData(personalData);

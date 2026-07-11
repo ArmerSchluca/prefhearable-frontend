@@ -10,7 +10,7 @@ class Survey {
   DateTime startedAt = DateTime.now();
   DateTime? finishedAt;
 
-  DeviceInformation deviceInformation = DeviceInformation();
+  DeviceInformation deviceInfo = DeviceInformation();
 
   PersonalData personalData = PersonalData();
   ContextData contextData = ContextData();
@@ -18,21 +18,21 @@ class Survey {
   AudioTestData audioTestData = AudioTestData();
 
   Map<String, dynamic> toJson() => {
-    'survey_version': surveyVersion,
-    'started_at': startedAt.toIso8601String(),
-    'finished_at': finishedAt?.toIso8601String(),
-    'deviceInfo': deviceInformation,
-    'personal_data': personalData,
-    'context_data': contextData,
-    'questionnaire_data': questionnaireData,
-    'audio_test_data': audioTestData,
+    'surveyVersion': surveyVersion,
+    'startedAt': startedAt.toIso8601String(),
+    'finishedAt': finishedAt?.toIso8601String(),
+    'deviceInfo': deviceInfo,
+    'personalData': personalData,
+    'contextData': contextData,
+    'questionnaireData': questionnaireData,
+    'audioTestData': audioTestData,
   };
 
   Set fromJson(Map<String, dynamic> json) => {
-    personalData = json['personal_data'] as PersonalData,
-    contextData = json['context_data'] as ContextData,
-    questionnaireData = json['questionnaire_data'] as QuestionnaireData,
-    audioTestData = json['audio_test_data'] as AudioTestData,
+    personalData = json['personalData'] as PersonalData,
+    contextData = json['contextData'] as ContextData,
+    questionnaireData = json['questionnaireData'] as QuestionnaireData,
+    audioTestData = json['audioTestData'] as AudioTestData,
   };
 
   bool get isComplete =>

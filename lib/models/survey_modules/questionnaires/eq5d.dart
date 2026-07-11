@@ -22,8 +22,8 @@ class Eq5d {
 
   Map<String, dynamic> toJson() => {
     'mobility': mobility?.value,
-    'self_care': selfCare?.value,
-    'usual_activities': usualActivities?.value,
+    'selfCare': selfCare?.value,
+    'usualActivities': usualActivities?.value,
     'pain': pain?.value,
     'anxiety': anxiety?.value,
   };
