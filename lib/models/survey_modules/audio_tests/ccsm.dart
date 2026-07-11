@@ -39,7 +39,6 @@ class SoundRating {
   });
 
   Map<String, dynamic> toJson() => {
-    'hasPlayed': hasPlayed,
     'loudness': loudness,
     'roughness': roughness,
     'tonality': tonality,

@@ -6,6 +6,10 @@ import 'package:frontend/models/survey_modules/personal_data.dart';
 
 class Survey {
   final String surveyVersion = "1.0.0";
+
+  DateTime startedAt = DateTime.now();
+  DateTime? finishedAt;
+
   DeviceInformation deviceInformation = DeviceInformation();
 
   PersonalData personalData = PersonalData();
@@ -14,8 +18,10 @@ class Survey {
   AudioTestData audioTestData = AudioTestData();
 
   Map<String, dynamic> toJson() => {
-    'deviceInfo': deviceInformation,
     'survey_version': surveyVersion,
+    'started_at': startedAt.toIso8601String(),
+    'finished_at': finishedAt?.toIso8601String(),
+    'deviceInfo': deviceInformation,
     'personal_data': personalData,
     'context_data': contextData,
     'questionnaire_data': questionnaireData,
