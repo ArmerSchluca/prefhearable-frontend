@@ -1,4 +1,4 @@
-import 'package:frontend/models/device_info.dart';
+import 'package:frontend/models/device_information.dart';
 
 class Participant {
   final String participantId;

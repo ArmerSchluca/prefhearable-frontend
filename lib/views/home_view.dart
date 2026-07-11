@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/services/device_info_service.dart';
 import 'package:frontend/services/session_service.dart';
 import 'package:frontend/shared/dialogs.dart';
 import 'package:frontend/shared/layout.dart';
@@ -34,7 +35,7 @@ class _HomeViewState extends State<HomeView> {
               style: TextStyle(color: Colors.red, fontSize: 18),
             ),
             onPressed: () async {
-              final uuid = await session.getCurrentParticipantId();
+              final uuid = await sessionService.getCurrentParticipantId();
               if (uuid == null) return;
 
               if (!context.mounted) return;
@@ -48,7 +49,7 @@ class _HomeViewState extends State<HomeView> {
               );
 
               if (!confirmed) return;
-              await session.logoutParticipant();
+              await sessionService.logoutParticipant();
 
               if (!context.mounted) return;
 
@@ -107,6 +108,9 @@ class _HomeViewState extends State<HomeView> {
             onPressed: () async {
               if (surveyService.currentSurvey == null) {
                 await surveyService.startSurvey();
+
+                surveyService.currentSurvey!.deviceInformation =
+    await DeviceInformationService.getDeviceInformation();
                 setState(() {});
                 if (!context.mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(

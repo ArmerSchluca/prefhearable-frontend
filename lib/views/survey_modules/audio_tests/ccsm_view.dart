@@ -1,6 +1,7 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/models/survey_modules/audio_tests/ccsm.dart';
+import 'package:frontend/services/device_info_service.dart';
 import 'package:frontend/shared/appbar.dart';
 import 'package:frontend/shared/dialogs.dart';
 import 'package:frontend/shared/footer.dart';
@@ -24,6 +25,8 @@ class _CcsmAudioTestViewState extends State<CcsmAudioTestView> {
   @override
   void initState() {
     super.initState();
+
+    _loadAudioDevice();
 
     final ccsm = surveyService.currentSurvey!.audioTestData.ccsm;
 
@@ -127,6 +130,9 @@ class _CcsmAudioTestViewState extends State<CcsmAudioTestView> {
               icon: Icon(Icons.play_arrow),
               label: Text("Sound abspielen"),
               onPressed: () async {
+                surveyService.currentSurvey!.audioTestData.ccsm.audioDevice ??=
+                    await DeviceInformationService.getAudioDevice();
+
                 await player.stop();
                 await player.play(asset);
 
@@ -212,5 +218,13 @@ class _CcsmAudioTestViewState extends State<CcsmAudioTestView> {
         SizedBox(height: 8),
       ],
     );
+  }
+
+  Future<void> _loadAudioDevice() async {
+    final device = await DeviceInformationService.getAudioDevice();
+
+    if (!mounted) return;
+
+    surveyService.currentSurvey!.audioTestData.ccsm.audioDevice = device;
   }
 }

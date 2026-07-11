@@ -85,7 +85,7 @@ class _LaunchViewState extends State<LaunchView> {
             onPressed: consentGiven
                 ? () async {
                     try {
-                      final id = await session.registerParticipant();
+                      final id = await sessionService.registerParticipant();
                       debugPrint("REGISTERED: $id");
 
                       if (!context.mounted) return;

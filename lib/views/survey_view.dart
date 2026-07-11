@@ -176,23 +176,34 @@ class _SurveyViewState extends State<SurveyView> {
           child: FilledButton(
             onPressed: surveyService.currentSurvey!.isComplete
                 ? () async {
-                    await surveyService.submitSurvey();
+                    try {
+                      await surveyService.submitSurvey();
 
-                    if (!context.mounted) return;
+                      if (!context.mounted) return;
 
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => HomeView()),
-                    );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => HomeView()),
+                      );
 
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          "Daten übermittelt! Vielen Dank für die Teilnahme",
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            "Daten übermittelt! Vielen Dank für die Teilnahme",
+                          ),
+                          backgroundColor: Colors.green,
                         ),
-                        backgroundColor: Colors.green,
-                      ),
-                    );
+                      );
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            "Daten konnten nicht übermittelt werden. Bitte versuche es später erneut!",
+                          ),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
                   }
                 : null,
             style: FilledButton.styleFrom(

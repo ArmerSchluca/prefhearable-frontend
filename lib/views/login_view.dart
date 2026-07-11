@@ -81,7 +81,7 @@ class _LoginViewState extends State<LoginView> {
 
   Future<void> login() async {
     try {
-      await session.loginWithUuid(participantId.trim());
+      await sessionService.loginWithUuid(participantId.trim());
 
       if (!mounted) return;
 

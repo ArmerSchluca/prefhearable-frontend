@@ -21,34 +21,42 @@ class SurveyService {
   Future<void> startSurvey() async {
     currentSurvey = Survey();
     debugPrint("SURVEY_CREATED");
-    await _cacheSurvey();
+    await cacheSurvey();
   }
 
   Future<void> cancelSurvey() async {
     try {
       currentSurvey = null;
 
-      _clearCache();
+      clearCache();
     } catch (e) {
       throw Exception("CANCEL_SURVEY_ERROR: $e");
     }
   }
 
   Future<void> submitSurvey() async {
-    final participantId = await session.getCurrentParticipantId();
+    final participantId = await sessionService.getCurrentParticipantId();
 
     if (participantId == null) {
       throw Exception("NO_PARTICIPANT");
     }
 
-    await http.post(
+    final response = await http.post(
       Uri.parse("$baseUrl/surveys"),
       headers: {
         "Content-Type": "application/json",
         "X-Participant-Id": participantId,
       },
-      body: jsonEncode(currentSurvey!.toJson()),
+      body: jsonEncode(currentSurvey),
     );
+
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      throw Exception(
+        "Survey konnte nicht übertragen werden (${response.statusCode})",
+      );
+    }
+
+    clearCache();
   }
 
   Future<void> loadCachedSurvey() async {
@@ -68,7 +76,7 @@ class SurveyService {
 
     currentSurvey!.personalData = personalData;
 
-    await _cacheSurvey();
+    await cacheSurvey();
   }
 
   Future<void> saveContextData(ContextData contextData) async {
@@ -77,7 +85,7 @@ class SurveyService {
     }
 
     currentSurvey!.contextData = contextData;
-    await _cacheSurvey();
+    await cacheSurvey();
   }
 
   Future<void> saveAudioTestData(AudioTestData audiotestData) async {
@@ -86,7 +94,7 @@ class SurveyService {
     }
 
     currentSurvey!.audioTestData = audiotestData;
-    await _cacheSurvey();
+    await cacheSurvey();
   }
 
   Future<void> saveQuestionnairesData(
@@ -97,30 +105,30 @@ class SurveyService {
     }
 
     currentSurvey!.questionnaireData = questionnaireData;
-    await _cacheSurvey();
+    await cacheSurvey();
   }
 
   Future<void> saveCcsm(CcsmAudioTest ccsm) async {
     currentSurvey!.audioTestData.ccsm = ccsm;
-    await _cacheSurvey();
+    await cacheSurvey();
   }
 
   Future<void> saveEq5d(Eq5d eq5d) async {
     currentSurvey!.questionnaireData.eq5d = eq5d;
-    await _cacheSurvey();
+    await cacheSurvey();
   }
 
   Future<void> saveWho5(Who5 who5) async {
     currentSurvey!.questionnaireData.who5 = who5;
-    await _cacheSurvey();
+    await cacheSurvey();
   }
 
-  Future<void> _cacheSurvey() async {
+  Future<void> cacheSurvey() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(storageKey, jsonEncode(currentSurvey!.toJson()));
+    await prefs.setString(storageKey, jsonEncode(currentSurvey));
   }
 
-  Future<void> _clearCache() async {
+  Future<void> clearCache() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(storageKey);
   }

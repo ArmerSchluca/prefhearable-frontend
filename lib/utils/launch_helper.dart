@@ -21,14 +21,14 @@ class _LaunchHelperState extends State<LaunchHelper> {
   }
 
   Future<void> _checkSession() async {
-    final id = await session.getCurrentParticipantId();
+    final id = await sessionService.getCurrentParticipantId();
 
     if (!mounted) return;
 
     if (id != null) {
       try {
         // Prüfe im Backend, ob UUID im Local Storage noch im existiert
-        await session.loginWithUuid(id);
+        await sessionService.loginWithUuid(id);
 
         if (!mounted) return;
 
@@ -38,7 +38,7 @@ class _LaunchHelperState extends State<LaunchHelper> {
         );
         return;
       } catch (context) {
-        await session.logoutParticipant();
+        await sessionService.logoutParticipant();
       }
     }
 

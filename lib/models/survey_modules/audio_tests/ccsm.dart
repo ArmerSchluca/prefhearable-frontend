@@ -1,4 +1,6 @@
 class CcsmAudioTest {
+  String? audioDevice;
+
   SoundRating artificialSound1 = SoundRating();
   SoundRating naturalSound1 = SoundRating();
   SoundRating naturalSound2 = SoundRating();
@@ -9,6 +11,7 @@ class CcsmAudioTest {
       naturalSound2.isComplete;
 
   Map<String, dynamic> toJson() => {
+    'audio_device': audioDevice,
     'artificial_sound_1': artificialSound1.toJson(),
     'natural_sound_1': naturalSound1.toJson(),
     'natural_sound_2': naturalSound2.toJson(),
