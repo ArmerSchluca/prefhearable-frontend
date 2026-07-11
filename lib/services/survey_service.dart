@@ -1,11 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/widgets.dart';
+import 'package:frontend/models/previous_surveys.dart';
 import 'package:frontend/models/survey_modules/audio_tests/ccsm.dart';
-import 'package:frontend/models/survey_modules/audiotest_data.dart';
 import 'package:frontend/models/survey_modules/context_data.dart';
 import 'package:frontend/models/survey_modules/personal_data.dart';
-import 'package:frontend/models/survey_modules/questionnaire_data.dart';
 import 'package:frontend/models/survey.dart';
 import 'package:frontend/models/survey_modules/questionnaires/eq5d.dart';
 import 'package:frontend/models/survey_modules/questionnaires/who5.dart';
@@ -67,8 +66,6 @@ class SurveyService {
     final json = prefs.getString(storageKey);
 
     if (json == null) return;
-
-    //currentSurvey = Survey.fromJson(jsonDecode(json));
   }
 
   Future<void> savePersonalData(PersonalData personalData) async {
@@ -87,26 +84,6 @@ class SurveyService {
     }
 
     currentSurvey!.contextData = contextData;
-    await cacheSurvey();
-  }
-
-  Future<void> saveAudioTestData(AudioTestData audiotestData) async {
-    if (currentSurvey == null) {
-      throw Exception("NO_ACTIVE_SURVEY");
-    }
-
-    currentSurvey!.audioTestData = audiotestData;
-    await cacheSurvey();
-  }
-
-  Future<void> saveQuestionnairesData(
-    QuestionnaireData questionnaireData,
-  ) async {
-    if (currentSurvey == null) {
-      throw Exception("NO_ACTIVE_SURVEY");
-    }
-
-    currentSurvey!.questionnaireData = questionnaireData;
     await cacheSurvey();
   }
 
@@ -134,6 +111,19 @@ class SurveyService {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(storageKey);
     currentSurvey = null;
+  }
+
+  Future<List<SurveyOverview>> getPreviousSurveys() async {
+    final participantId = await sessionService.getCurrentParticipantId();
+
+    final response = await http.get(
+      Uri.parse("$baseUrl/surveys"),
+      headers: {"X-Participant-Id": participantId!},
+    );
+
+    final List<dynamic> json = jsonDecode(response.body);
+
+    return json.map((e) => SurveyOverview.fromJson(e)).toList();
   }
 
   String? validateAge(int? age) {

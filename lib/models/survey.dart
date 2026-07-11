@@ -5,6 +5,8 @@ import 'package:frontend/models/survey_modules/questionnaire_data.dart';
 import 'package:frontend/models/survey_modules/personal_data.dart';
 
 class Survey {
+  bool readOnly = false;
+  
   final String surveyVersion = "1.0.0";
 
   DateTime startedAt = DateTime.now();
