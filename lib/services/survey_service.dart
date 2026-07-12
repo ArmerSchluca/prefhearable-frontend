@@ -13,16 +13,22 @@ import 'package:frontend/utils/session_instance.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
+/// Verwaltet den Lebenszyklus einer Umfrage.
+///
+/// Der Service übernimmt das Erstellen, Zwischenspeichern, Wiederherstellen
+/// und Übertragen von Umfragen sowie das Speichern der einzelnen
+/// Umfragemodule während der Bearbeitung.
 class SurveyService {
   Survey? currentSurvey;
-  String storageKey = 'current_survey';
+  static const String storageKey = 'current_survey';
 
+  /// Erstellt eine neue Umfrage und legt sie im lokalen Zwischenspeicher ab.
   Future<void> startSurvey() async {
     currentSurvey = Survey();
-    debugPrint("SURVEY_CREATED");
     await cacheSurvey();
   }
 
+  /// Verwirft die aktuelle Umfrage und entfernt sie aus dem lokalen Zwischenspeicher.
   Future<void> cancelSurvey() async {
     try {
       currentSurvey = null;
@@ -33,6 +39,9 @@ class SurveyService {
     }
   }
 
+  /// Überträgt die abgeschlossene Umfrage an das Backend.
+  ///
+  /// Nach erfolgreicher Übertragung wird die lokale Kopie der Umfrage entfernt.
   Future<void> submitSurvey() async {
     final participantId = await sessionService.getCurrentParticipantId();
 
@@ -61,18 +70,19 @@ class SurveyService {
     clearCache();
   }
 
+  /// Lädt eine lokal zwischengespeicherte laufende Umfrage.
+  ///
+  /// Wird beim Appstart aufgerufen, um alle Felder mit den entsprechenden Werten auszufüllen.
   Future<void> loadCachedSurvey() async {
     final prefs = await SharedPreferences.getInstance();
     final json = prefs.getString(storageKey);
 
-    debugPrint("Cached survey: $json");
-
     if (json == null) return;
 
     currentSurvey = Survey.fromJson(jsonDecode(json));
-    debugPrint("SURVEY_LOADED");
   }
 
+  /// Speichert die personenbezogenen Angaben der aktuellen Umfrage.
   Future<void> savePersonalData(PersonalData personalData) async {
     if (currentSurvey == null) {
       throw Exception("NO_ACTIVE_SURVEY");
@@ -83,6 +93,7 @@ class SurveyService {
     await cacheSurvey();
   }
 
+  /// Speichert die Kontextinformationen der aktuellen Umfrage.
   Future<void> saveContextData(ContextData contextData) async {
     if (currentSurvey == null) {
       throw Exception("NO_ACTIVE_SURVEY");
@@ -92,35 +103,40 @@ class SurveyService {
     await cacheSurvey();
   }
 
+  /// Speichert die Ergebnisse des CCSM-Hörtests.
   Future<void> saveCcsm(CcsmAudioTest ccsm) async {
     currentSurvey!.audioTestData.ccsm = ccsm;
     await cacheSurvey();
   }
 
+  /// Speichert die Antworten des EQ-5D-5L-Fragebogens.
   Future<void> saveEq5d(Eq5d eq5d) async {
     currentSurvey!.questionnaireData.eq5d = eq5d;
     await cacheSurvey();
   }
 
+  /// Speichert die Antworten des WHO-5-Fragebogens.
   Future<void> saveWho5(Who5 who5) async {
     currentSurvey!.questionnaireData.who5 = who5;
     await cacheSurvey();
   }
 
+  /// Legt die aktuelle Umfrage als JSON im lokalen Zwischenspeicher ab.
   Future<void> cacheSurvey() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(storageKey, jsonEncode(currentSurvey));
   }
 
+  /// Entfernt die lokal zwischengespeicherte Umfrage.
   Future<void> clearCache() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(storageKey);
   }
 
+  /// Lädt eine Übersicht aller bereits abgeschlossenen Umfragen
+  /// des aktuellen Teilnehmers aus dem Backend.
   Future<List<SurveyOverview>> getPreviousSurveys() async {
     try {
-      debugPrint("getPreviousSurveys()");
-
       final participantId = await sessionService.getCurrentParticipantId();
 
       final response = await http.get(
@@ -128,27 +144,21 @@ class SurveyService {
         headers: {"X-Participant-Id": participantId!},
       );
 
-      debugPrint(response.body);
-
       final List<dynamic> json = jsonDecode(response.body);
 
-      debugPrint("JSON dekodiert");
-
       final surveys = json.map((e) {
-        debugPrint("Mappe: $e");
         return SurveyOverview.fromJson(e);
       }).toList();
 
-      debugPrint("Surveys geladen: ${surveys.length}");
-
       return surveys;
-    } catch (e, stackTrace) {
+    } catch (e) {
       debugPrint("FEHLER: $e");
-      debugPrintStack(stackTrace: stackTrace);
       rethrow;
     }
   }
 
+  /// Prüft, ob das angegebene Alter den definierten Eingaberegeln entspricht.
+  /// Bei ungültigen Eingaben wird eine passende Fehlermeldung zurückgegeben.
   String? validateAge(int? age) {
     if (age == null) {
       return "Bitte Alter angeben.";

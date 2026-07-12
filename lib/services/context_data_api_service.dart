@@ -9,7 +9,12 @@ import 'package:http/http.dart' as http;
 import 'package:noise_meter/noise_meter.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+/// Service für die Erfassung der Kontextdaten über externe Dienste und Gerätesensoren.
 class ExternalApiService {
+  /// Ermittelt den durchschnittlichen Umgebungsgeräuschpegel.
+  ///
+  /// Die Lautstärke wird über einen Zeitraum von drei Sekunden gemessen und
+  /// als gemittelter Dezibelwert zurückgegeben.
   static Future<double> measureDecibels() async {
     if (Platform.isAndroid || Platform.isIOS) {
       if (!await Permission.microphone.isGranted) {
@@ -36,8 +41,6 @@ class ExternalApiService {
       },
 
       onError: (Object error) async {
-        debugPrint("NoiseMeter Error: $error");
-
         await subscription.cancel();
 
         if (!completer.isCompleted) {
@@ -67,6 +70,11 @@ class ExternalApiService {
     return completer.future;
   }
 
+  /// Ermittelt die aktuelle Position des Geräts.
+  ///
+  /// Vor dem Abruf werden der Standortdienst sowie die erforderlichen
+  /// Berechtigungen überprüft. Bei fehlenden Voraussetzungen wird eine
+  /// entsprechende Exception ausgelöst.
   static Future<Position> getCurrentPosition() async {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
 
@@ -75,10 +83,6 @@ class ExternalApiService {
     }
 
     LocationPermission permission = await Geolocator.checkPermission();
-    debugPrint("Permission: $permission");
-
-    final enabled = await Geolocator.isLocationServiceEnabled();
-    debugPrint("Location enabled: $enabled");
 
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
@@ -100,6 +104,10 @@ class ExternalApiService {
     );
   }
 
+  /// Ruft die aktuellen Wetterdaten für die angegebene Position ab.
+  ///
+  /// Die Wetterinformationen werden über die Open-Meteo-API bezogen und
+  /// als strukturiertes Datenmodell zurückgegeben.
   static Future<WeatherData> getWeather(
     double latitude,
     double longitude,
@@ -135,7 +143,9 @@ class ExternalApiService {
     );
   }
 
-  /// Basierend auf WMO Weather Codes. Hier wurden die wichtigsten ausgesucht
+  /// Übersetzt WMO-Wettercodes in eine deutschsprachige Beschreibung.
+  ///
+  /// Es werden die für die Anwendung relevanten Wettercodes berücksichtigt.
   static String _weatherCodeToString(int code) {
     switch (code) {
       case 0:

@@ -6,14 +6,20 @@ import 'package:frontend/views/launch_view.dart';
 import 'package:frontend/utils/base_url.dart';
 import 'package:http/http.dart' as http;
 
-class LaunchHelper extends StatefulWidget {
-  const LaunchHelper({super.key});
+/// Initialer Einstiegspunkt der Anwendung nach dem Start.
+///
+/// Der Helper prüft die Erreichbarkeit des Backends sowie eine eventuell
+/// vorhandene Session und leitet anschließend zur passenden Ansicht weiter.
+class LaunchHandler extends StatefulWidget {
+  const LaunchHandler({super.key});
 
   @override
-  State<LaunchHelper> createState() => _LaunchHelperState();
+  State<LaunchHandler> createState() => _LaunchHandlerState();
 }
 
-class _LaunchHelperState extends State<LaunchHelper> {
+class _LaunchHandlerState extends State<LaunchHandler> {
+  /// Führt die Initialisierung der Anwendung aus.
+  /// Dabei werden die Serververbindung sowie eine bestehende Sitzung geprüft.
   @override
   void initState() {
     super.initState();
@@ -21,6 +27,11 @@ class _LaunchHelperState extends State<LaunchHelper> {
     _checkSession();
   }
 
+  /// Prüft, ob bereits eine gültige Teilnehmersitzung vorhanden ist.
+  ///
+  /// Bei erfolgreicher Anmeldung wird eine eventuell zwischengespeicherte
+  /// Umfrage wiederhergestellt und zur Startseite navigiert. Andernfalls
+  /// erfolgt die Weiterleitung zur Registrierungsansicht.
   Future<void> _checkSession() async {
     final id = await sessionService.getCurrentParticipantId();
 
@@ -37,7 +48,7 @@ class _LaunchHelperState extends State<LaunchHelper> {
           context,
           MaterialPageRoute(builder: (_) => const HomeView()),
         );
-        
+
         return;
       } catch (e, stackTrace) {
         debugPrint("Launch failed: $e");
@@ -55,11 +66,15 @@ class _LaunchHelperState extends State<LaunchHelper> {
     );
   }
 
+  /// Zeigt während der Initialisierung einen Ladeindikator an.
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: Center(child: CircularProgressIndicator()));
   }
 
+  /// Prüft, ob das Backend erreichbar ist.
+  ///
+  /// Die Verbindung wird über den Endpunkt /health des Backends validiert.
   Future<void> _checkServerConnection() async {
     final response = await http.get(Uri.parse('$baseUrl/health'));
 

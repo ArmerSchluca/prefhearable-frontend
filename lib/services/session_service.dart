@@ -6,9 +6,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:uuid/validation.dart';
 
+/// Verwaltet die Sitzung eines Teilnehmers.
+///
+/// Der Service übernimmt die Registrierung und Anmeldung eines Teilnehmers,
+/// speichert dessen UUID lokal und stellt sie während der Laufzeit der
+/// Anwendung zur Verfügung.
 class SessionService {
   static final String storageKey = 'participant_uuid';
 
+  /// Registriert einen neuen Teilnehmer im Backend.
+  ///
+  /// Die vom Backend erzeugte UUID wird lokal gespeichert und anschließend
+  /// zurückgegeben.
   Future<String> registerParticipant() async {
     final response = await http.post(Uri.parse('$baseUrl/participants'));
 
@@ -24,6 +33,11 @@ class SessionService {
     return participantId;
   }
 
+  /// Meldet einen Teilnehmer anhand seiner UUID an.
+  ///
+  /// Vor der Anmeldung wird das Format der UUID geprüft. Anschließend wird
+  /// im Backend validiert, ob der Teilnehmer existiert. Bei erfolgreicher
+  /// Anmeldung wird die UUID lokal gespeichert.
   Future<String> loginWithUuid(String participantId) async {
     if (!UuidValidation.isValidUUID(fromString: participantId)) {
       throw Exception("INVALID_UUID_FORMAT");
@@ -48,11 +62,18 @@ class SessionService {
     }
   }
 
+  /// Gibt die lokal gespeicherte Teilnehmer-ID zurück.
+  ///
+  /// Falls keine Sitzung vorhanden ist, wird `null` zurückgegeben.
   Future<String?> getCurrentParticipantId() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString(storageKey);
   }
 
+  /// Meldet den aktuellen Teilnehmer ab.
+  ///
+  /// Entfernt die zwischengespeicherte Teilnehmer-ID aus dem SharedStorage
+  /// und ggf. eine laufende Umfrage.
   Future<void> logoutParticipant() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(storageKey);
@@ -62,6 +83,8 @@ class SessionService {
     }
   }
 
+  /// Speichert die Teilnehmer-ID lokal auf dem Gerät,
+  /// um sich beim Appstart (bis zur Abmeldung) automatisch anzumelden.
   Future<void> _cacheId(String participantId) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(storageKey, participantId);

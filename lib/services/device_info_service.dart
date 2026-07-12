@@ -6,9 +6,15 @@ import 'package:frontend/models/device_information.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:flutter_audio_output/flutter_audio_output.dart';
 
+/// Ermittelt Informationen über das verwendete Endgerät.
+///
+/// Der Service bündelt den Zugriff auf gerätespezifische Informationen,
+/// die im Rahmen einer Umfrage zusammen mit den erhobenen Daten gespeichert
+/// werden.
 class DeviceInformationService {
   static final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
 
+  /// Erfasst sämtliche für die Umfrage relevanten Geräteinformationen.
   static Future<DeviceInformation> getDeviceInformation() async {
     return DeviceInformation(
       appVersion: await getAppVersion(),
@@ -17,11 +23,13 @@ class DeviceInformationService {
     );
   }
 
+  /// Liest die aktuelle Version der Anwendung aus (siehe pubspec.yaml "version").
   static Future<String> getAppVersion() async {
     final packageInfo = await PackageInfo.fromPlatform();
     return packageInfo.version;
   }
 
+  /// Ermittelt das Betriebssystem des verwendeten Geräts.
   static Future<String> getOperatingSystem() async {
     if (Platform.isAndroid) {
       final info = await deviceInfo.androidInfo;
@@ -45,6 +53,7 @@ class DeviceInformationService {
     return Platform.operatingSystem;
   }
 
+  /// Ermittelt die Gerätebezeichnung des verwendeten Endgeräts.
   static Future<String> getModel() async {
     if (Platform.isAndroid) {
       final info = await deviceInfo.androidInfo;
@@ -69,33 +78,32 @@ class DeviceInformationService {
     return "Unknown";
   }
 
+  /// Ermittelt das aktuell verwendete Audiowiedergabegerät.
+  ///
+  /// Die Information wird während des Hörtests erfasst, um die
+  /// Wiedergabeumgebung der Bewertung nachvollziehen zu können.
   static Future<String> getAudioDevice() async {
     try {
       final output = await FlutterAudioOutput.getCurrentOutput();
 
       switch (output.port) {
         case AudioPort.bluetooth:
-          debugPrint("Bluetooth (${output.name})");
           return "Bluetooth (${output.name})";
 
         case AudioPort.headphones:
-          debugPrint("Kabelgebundene Kopfhörer");
           return "Kabelgebundene Kopfhörer";
 
         case AudioPort.speaker:
-          debugPrint("Lautsprecher");
           return "Lautsprecher";
 
         case AudioPort.receiver:
-          debugPrint("Hörmuschel");
           return "Hörmuschel";
 
         default:
           return output.name;
       }
-    } catch (e, stackTrace) {
-      debugPrint("AudioDevice Error: $e");
-      debugPrint(stackTrace.toString());
+    } catch (e) {
+      debugPrint("Audiogerät konnte nicht ermittelt werden: $e");
       return "Unknown";
     }
   }
