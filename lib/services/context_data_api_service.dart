@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:frontend/models/survey_modules/context_data.dart';
@@ -9,12 +10,14 @@ import 'package:noise_meter/noise_meter.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class ExternalApiService {
-static Future<double> measureDecibels() async {
-    if (!await Permission.microphone.isGranted) {
-      final result = await Permission.microphone.request();
+  static Future<double> measureDecibels() async {
+    if (Platform.isAndroid || Platform.isIOS) {
+      if (!await Permission.microphone.isGranted) {
+        final result = await Permission.microphone.request();
 
-      if (!result.isGranted) {
-        throw Exception("MIC_PERMISSION_DENIED");
+        if (!result.isGranted) {
+          throw Exception("MIC_PERMISSION_DENIED");
+        }
       }
     }
 
@@ -27,7 +30,9 @@ static Future<double> measureDecibels() async {
 
     subscription = noiseMeter.noise.listen(
       (NoiseReading reading) async {
-        values.add(reading.meanDecibel);
+        if (reading.meanDecibel.isFinite) {
+          values.add(reading.meanDecibel);
+        }
       },
 
       onError: (Object error) async {
@@ -52,8 +57,7 @@ static Future<double> measureDecibels() async {
         return;
       }
 
-      final average =
-          values.reduce((a, b) => a + b) / values.length;
+      final average = values.reduce((a, b) => a + b) / values.length;
 
       if (!completer.isCompleted) {
         completer.complete(average);
