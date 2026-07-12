@@ -40,10 +40,26 @@ class _CcsmAudioTestViewState extends State<CcsmAudioTestView> {
         title: "CCSM Audiotest",
         color: Colors.pinkAccent,
         nav: true,
-        onBackPressed: () async {
-          await _saveCcsm();
-          if (!context.mounted) return;
+        onBackPressed: () {
+          _saveCcsm();
+
           Navigator.pop(context);
+
+          if (!surveyService.currentSurvey!.contextData.isComplete) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text("Es wurden noch nicht alle Felder ausgefüllt!"),
+                backgroundColor: Colors.grey,
+              ),
+            );
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text("Daten zum CCSM Audiotest erfasst!"),
+                backgroundColor: Colors.green,
+              ),
+            );
+          }
         },
       ),
       footer: AppFooter(

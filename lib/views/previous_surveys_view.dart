@@ -96,9 +96,7 @@ Widget _buildSurveyCard(SurveyOverview survey) {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(height: 6),
-
           Text(DateFormat("dd.MM.yyyy HH:mm").format(survey.finishedAt)),
-
           Text(
             "Dauer: ${survey.finishedAt.difference(survey.startedAt).inMinutes} min",
           ),

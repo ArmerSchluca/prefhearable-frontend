@@ -189,7 +189,7 @@ class _SurveyViewState extends State<SurveyView> {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(
-                            "Daten übermittelt! Vielen Dank für die Teilnahme",
+                            "Daten übermittelt! Vielen Dank für Ihre Teilnahme!",
                           ),
                           backgroundColor: Colors.green,
                         ),

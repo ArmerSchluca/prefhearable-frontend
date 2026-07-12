@@ -189,7 +189,10 @@ class AppDialog {
                         timer?.cancel();
                         Navigator.pop(context, false);
                       },
-                      child: const Text("Abbrechen"),
+                      child: const Text(
+                        "Abbrechen",
+                        style: TextStyle(color: Colors.green),
+                      ),
                     ),
                   ],
                 );

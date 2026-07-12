@@ -57,6 +57,7 @@ class SurveyService {
       );
     }
 
+    currentSurvey = null;
     clearCache();
   }
 
@@ -110,7 +111,6 @@ class SurveyService {
   Future<void> clearCache() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(storageKey);
-    currentSurvey = null;
   }
 
   Future<List<SurveyOverview>> getPreviousSurveys() async {

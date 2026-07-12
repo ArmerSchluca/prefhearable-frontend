@@ -399,8 +399,22 @@ class _ContextDataViewState extends State<ContextDataView> {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (_) =>
-          Center(child: CircularProgressIndicator(color: Colors.green)),
+      builder: (_) => PopScope(
+        canPop: false,
+        child: AlertDialog(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CircularProgressIndicator(color: Colors.green),
+              SizedBox(height: 20),
+              Text(
+                "Umgebungsdaten werden erfasst, \nbitte warten.",
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+      ),
     );
 
     try {
@@ -450,20 +464,55 @@ class _ContextDataViewState extends State<ContextDataView> {
         SnackBar(content: Text("Standort konnte nicht ermittelt werden.")),
       );
       debugPrint(e.toString());
-
-
-    } 
+    }
   }
 
-Future<void> getNoiseLevel() async {
+  Future<void> getNoiseLevel() async {
     final start = await AppDialog.showNoiseCountdown(context);
 
     if (!start || !mounted) return;
 
-    final noise = await ExternalApiService.measureDecibels();
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => PopScope(
+        canPop: false,
+        child: AlertDialog(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CircularProgressIndicator(color: Colors.green),
+              SizedBox(height: 20),
+              Text(
+                "Umgebungslautstärke wird gemessen...\nBitte bleiben Sie möglichst ruhig.",
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
 
-    setState(() {
-      noiseLevelController.text = noise.toStringAsFixed(1);
-    });
+    try {
+      final noise = await ExternalApiService.measureDecibels();
+
+      if (!mounted) return;
+
+      Navigator.pop(context);
+
+      setState(() {
+        noiseLevelController.text = noise.toStringAsFixed(1);
+      });
+    } catch (e) {
+      if (!mounted) return;
+
+      Navigator.pop(context);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Die Lautstärke konnte nicht gemessen werden."),
+        ),
+      );
+    }
   }
 }
