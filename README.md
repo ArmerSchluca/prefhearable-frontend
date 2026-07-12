@@ -22,7 +22,7 @@ This app serves as a large-scale crowdsourcing tool to build a comprehensive, st
 * **Target Platforms:** iOS & Android
 * **Other theoretically supported Platforms:** Windows & macOS (not tested)
 
-* ## Backend
+## Backend
 
 This application requires the Prefhearable backend.
 
@@ -62,20 +62,15 @@ flutter run
 ## Configuration
 
 Before running the application, configure the backend URL in case the server does not run locally as http://localhost:3000
-
+```
 lib/utils/base_url.dart
-
-Example:
-
-```dart
-const baseUrl = "http://192.168.178.50:3000";
 ```
 
 ## Supported Platforms
 
 | Platform | Status |
 |----------|--------|
-| Android | ✅ Fully supported |
+| Android | ✅ Supported |
 | iOS | ✅ Supported |
 | macOS | ⚠ Experimental |
 | Windows | ⚠ Experimental |
