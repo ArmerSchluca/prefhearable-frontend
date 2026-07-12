@@ -27,6 +27,28 @@ class Who5 {
     'restedness': restedness?.value,
     'lifeInterest': lifeInterest?.value,
   };
+
+  Who5.fromJson(Map<String, dynamic> json) {
+    positiveAffect = json['positiveAffect'] != null
+        ? Who5Answer.values.firstWhere((e) => e.value == json['positiveAffect'])
+        : null;
+
+    calmness = json['calmness'] != null
+        ? Who5Answer.values.firstWhere((e) => e.value == json['calmness'])
+        : null;
+
+    vitality = json['vitality'] != null
+        ? Who5Answer.values.firstWhere((e) => e.value == json['vitality'])
+        : null;
+
+    restedness = json['restedness'] != null
+        ? Who5Answer.values.firstWhere((e) => e.value == json['restedness'])
+        : null;
+
+    lifeInterest = json['lifeInterest'] != null
+        ? Who5Answer.values.firstWhere((e) => e.value == json['lifeInterest'])
+        : null;
+  }
 }
 
 enum Who5Answer { never, rarely, sometimes, often, mostOfTheTime, always }

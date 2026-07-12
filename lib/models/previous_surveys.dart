@@ -1,3 +1,4 @@
+/// Datenmodell für die Cards in der "Vorherige Umfragen"-View
 class SurveyOverview {
   final int id;
   final String surveyVersion;
@@ -11,12 +12,10 @@ class SurveyOverview {
     required this.finishedAt,
   });
 
-  factory SurveyOverview.fromJson(Map<String, dynamic> json) {
-    return SurveyOverview(
-      id: json['id'],
-      surveyVersion: json['survey_version'],
-      startedAt: DateTime.parse(json['started_at']),
-      finishedAt: DateTime.parse(json['finished_at']),
-    );
-  }
+  // Initializer-List, da Felder final sind
+  SurveyOverview.fromJson(Map<String, dynamic> json)
+    : id = json['id'],
+      surveyVersion = json['surveyVersion'],
+      startedAt = DateTime.parse(json['startedAt']),
+      finishedAt = DateTime.parse(json['finishedAt']);
 }

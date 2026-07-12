@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:frontend/utils/base_url.dart';
+import 'package:frontend/utils/survey_instance.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:uuid/validation.dart';
@@ -55,6 +56,10 @@ class SessionService {
   Future<void> logoutParticipant() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(storageKey);
+
+    if (surveyService.currentSurvey != null) {
+      surveyService.cancelSurvey();
+    }
   }
 
   Future<void> _cacheId(String participantId) async {

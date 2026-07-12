@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/utils/session_instance.dart';
+import 'package:frontend/utils/survey_instance.dart';
 import 'package:frontend/views/home_view.dart';
 import 'package:frontend/views/launch_view.dart';
 import 'package:frontend/utils/base_url.dart';
@@ -27,17 +28,21 @@ class _LaunchHelperState extends State<LaunchHelper> {
 
     if (id != null) {
       try {
-        // Prüfe im Backend, ob UUID im Local Storage noch im existiert
         await sessionService.loginWithUuid(id);
+        await surveyService.loadCachedSurvey();
 
         if (!mounted) return;
 
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => HomeView()),
+          MaterialPageRoute(builder: (_) => const HomeView()),
         );
+        
         return;
-      } catch (context) {
+      } catch (e, stackTrace) {
+        debugPrint("Launch failed: $e");
+        debugPrintStack(stackTrace: stackTrace);
+
         await sessionService.logoutParticipant();
       }
     }

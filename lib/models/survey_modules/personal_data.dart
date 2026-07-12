@@ -69,6 +69,59 @@ class PersonalData {
     'allergies': allergies,
     'diseases': diseases,
   };
+
+  PersonalData.fromJson(Map<String, dynamic> json) {
+    age = json['age'];
+
+    gender = json['gender'] != null
+        ? Gender.values.firstWhere((e) => e.name == json['gender'])
+        : null;
+
+    occupation = json['occupation'] != null
+        ? Occupation.values.firstWhere((e) => e.name == json['occupation'])
+        : null;
+
+    hearingAided = json['hearingAided'] != null
+        ? HearingAided.values.firstWhere((e) => e.name == json['hearingAided'])
+        : null;
+
+    hearingAidDuration = json['hearingAidDuration'] != null
+        ? HearingAidDuration.values.firstWhere(
+            (e) => e.name == json['hearingAidDuration'],
+          )
+        : null;
+
+    residentialArea = json['residentialArea'] != null
+        ? ResidentialArea.values.firstWhere(
+            (e) => e.name == json['residentialArea'],
+          )
+        : null;
+
+    physicalActivityType = json['physicalActivityType'] != null
+        ? PhysicalActivityType.values.firstWhere(
+            (e) => e.name == json['physicalActivityType'],
+          )
+        : null;
+
+    physicalActivityFrequency = json['physicalActivityFrequency'] != null
+        ? PhysicalActivityFrequency.values.firstWhere(
+            (e) => e.name == json['physicalActivityFrequency'],
+          )
+        : null;
+
+    physicalActivityDuration = json['physicalActivityDuration'] != null
+        ? PhysicalActivityDuration.values.firstWhere(
+            (e) => e.minutes == json['physicalActivityDuration'],
+          )
+        : null;
+
+    diet = json['diet'] != null
+        ? Diet.values.firstWhere((e) => e.name == json['diet'])
+        : null;
+
+    allergies = json['allergies'];
+    diseases = json['diseases'];
+  }
 }
 
 enum Gender { male, female, diverse }

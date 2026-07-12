@@ -63,10 +63,14 @@ class SurveyService {
 
   Future<void> loadCachedSurvey() async {
     final prefs = await SharedPreferences.getInstance();
-
     final json = prefs.getString(storageKey);
 
+    debugPrint("Cached survey: $json");
+
     if (json == null) return;
+
+    currentSurvey = Survey.fromJson(jsonDecode(json));
+    debugPrint("SURVEY_LOADED");
   }
 
   Future<void> savePersonalData(PersonalData personalData) async {
@@ -114,16 +118,35 @@ class SurveyService {
   }
 
   Future<List<SurveyOverview>> getPreviousSurveys() async {
-    final participantId = await sessionService.getCurrentParticipantId();
+    try {
+      debugPrint("getPreviousSurveys()");
 
-    final response = await http.get(
-      Uri.parse("$baseUrl/surveys"),
-      headers: {"X-Participant-Id": participantId!},
-    );
+      final participantId = await sessionService.getCurrentParticipantId();
 
-    final List<dynamic> json = jsonDecode(response.body);
+      final response = await http.get(
+        Uri.parse("$baseUrl/surveys"),
+        headers: {"X-Participant-Id": participantId!},
+      );
 
-    return json.map((e) => SurveyOverview.fromJson(e)).toList();
+      debugPrint(response.body);
+
+      final List<dynamic> json = jsonDecode(response.body);
+
+      debugPrint("JSON dekodiert");
+
+      final surveys = json.map((e) {
+        debugPrint("Mappe: $e");
+        return SurveyOverview.fromJson(e);
+      }).toList();
+
+      debugPrint("Surveys geladen: ${surveys.length}");
+
+      return surveys;
+    } catch (e, stackTrace) {
+      debugPrint("FEHLER: $e");
+      debugPrintStack(stackTrace: stackTrace);
+      rethrow;
+    }
   }
 
   String? validateAge(int? age) {

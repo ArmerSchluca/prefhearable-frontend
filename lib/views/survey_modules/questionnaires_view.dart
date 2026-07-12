@@ -51,7 +51,7 @@ class _QuestionnairesViewState extends State<QuestionnairesView> {
       children: [
         // EQ-5D CARD
         SectionCard(
-          title: "EQ-5D",
+          title: "EQ-5D-5L",
           icon: Icon(
             Icons.notes_outlined,
             color: Colors.deepPurpleAccent,

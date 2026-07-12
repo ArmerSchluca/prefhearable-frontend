@@ -6,7 +6,7 @@ import 'package:frontend/models/survey_modules/personal_data.dart';
 
 class Survey {
   bool readOnly = false;
-  
+
   final String surveyVersion = "1.0.0";
 
   DateTime startedAt = DateTime.now();
@@ -19,6 +19,20 @@ class Survey {
   QuestionnaireData questionnaireData = QuestionnaireData();
   AudioTestData audioTestData = AudioTestData();
 
+  Survey();
+
+  Survey.fromJson(Map<String, dynamic> json) {
+    startedAt = DateTime.parse(json['startedAt']);
+    finishedAt = json['finishedAt'] != null
+        ? DateTime.parse(json['finishedAt'])
+        : null;
+    deviceInformation = DeviceInformation.fromJson(json['deviceInformation']);
+    personalData = PersonalData.fromJson(json['personalData']);
+    contextData = ContextData.fromJson(json['contextData']);
+    questionnaireData = QuestionnaireData.fromJson(json['questionnaireData']);
+    audioTestData = AudioTestData.fromJson(json['audioTestData']);
+  }
+
   Map<String, dynamic> toJson() => {
     'surveyVersion': surveyVersion,
     'startedAt': startedAt.toIso8601String(),
@@ -28,13 +42,6 @@ class Survey {
     'contextData': contextData,
     'questionnaireData': questionnaireData,
     'audioTestData': audioTestData,
-  };
-
-  Set fromJson(Map<String, dynamic> json) => {
-    personalData = json['personalData'] as PersonalData,
-    contextData = json['contextData'] as ContextData,
-    questionnaireData = json['questionnaireData'] as QuestionnaireData,
-    audioTestData = json['audioTestData'] as AudioTestData,
   };
 
   bool get isComplete =>

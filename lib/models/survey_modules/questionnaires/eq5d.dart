@@ -27,6 +27,28 @@ class Eq5d {
     'pain': pain?.value,
     'anxiety': anxiety?.value,
   };
+
+  Eq5d.fromJson(Map<String, dynamic> json) {
+    mobility = json['mobility'] != null
+        ? Eq5dLevel.values.firstWhere((e) => e.value == json['mobility'])
+        : null;
+
+    selfCare = json['selfCare'] != null
+        ? Eq5dLevel.values.firstWhere((e) => e.value == json['selfCare'])
+        : null;
+
+    usualActivities = json['usualActivities'] != null
+        ? Eq5dLevel.values.firstWhere((e) => e.value == json['usualActivities'])
+        : null;
+
+    pain = json['pain'] != null
+        ? Eq5dLevel.values.firstWhere((e) => e.value == json['pain'])
+        : null;
+
+    anxiety = json['anxiety'] != null
+        ? Eq5dLevel.values.firstWhere((e) => e.value == json['anxiety'])
+        : null;
+  }
 }
 
 enum Eq5dLevel { level1, level2, level3, level4, level5 }

@@ -10,10 +10,10 @@ class DeviceInformationService {
   static final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
 
   static Future<DeviceInformation> getDeviceInformation() async {
-    return DeviceInformation.withParams(
-      await getAppVersion(),
-      await getOperatingSystem(),
-      await getModel(),
+    return DeviceInformation(
+      appVersion: await getAppVersion(),
+      operatingSystem: await getOperatingSystem(),
+      model: await getModel(),
     );
   }
 

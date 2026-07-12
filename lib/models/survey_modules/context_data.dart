@@ -35,6 +35,29 @@ class ContextData {
     'timestamp': timestamp?.toIso8601String(),
     'weather': weather?.toJson(),
   };
+
+  ContextData.fromJson(Map<String, dynamic> json) {
+    latitude = json['latitude'];
+    longitude = json['longitude'];
+
+    locationType = json['locationType'] != null
+        ? LocationType.values.firstWhere((e) => e.name == json['locationType'])
+        : null;
+
+    season = json['season'] != null
+        ? Season.values.firstWhere((e) => e.name == json['season'])
+        : null;
+
+    noiseLevel = json['noiseLevel'];
+
+    timestamp = json['timestamp'] != null
+        ? DateTime.parse(json['timestamp'])
+        : null;
+
+    weather = json['weather'] != null
+        ? WeatherData.fromJson(json['weather'])
+        : null;
+  }
 }
 
 enum LocationType { indoor, outdoor }
@@ -89,6 +112,13 @@ class WeatherData {
     'windSpeed': windSpeed,
     'uvIndex': uvIndex,
   };
+
+  WeatherData.fromJson(Map<String, dynamic> json)
+    : description = json['description'],
+      temperature = (json['temperature'] as num?)?.toDouble(),
+      humidity = (json['humidity'] as num?)?.toDouble(),
+      windSpeed = (json['windSpeed'] as num?)?.toDouble(),
+      uvIndex = (json['uvIndex'] as num?)?.toDouble();
 
   bool get isWeatherComplete =>
       description != null &&

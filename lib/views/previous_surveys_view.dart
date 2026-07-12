@@ -90,7 +90,7 @@ Widget _buildSurveyCard(SurveyOverview survey) {
         child: const Icon(Icons.assignment),
       ),
 
-      title: Text("Version ${survey.surveyVersion}"),
+      title: Text("Umfrage v${survey.surveyVersion}"),
 
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
