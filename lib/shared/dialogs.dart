@@ -202,4 +202,28 @@ class AppDialog {
         ) ??
         false;
   }
+
+  static Future<bool> showLoadingIndicator(
+    BuildContext context,
+    Color? color,
+    String? message,
+  ) async {
+    return await showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => PopScope(
+        canPop: false,
+        child: AlertDialog(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CircularProgressIndicator(color: color ?? Colors.blueAccent),
+              SizedBox(height: 20),
+              Text(message ?? "Bitte warten...", textAlign: TextAlign.center),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }

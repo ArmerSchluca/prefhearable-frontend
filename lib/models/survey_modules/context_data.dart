@@ -6,6 +6,7 @@ class ContextData {
   double? noiseLevel;
   DateTime? timestamp;
   WeatherData? weather;
+  AirQualityData? airQuality;
 
   bool get isComplete =>
       latitude != null &&
@@ -14,7 +15,8 @@ class ContextData {
       season != null &&
       noiseLevel != null &&
       timestamp != null &&
-      weather!.isWeatherComplete;
+      weather!.isComplete &&
+      airQuality!.isComplete;
 
   ContextData({
     this.latitude,
@@ -24,6 +26,7 @@ class ContextData {
     this.noiseLevel,
     this.timestamp,
     this.weather,
+    this.airQuality,
   });
 
   Map<String, dynamic> toJson() => {
@@ -34,6 +37,7 @@ class ContextData {
     'noiseLevel': noiseLevel,
     'timestamp': timestamp?.toIso8601String(),
     'weather': weather?.toJson(),
+    'airQuality': airQuality?.toJson(),
   };
 
   ContextData.fromJson(Map<String, dynamic> json) {
@@ -56,6 +60,10 @@ class ContextData {
 
     weather = json['weather'] != null
         ? WeatherData.fromJson(json['weather'])
+        : null;
+
+    airQuality = json['airQuality'] != null
+        ? AirQualityData.fromJson(json['airQuality'])
         : null;
   }
 }
@@ -91,18 +99,18 @@ extension SeasonLabel on Season {
 }
 
 class WeatherData {
-  final String? description;
-  final double? temperature;
-  final double? humidity;
-  final double? windSpeed;
-  final double? uvIndex;
+  String? description;
+  double? temperature;
+  double? humidity;
+  double? windSpeed;
+  double? uvIndex;
 
   WeatherData({
-    required this.description,
-    required this.temperature,
-    required this.humidity,
-    required this.windSpeed,
-    required this.uvIndex,
+    this.description,
+    this.temperature,
+    this.humidity,
+    this.windSpeed,
+    this.uvIndex,
   });
 
   Map<String, dynamic> toJson() => {
@@ -120,10 +128,48 @@ class WeatherData {
       windSpeed = (json['windSpeed'] as num?)?.toDouble(),
       uvIndex = (json['uvIndex'] as num?)?.toDouble();
 
-  bool get isWeatherComplete =>
+  bool get isComplete =>
       description != null &&
       temperature != null &&
       humidity != null &&
       windSpeed != null &&
       uvIndex != null;
+}
+
+class AirQualityData {
+  double? europeanAqi;
+  double? pm25;
+  double? pm10;
+  double? nitrogenDioxide;
+  double? ozone;
+
+  AirQualityData({
+    this.europeanAqi,
+    this.pm25,
+    this.pm10,
+    this.nitrogenDioxide,
+    this.ozone,
+  });
+
+  Map<String, dynamic> toJson() => {
+    'europeanAqi': europeanAqi,
+    'pm25': pm25,
+    'pm10': pm10,
+    'nitrogenDioxide': nitrogenDioxide,
+    'ozone': ozone,
+  };
+
+  AirQualityData.fromJson(Map<String, dynamic> json)
+    : europeanAqi = (json['europeanAqi'] as num?)?.toDouble(),
+      pm25 = (json['pm25'] as num?)?.toDouble(),
+      pm10 = (json['pm10'] as num?)?.toDouble(),
+      nitrogenDioxide = (json['nitrogenDioxide'] as num?)?.toDouble(),
+      ozone = (json['ozone'] as num?)?.toDouble();
+
+  bool get isComplete =>
+      europeanAqi != null &&
+      pm25 != null &&
+      pm10 != null &&
+      nitrogenDioxide != null &&
+      ozone != null;
 }

@@ -22,45 +22,13 @@ class ContextDataView extends StatefulWidget {
 class _ContextDataViewState extends State<ContextDataView> {
   final _formKey = GlobalKey<FormState>();
 
-  final latitudeController = TextEditingController();
-  final longitudeController = TextEditingController();
-  LocationType? locationType;
-  Season? season;
-  final noiseLevelController = TextEditingController();
-  final timestampController = TextEditingController();
-  DateTime? timestamp;
-  // Wetter
-  final temperatureController = TextEditingController();
-  final humidityController = TextEditingController();
-  final windSpeedController = TextEditingController();
-  final uvIndexController = TextEditingController();
-  final descriptionController = TextEditingController();
+  late final ContextData contextData;
 
   // Hier werden die Felder mit den bereits gespeicherten Daten befüllt
   @override
   void initState() {
     super.initState();
-
-    final contextData = surveyService.currentSurvey!.contextData;
-
-    latitudeController.text = contextData.latitude?.toString() ?? "";
-    longitudeController.text = contextData.longitude?.toString() ?? "";
-    locationType = contextData.locationType;
-    season = contextData.season;
-    noiseLevelController.text = contextData.noiseLevel?.toString() ?? "";
-
-    timestamp = contextData.timestamp;
-    timestampController.text = contextData.timestamp == null
-        ? ""
-        : DateFormat("dd.MM.yyyy HH:mm:ss").format(contextData.timestamp!);
-
-    if (contextData.weather != null) {
-      temperatureController.text = contextData.weather!.temperature.toString();
-      humidityController.text = contextData.weather!.humidity.toString();
-      windSpeedController.text = contextData.weather!.windSpeed.toString();
-      uvIndexController.text = contextData.weather!.uvIndex.toString();
-      descriptionController.text = contextData.weather!.description.toString();
-    }
+    contextData = surveyService.currentSurvey!.contextData;
   }
 
   @override
@@ -71,7 +39,7 @@ class _ContextDataViewState extends State<ContextDataView> {
         color: Colors.green,
         nav: true,
         onBackPressed: () {
-          _saveContextData();
+          surveyService.saveContextData(contextData);
 
           Navigator.pop(context);
 
@@ -123,7 +91,7 @@ class _ContextDataViewState extends State<ContextDataView> {
                   hint: "Bitte Aufenthaltsort auswählen",
                   accentColor: Colors.green,
                 ),
-                initialValue: locationType,
+                initialValue: contextData.locationType,
                 items: LocationType.values.map((locationType) {
                   return DropdownMenuItem(
                     value: locationType,
@@ -132,7 +100,7 @@ class _ContextDataViewState extends State<ContextDataView> {
                 }).toList(),
                 onChanged: (value) {
                   setState(() {
-                    locationType = value;
+                    contextData.locationType = value;
                   });
                 },
               ),
@@ -146,7 +114,7 @@ class _ContextDataViewState extends State<ContextDataView> {
                   hint: "Bitte die aktuelle Jahreszeit auswählen",
                   accentColor: Colors.green,
                 ),
-                initialValue: season,
+                initialValue: contextData.season,
                 items: Season.values.map((season) {
                   return DropdownMenuItem(
                     value: season,
@@ -155,12 +123,56 @@ class _ContextDataViewState extends State<ContextDataView> {
                 }).toList(),
                 onChanged: (value) {
                   setState(() {
-                    season = value;
+                    contextData.season = value;
                   });
                 },
               ),
 
-              SizedBox(height: 70),
+              SizedBox(height: 50),
+
+              // BUTTON FÜR UMGEBUNGSLAUTSTÄRKE MESSEN
+              Center(
+                child: FilledButton(
+                  onPressed: getNoiseLevel,
+                  style: FilledButton.styleFrom(
+                    minimumSize: Size(double.infinity, 60),
+                    elevation: 3,
+                    backgroundColor: Colors.green,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.mic, size: 28),
+                      SizedBox(width: 12),
+                      Flexible(
+                        child: AutoSizeText(
+                          "Drücken für Dezibelmessung",
+                          maxLines: 1,
+                          minFontSize: 12,
+                          style: TextStyle(fontSize: 20),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              SizedBox(height: 10),
+
+              // LAUTSTÄRKE (noiseLevel)
+              ListTile(
+                leading: const Icon(Icons.volume_up, color: Colors.green),
+                title: const Text("Lautstärke in Dezibel"),
+                subtitle: Text(
+                  "${contextData.noiseLevel?.toStringAsFixed(1) ?? "-"} dB",
+                ),
+              ),
+
+              SizedBox(height: 50),
 
               // BUTTON FÜR STANDORT UND WETTER ERFASSEN
               Center(
@@ -196,191 +208,122 @@ class _ContextDataViewState extends State<ContextDataView> {
 
               SizedBox(height: 30),
 
-              // ZEITSTEMPEL (timestamp)
-              TextFormField(
-                readOnly: true,
-                controller: timestampController,
-                decoration: AppInputStyles.textField(
-                  label: "Zeitpunkt",
-                  hint: "wird automatisch erfasst",
-                  accentColor: Colors.green,
-                ),
-              ),
-
-              SizedBox(height: 30),
-
-              // LÄNGENGRAD (latitude)
-              TextFormField(
-                controller: latitudeController,
-                keyboardType: TextInputType.number,
-                readOnly: true,
-                decoration: AppInputStyles.textField(
-                  label: "Längengrad",
-                  hint: "Wird automatisch erfasst",
-                  accentColor: Colors.green,
-                ),
-              ),
-
-              SizedBox(height: 30),
-
-              // BREITENGRAD (longitude)
-              TextFormField(
-                controller: longitudeController,
-                keyboardType: TextInputType.number,
-                readOnly: true,
-                decoration: AppInputStyles.textField(
-                  label: "Breitengrad",
-                  hint: "Wird automatisch erfasst",
-                  accentColor: Colors.green,
-                ),
-              ),
-
-              SizedBox(height: 30),
-
-              // KLIMAZONE (climateZone)
               Text(
-                "Wetterdaten",
+                "Automatisch erfasste Kontextdaten",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
 
               SizedBox(height: 10),
 
-              // TEMPERATUR (temprature)
-              TextFormField(
-                controller: temperatureController,
-                readOnly: true,
-                decoration: AppInputStyles.textField(
-                  label: "Temperatur",
-                  hint: "wird automatisch erfasst",
-                  accentColor: Colors.green,
-                ),
+              buildInfoTile(
+                icon: Icons.schedule,
+                title: "Zeitpunkt",
+                value: contextData.timestamp == null
+                    ? "-"
+                    : DateFormat(
+                        "dd.MM.yyyy HH:mm:ss",
+                      ).format(contextData.timestamp!),
               ),
 
-              SizedBox(height: 30),
-
-              // LUFTFEUCHTIGKEIT (humidity)
-              TextFormField(
-                controller: humidityController,
-                readOnly: true,
-                decoration: AppInputStyles.textField(
-                  label: "Luftfeuchtigkeit",
-                  hint: "wird automatisch erfasst",
-                  accentColor: Colors.green,
-                ),
+              buildInfoTile(
+                icon: Icons.location_on,
+                title: "Standort",
+                value:
+                    "${contextData.latitude?.toStringAsFixed(6) ?? "-"}, "
+                    "${contextData.longitude?.toStringAsFixed(6) ?? "-"}",
               ),
 
-              SizedBox(height: 30),
+              Divider(),
 
-              // WINDGESCHWINDKEIT (windSpeed)
-              TextFormField(
-                controller: windSpeedController,
-                readOnly: true,
-                decoration: AppInputStyles.textField(
-                  label: "Windgeschwindigkeit",
-                  hint: "wird automatisch erfasst",
-                  accentColor: Colors.green,
-                ),
+              Text(
+                "Wetter",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
 
-              SizedBox(height: 30),
+              SizedBox(height: 10),
 
-              // UV-INDEX (uvIndex)
-              TextFormField(
-                controller: uvIndexController,
-                readOnly: true,
-                decoration: AppInputStyles.textField(
-                  label: "UV-Index",
-                  hint: "wird automatisch erfasst",
-                  accentColor: Colors.green,
-                ),
+              buildInfoTile(
+                icon: Icons.cloud,
+                title: "Beschreibung",
+                value: contextData.weather?.description ?? "-",
               ),
 
-              SizedBox(height: 30),
-
-              // WETTER (weather)
-              TextFormField(
-                controller: descriptionController,
-                readOnly: true,
-                decoration: AppInputStyles.textField(
-                  label: "Wetter",
-                  hint: "wird automatisch erfasst",
-                  accentColor: Colors.green,
-                ),
+              buildInfoTile(
+                icon: Icons.thermostat,
+                title: "Temperatur",
+                value:
+                    "${contextData.weather?.temperature?.toStringAsFixed(1) ?? "-"} °C",
               ),
 
-              SizedBox(height: 70),
-
-              // BUTTON FÜR UMGEBUNGSLAUTSTÄRKE MESSEN
-              Center(
-                child: FilledButton(
-                  onPressed: getNoiseLevel,
-                  style: FilledButton.styleFrom(
-                    minimumSize: Size(double.infinity, 60),
-                    elevation: 3,
-                    backgroundColor: Colors.green,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.mic, size: 28),
-                      SizedBox(width: 12),
-                      Flexible(
-                        child: AutoSizeText(
-                          "Drücken für Dezibelmessung",
-                          maxLines: 1,
-                          minFontSize: 12,
-                          style: TextStyle(fontSize: 20),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+              buildInfoTile(
+                icon: Icons.water_drop,
+                title: "Luftfeuchtigkeit",
+                value:
+                    "${contextData.weather?.humidity?.toStringAsFixed(0) ?? "-"} %",
               ),
 
-              SizedBox(height: 30),
+              buildInfoTile(
+                icon: Icons.air,
+                title: "Windgeschwindigkeit",
+                value:
+                    "${contextData.weather?.windSpeed?.toStringAsFixed(1) ?? "-"} km/h",
+              ),
 
-              // LAUTSTÄRKE (noiseLevel)
-              TextFormField(
-                controller: noiseLevelController,
-                readOnly: true,
-                keyboardType: TextInputType.numberWithOptions(decimal: true),
-                decoration: AppInputStyles.textField(
-                  label: "Umgebungslautstärke",
-                  hint: "wird automatisch erfasst",
-                  accentColor: Colors.green,
-                ),
+              buildInfoTile(
+                icon: Icons.wb_sunny_outlined,
+                title: "UV-Index",
+                value: contextData.weather?.uvIndex?.toStringAsFixed(1) ?? "-",
+              ),
+
+              Divider(),
+
+              Text(
+                "Luftqualität",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+
+              SizedBox(height: 10),
+
+              buildInfoTile(
+                icon: Icons.eco,
+                title: "European AQI",
+                value:
+                    contextData.airQuality?.europeanAqi?.toStringAsFixed(0) ??
+                    "-",
+              ),
+
+              buildInfoTile(
+                icon: Icons.blur_on,
+                title: "PM2.5",
+                value:
+                    "${contextData.airQuality?.pm25?.toStringAsFixed(1) ?? "-"} µg/m³",
+              ),
+
+              buildInfoTile(
+                icon: Icons.blur_on,
+                title: "PM10",
+                value:
+                    "${contextData.airQuality?.pm10?.toStringAsFixed(1) ?? "-"} µg/m³",
+              ),
+
+              buildInfoTile(
+                icon: Icons.factory,
+                title: "Stickstoffdioxid",
+                value:
+                    "${contextData.airQuality?.nitrogenDioxide?.toStringAsFixed(1) ?? "-"} µg/m³",
+              ),
+
+              buildInfoTile(
+                icon: Icons.sunny,
+                title: "Ozon",
+                value:
+                    "${contextData.airQuality?.ozone?.toStringAsFixed(1) ?? "-"} µg/m³",
               ),
             ],
           ),
         ),
       ],
     );
-  }
-
-  Future<void> _saveContextData() async {
-    final weather = WeatherData(
-      description: descriptionController.text,
-      temperature: double.tryParse(temperatureController.text) ?? 0,
-      humidity: double.tryParse(humidityController.text) ?? 0,
-      windSpeed: double.tryParse(windSpeedController.text) ?? 0,
-      uvIndex: double.tryParse(uvIndexController.text) ?? 0,
-    );
-
-    final contextData = ContextData(
-      latitude: double.tryParse(latitudeController.text),
-      longitude: double.tryParse(longitudeController.text),
-      locationType: locationType,
-      season: season,
-      noiseLevel: double.tryParse(noiseLevelController.text),
-      timestamp: timestamp,
-      weather: weather,
-    );
-
-    await surveyService.saveContextData(contextData);
   }
 
   Future<void> _getApiData() async {
@@ -396,25 +339,10 @@ class _ContextDataViewState extends State<ContextDataView> {
 
     // Ladebalken vor API-Call öffnen
     if (!mounted) return;
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (_) => PopScope(
-        canPop: false,
-        child: AlertDialog(
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              CircularProgressIndicator(color: Colors.green),
-              SizedBox(height: 20),
-              Text(
-                "Umgebungsdaten werden erfasst, \nbitte warten.",
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
-        ),
-      ),
+    AppDialog.showLoadingIndicator(
+      context,
+      Colors.green,
+      "Umgebungsdaten werden erfasst, \nbitte warten.",
     );
 
     try {
@@ -422,9 +350,17 @@ class _ContextDataViewState extends State<ContextDataView> {
         Duration(seconds: 15),
       );
 
+      double lat = position.latitude;
+      double long = position.longitude;
+
       final weather = await ExternalApiService.getWeather(
-        position.latitude,
-        position.longitude,
+        lat,
+        long,
+      ).timeout(Duration(seconds: 15));
+
+      final airQuality = await ExternalApiService.getAirQuality(
+        lat,
+        long,
       ).timeout(Duration(seconds: 15));
 
       // Ladebalken nach Abschluss der API-Calls schließen
@@ -432,23 +368,15 @@ class _ContextDataViewState extends State<ContextDataView> {
         Navigator.pop(context);
       }
 
-      final timeNow = DateTime.now();
-
       setState(() {
-        latitudeController.text = position.latitude.toStringAsFixed(6);
-        longitudeController.text = position.longitude.toStringAsFixed(6);
-
-        temperatureController.text = weather.temperature!.toStringAsFixed(1);
-        humidityController.text = weather.humidity!.toStringAsFixed(0);
-        windSpeedController.text = weather.windSpeed!.toStringAsFixed(1);
-        uvIndexController.text = weather.uvIndex!.toStringAsFixed(1);
-        descriptionController.text = weather.description!;
-
-        timestamp = timeNow;
-        timestampController.text = DateFormat(
-          "dd.MM.yyyy HH:mm:ss",
-        ).format(timeNow);
+        contextData.latitude = lat;
+        contextData.longitude = long;
+        contextData.weather = weather;
+        contextData.airQuality = airQuality;
+        contextData.timestamp = DateTime.now();
       });
+
+      await surveyService.saveContextData(contextData);
 
       // Bei Zeitüberschreitung entsprechedne Fehlermeldung
     } on TimeoutException {
@@ -472,25 +400,10 @@ class _ContextDataViewState extends State<ContextDataView> {
 
     if (!start || !mounted) return;
 
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (_) => PopScope(
-        canPop: false,
-        child: AlertDialog(
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              CircularProgressIndicator(color: Colors.green),
-              SizedBox(height: 20),
-              Text(
-                "Umgebungslautstärke wird gemessen...\nBitte bleiben Sie möglichst ruhig.",
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
-        ),
-      ),
+    AppDialog.showLoadingIndicator(
+      context,
+      Colors.green,
+      "Umgebungslautstärke wird gemessen...\nBitte bleiben Sie möglichst ruhig.",
     );
 
     try {
@@ -500,9 +413,9 @@ class _ContextDataViewState extends State<ContextDataView> {
 
       Navigator.pop(context);
 
-      setState(() {
-        noiseLevelController.text = noise.toStringAsFixed(1);
-      });
+      contextData.noiseLevel = noise;
+      await surveyService.saveContextData(contextData);
+      setState(() {});
     } catch (e) {
       if (!mounted) return;
 
@@ -514,5 +427,18 @@ class _ContextDataViewState extends State<ContextDataView> {
         ),
       );
     }
+  }
+
+  Widget buildInfoTile({
+    required IconData icon,
+    required String title,
+    required String value,
+  }) {
+    return ListTile(
+      contentPadding: EdgeInsets.zero,
+      leading: Icon(icon, color: Colors.green),
+      title: Text(title),
+      subtitle: Text(value),
+    );
   }
 }

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:frontend/models/survey_modules/context_data.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
@@ -106,8 +105,7 @@ class ExternalApiService {
 
   /// Ruft die aktuellen Wetterdaten für die angegebene Position ab.
   ///
-  /// Die Wetterinformationen werden über die Open-Meteo-API bezogen und
-  /// als strukturiertes Datenmodell zurückgegeben.
+  /// Die Wetterinformationen werden über die Open-Meteo Forecast-API als JSON bezogen.
   static Future<WeatherData> getWeather(
     double latitude,
     double longitude,
@@ -117,17 +115,18 @@ class ExternalApiService {
         "https://api.open-meteo.com/v1/forecast"
         "?latitude=$latitude"
         "&longitude=$longitude"
-        "&current="
-        "temperature_2m,"
-        "relative_humidity_2m,"
-        "wind_speed_10m,"
-        "weather_code,"
-        "uv_index",
+        // Units
+        "&current=" // iso8601 (time)
+        "temperature_2m," // °C
+        "relative_humidity_2m," // %
+        "wind_speed_10m," // km/h
+        "weather_code," // wmo code
+        "uv_index", // index
       ),
     );
 
     if (response.statusCode != 200) {
-      throw Exception("WEATHER_API_FAILED");
+      throw Exception("WEATHER_FORECAST_API_FAILED");
     }
 
     final data = jsonDecode(response.body);
@@ -140,6 +139,43 @@ class ExternalApiService {
       humidity: (current["relative_humidity_2m"] as num).toDouble(),
       windSpeed: (current["wind_speed_10m"] as num).toDouble(),
       uvIndex: (current["uv_index"] as num).toDouble(),
+    );
+  }
+
+  /// Ruft die aktuellen Luftqualitätsdaten für die angegebene Position ab.
+  ///
+  /// Die Daten werden über die Open-Meteo Air-Quality-API als JSON bezogen.
+  static Future<AirQualityData> getAirQuality(
+    double latitude,
+    double longitude,
+  ) async {
+    final response = await http.get(
+      Uri.parse(
+        "https://air-quality-api.open-meteo.com/v1/air-quality"
+        "?latitude=$latitude"
+        "&longitude=$longitude"
+        "&current="
+        "european_aqi,"
+        "pm2_5,"
+        "pm10,"
+        "nitrogen_dioxide,"
+        "ozone",
+      ),
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception("AIR_QUALITY_API_FAILED");
+    }
+
+    final data = jsonDecode(response.body);
+    final current = data["current"];
+
+    return AirQualityData(
+      europeanAqi: (current["european_aqi"] as num).toDouble(),
+      pm25: (current["pm2_5"] as num).toDouble(),
+      pm10: (current["pm10"] as num).toDouble(),
+      nitrogenDioxide: (current["nitrogen_dioxide"] as num).toDouble(),
+      ozone: (current["ozone"] as num).toDouble(),
     );
   }
 
