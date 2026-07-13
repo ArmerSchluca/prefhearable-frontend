@@ -12,6 +12,7 @@ This app serves as a large-scale crowdsourcing tool to build a comprehensive, st
 - Automatic collection of contextual information
   - GPS position
   - Weather
+  - Air Quality
   - Environmental noise level
   - Device information
 - Offline survey caching
@@ -35,6 +36,7 @@ https://github.com/ArmerSchluca/prefhearable-backend
 
 ### Prerequisites
 Before running the app, ensure you have the [Flutter SDK](https://docs.flutter.dev/install/quick) installed on your machine.
+Additionally the [Android Studio SDK](https://developer.android.com/studio?hl=de) must be installed to test the App on an emulated Android device.
 
 ### Installation & Run
 
