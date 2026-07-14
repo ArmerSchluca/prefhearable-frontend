@@ -27,42 +27,62 @@ class _LaunchHandlerState extends State<LaunchHandler> {
     _checkSession();
   }
 
-  /// Prüft, ob bereits eine gültige Teilnehmersitzung vorhanden ist.
+  /// Prüft beim Appstart, ob eine gespeicherte Teilnehmersitzung vorhanden ist.
   ///
-  /// Bei erfolgreicher Anmeldung wird eine eventuell zwischengespeicherte
-  /// Umfrage wiederhergestellt und zur Startseite navigiert. Andernfalls
-  /// erfolgt die Weiterleitung zur Registrierungsansicht.
+  /// Ist eine Session vorhanden, wird diese nach Möglichkeit über das Backend
+  /// validiert. Bei fehlender Serververbindung wird die lokale Sitzung
+  /// weiterverwendet, sodass zwischengespeicherte Umfragen auch offline
+  /// fortgesetzt werden können.
+  ///
+  /// Existiert keine Session oder ist die gespeicherte UUID ungültig, erfolgt
+  /// die Weiterleitung zur Registrierungsansicht (LiveView).
   Future<void> _checkSession() async {
+    // Lokal gespeicherte Teilnehmer-ID laden
     final id = await sessionService.getCurrentParticipantId();
 
     if (!mounted) return;
 
-    if (id != null) {
-      try {
-        await sessionService.loginWithUuid(id);
-        await surveyService.loadCachedSurvey();
+    // Keine aktive Sitzung vorhanden -> Registrierungsansicht (LiveView) anzeigen
+    if (id == null) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const LaunchView()),
+      );
+      return;
+    }
+
+    try {
+      // Bei Internetverbindung, versuche UUID aus lokal laufender Sitzung über das Backend validieren
+      await sessionService.loginWithUuid(id);
+    } on Exception catch (e) {
+      // Offline-Modus: lokale Sitzung weiterhin verwenden
+      if (e.toString().contains("SERVER_UNREACHABLE")) {
+        debugPrint("Offline-Modus");
+        // Alle anderen werfbaren Exceptions bedeuten, dass die gespeicherte UUID
+        // ungültig oder nicht mehr vorhanden ist.
+      } else {
+        await sessionService.logoutParticipant();
 
         if (!mounted) return;
 
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (_) => const HomeView()),
+          MaterialPageRoute(builder: (_) => const LaunchView()),
         );
 
         return;
-      } catch (e, stackTrace) {
-        debugPrint("Launch failed: $e");
-        debugPrintStack(stackTrace: stackTrace);
-
-        await sessionService.logoutParticipant();
       }
     }
 
+    // Eine eventuell begonnene Umfrage aus dem lokalen Speicher wiederherstellen
+    await surveyService.loadCachedSurvey();
+
     if (!mounted) return;
 
+    // Zur Startseite navigieren
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => LaunchView()),
+      MaterialPageRoute(builder: (_) => const HomeView()),
     );
   }
 
