@@ -45,7 +45,7 @@ class _CcsmAudioTestViewState extends State<CcsmAudioTestView> {
 
           Navigator.pop(context);
 
-          if (!surveyService.currentSurvey!.contextData.isComplete) {
+          if (!surveyService.currentSurvey!.audioTestData.ccsm.isComplete) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text("Es wurden noch nicht alle Felder ausgefüllt!"),
