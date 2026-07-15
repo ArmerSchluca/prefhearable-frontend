@@ -111,7 +111,7 @@ class _ContextDataViewState extends State<ContextDataView> {
               DropdownButtonFormField<Season>(
                 decoration: AppInputStyles.dropdown(
                   label: "Jahreszeit",
-                  hint: "Bitte die aktuelle Jahreszeit auswählen",
+                  hint: "Bitte Jahreszeit auswählen",
                   accentColor: Colors.green,
                 ),
                 initialValue: contextData.season,
@@ -363,11 +363,6 @@ class _ContextDataViewState extends State<ContextDataView> {
         long,
       ).timeout(Duration(seconds: 15));
 
-      // Ladebalken nach Abschluss der API-Calls schließen
-      if (mounted) {
-        Navigator.pop(context);
-      }
-
       setState(() {
         contextData.latitude = lat;
         contextData.longitude = long;
@@ -392,6 +387,10 @@ class _ContextDataViewState extends State<ContextDataView> {
         SnackBar(content: Text("Standort konnte nicht ermittelt werden.")),
       );
       debugPrint(e.toString());
+    } finally {
+      if (mounted && Navigator.canPop(context)) {
+        Navigator.pop(context);
+      }
     }
   }
 
@@ -419,6 +418,7 @@ class _ContextDataViewState extends State<ContextDataView> {
     } catch (e) {
       if (!mounted) return;
 
+      debugPrint(e.toString());
       Navigator.pop(context);
 
       ScaffoldMessenger.of(context).showSnackBar(

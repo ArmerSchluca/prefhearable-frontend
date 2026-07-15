@@ -107,6 +107,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
             children: [
               // ALTER (age)
               TextFormField(
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 controller: ageController,
                 keyboardType: TextInputType.number,
                 decoration: AppInputStyles.textField(

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:frontend/models/survey_modules/context_data.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
@@ -18,7 +19,7 @@ class ExternalApiService {
     if (Platform.isAndroid || Platform.isIOS) {
       if (!await Permission.microphone.isGranted) {
         final result = await Permission.microphone.request();
-
+        
         if (!result.isGranted) {
           throw Exception("MIC_PERMISSION_DENIED");
         }

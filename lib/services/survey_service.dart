@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/widgets.dart';
 import 'package:frontend/models/previous_surveys.dart';
@@ -136,13 +137,17 @@ class SurveyService {
   /// Lädt eine Übersicht aller bereits abgeschlossenen Umfragen
   /// des aktuellen Teilnehmers aus dem Backend.
   Future<List<SurveyOverview>> getPreviousSurveys() async {
-    try {
-      final participantId = await sessionService.getCurrentParticipantId();
+    final participantId = await sessionService.getCurrentParticipantId();
 
+    try {
       final response = await http.get(
         Uri.parse("$baseUrl/surveys"),
         headers: {"X-Participant-Id": participantId!},
       );
+
+      if (response.statusCode != 200) {
+        throw Exception("SURVEY_REQUEST_FAILED");
+      }
 
       final List<dynamic> json = jsonDecode(response.body);
 
@@ -151,9 +156,8 @@ class SurveyService {
       }).toList();
 
       return surveys;
-    } catch (e) {
-      debugPrint("FEHLER: $e");
-      rethrow;
+    } on SocketException {
+      throw Exception("SERVER_UNREACHABLE");
     }
   }
 

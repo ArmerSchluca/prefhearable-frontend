@@ -9,16 +9,31 @@ class AppDialog {
       barrierDismissible: false,
       builder: (context) {
         return AlertDialog(
-          title: Text("Server nicht erreichbar"),
-          content: Text(
-            "Die Verbindung zum Server konnte nicht hergestellt werden. "
-            "Bitte prüfe deine Internetverbindung oder versuche es später erneut.",
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.cloud_off, size: 64, color: Colors.red.shade300),
+
+              SizedBox(height: 16),
+
+              Text(
+                "Server nicht erreichbar",
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+
+              SizedBox(height: 16),
+
+              Text(
+                "Die Verbindung zum Server konnte nicht hergestellt werden.\n\n"
+                "Bitte prüfe deine Internetverbindung oder versuche es später erneut.",
+                textAlign: TextAlign.center,
+              ),
+            ],
           ),
           actions: [
             TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
+              onPressed: () => Navigator.of(context).pop(),
               child: Text("OK", style: TextStyle(color: Colors.blueAccent)),
             ),
           ],
@@ -203,12 +218,12 @@ class AppDialog {
         false;
   }
 
-  static Future<bool> showLoadingIndicator(
+  static Future<void> showLoadingIndicator(
     BuildContext context,
     Color? color,
     String? message,
   ) async {
-    return await showDialog(
+    await showDialog(
       context: context,
       barrierDismissible: false,
       builder: (_) => PopScope(

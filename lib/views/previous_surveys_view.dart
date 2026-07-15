@@ -41,16 +41,57 @@ class PreviousSurveysView extends StatelessWidget {
         nav: true,
       ),
       children: [
+        // Ruft die abgeschlossenen Umfragen vom Backend ab und stellt abhängig
+        // vom Ladezustand entweder einen Ladeindikator, eine Fehlermeldung,
+        // einen Hinweis auf fehlende Daten oder, sobald die Daten da sind, die Ergebnisliste dar.
+        // Ruft die abgeschlossenen Umfragen vom Backend ab und stellt abhängig
+        // vom Ladezustand entweder einen Ladeindikator, eine Fehlermeldung,
+        // einen Hinweis auf fehlende Daten oder die Ergebnisliste dar.
         FutureBuilder<List<SurveyOverview>>(
           future: surveyService.getPreviousSurveys(),
           builder: (context, snapshot) {
+            // Daten werden noch geladen
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(
                 child: CircularProgressIndicator(color: Colors.teal),
               );
             }
 
-            if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            // Fehler beim Laden der Umfragen
+            if (snapshot.hasError) {
+              final error = snapshot.error.toString();
+
+              if (error.contains("SERVER_UNREACHABLE")) {
+                return Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.cloud_off, size: 64, color: Colors.grey),
+                      SizedBox(height: 16),
+                      Text(
+                        "Der Server ist derzeit nicht erreichbar.",
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        "Vorherige Umfragen können momentan nicht geladen werden.",
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                );
+              }
+
+              return Center(
+                child: Text(
+                  "Beim Laden der Umfragen ist ein Fehler aufgetreten.",
+                  style: TextStyle(fontSize: 18),
+                ),
+              );
+            }
+
+            // Anfrage erfolgreich, aber noch keine abgeschlossenen Umfragen vorhanden
+            if (snapshot.data!.isEmpty) {
               return Center(
                 child: Text(
                   "Es wurden noch keine Umfragen abgeschlossen.",
@@ -67,9 +108,7 @@ class PreviousSurveysView extends StatelessWidget {
               physics: NeverScrollableScrollPhysics(),
               itemCount: surveys.length,
               itemBuilder: (context, index) {
-                final survey = surveys[index];
-
-                return _buildSurveyCard(survey);
+                return _buildSurveyCard(surveys[index]);
               },
             );
           },

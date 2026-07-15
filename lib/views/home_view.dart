@@ -43,9 +43,10 @@ class _HomeViewState extends State<HomeView> {
                 context,
                 uuid,
                 "Wirklich abmelden? ",
-                "Laufende Umfragen werden abgebrochen! Wenn Sie künftig auf Ihre bisherigen Umfragen zugreifen können möchten, "
-                    " sichern Sie vorher Ihren Zugangscode zur Anmeldung!"
-                    " Bitte geben Sie Ihren Zugangscode zur Bestätigung ein.",
+                "Laufende Umfragen werden abgebrochen!\n\n"
+                    "Wenn Sie künftig auf Ihre bisherigen Umfragen zugreifen können möchten, "
+                    "sichern Sie vorher Ihren Zugangscode zur Anmeldung! \n\n"
+                    "Bitte geben Sie Ihren Zugangscode zur Bestätigung ein:",
               );
 
               if (!confirmed) return;
