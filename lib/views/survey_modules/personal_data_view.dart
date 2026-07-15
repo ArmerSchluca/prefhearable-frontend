@@ -3,6 +3,7 @@ import 'package:frontend/models/survey_modules/personal_data.dart';
 import 'package:frontend/shared/appbar.dart';
 import 'package:frontend/shared/dialogs.dart';
 import 'package:frontend/shared/footer.dart';
+import 'package:frontend/shared/info_texts.dart';
 import 'package:frontend/shared/input_styles.dart';
 import 'package:frontend/shared/layout.dart';
 import 'package:frontend/utils/survey_instance.dart';
@@ -93,7 +94,8 @@ class _PersonalDataViewState extends State<PersonalDataView> {
               style: TextStyle(color: Colors.blueGrey, fontSize: 18),
             ),
             onPressed: () {
-              AppDialog.showInfo(context, Text("Titel"), Text("Lorem ipsum"));
+              AppDialog.showInfo(context, Text("Personendaten"), 
+                Text(InfoTexts.personalData),);
             },
           ),
         ],

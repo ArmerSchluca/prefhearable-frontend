@@ -3,6 +3,7 @@ import 'package:frontend/models/survey_modules/questionnaires/eq5d.dart';
 import 'package:frontend/shared/appbar.dart';
 import 'package:frontend/shared/dialogs.dart';
 import 'package:frontend/shared/footer.dart';
+import 'package:frontend/shared/info_texts.dart';
 import 'package:frontend/shared/layout.dart';
 import 'package:frontend/utils/survey_instance.dart';
 
@@ -112,9 +113,7 @@ class _Eq5dViewState extends State<Eq5dView> {
               AppDialog.showInfo(
                 context,
                 Text("EQ-5D-5L"),
-                Text(
-                  "Bitte wählen Sie für jede Aussage die Antwort aus, die Ihre aktuelle Situation am besten beschreibt.",
-                ),
+                Text(InfoTexts.eq5d),
               );
             },
           ),

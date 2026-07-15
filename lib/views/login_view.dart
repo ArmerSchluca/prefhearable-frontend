@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/shared/dialogs.dart';
+import 'package:frontend/shared/footer.dart';
+import 'package:frontend/shared/info_texts.dart';
 import 'package:frontend/shared/layout.dart';
 import 'package:frontend/shared/input_styles.dart';
 import 'package:frontend/utils/session_instance.dart';
@@ -20,6 +22,22 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return AppLayout(
+      footer: AppFooter(
+        actions: [
+          Spacer(),
+          TextButton.icon(
+            icon: Icon(Icons.info, color: Colors.blueGrey),
+            label: Text("Info", style: TextStyle(color: Colors.blueGrey)),
+            onPressed: () {
+              AppDialog.showInfo(
+                context,
+                Text("Anmelden mit Zugangscode"),
+                Text(InfoTexts.login),
+              );
+            },
+          ),
+        ],
+      ),
       children: [
         Center(child: Icon(Icons.fingerprint, size: 150)),
 

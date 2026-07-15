@@ -5,6 +5,7 @@ import 'package:frontend/services/device_info_service.dart';
 import 'package:frontend/shared/appbar.dart';
 import 'package:frontend/shared/dialogs.dart';
 import 'package:frontend/shared/footer.dart';
+import 'package:frontend/shared/info_texts.dart';
 import 'package:frontend/shared/layout.dart';
 import 'package:frontend/utils/survey_instance.dart';
 
@@ -71,8 +72,8 @@ class _CcsmAudioTestViewState extends State<CcsmAudioTestView> {
             onPressed: () {
               AppDialog.showInfo(
                 context,
-                Text("CCSM Audio Test"),
-                Text("Lorem Ipsum"),
+                Text("CCSM Hörtest"),
+                Text(InfoTexts.ccsm),
               );
             },
           ),

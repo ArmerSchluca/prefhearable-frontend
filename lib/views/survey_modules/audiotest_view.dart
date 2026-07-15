@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/shared/dialogs.dart';
+import 'package:frontend/shared/info_texts.dart';
 import 'package:frontend/shared/layout.dart';
 import 'package:frontend/shared/appbar.dart';
 import 'package:frontend/shared/footer.dart';
@@ -32,11 +33,9 @@ class _AudioTestViewState extends State<AudioTestView> {
             onPressed: () {
               AppDialog.showInfo(
                 context,
-                Text("Infos zu Hörtests"),
-                Text(
-                  "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut "
-                  "labore et dolore magna aliquyam erat, sed diam voluptua.At vero eos et accusam et justo duo dolores et ea rebum. ",
-                ),
+                Text("Hörtests"),
+
+                Text(InfoTexts.audioTests),
               );
             },
           ),

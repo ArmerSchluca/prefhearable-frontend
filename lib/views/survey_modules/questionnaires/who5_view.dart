@@ -3,6 +3,7 @@ import 'package:frontend/models/survey_modules/questionnaires/who5.dart';
 import 'package:frontend/shared/appbar.dart';
 import 'package:frontend/shared/dialogs.dart';
 import 'package:frontend/shared/footer.dart';
+import 'package:frontend/shared/info_texts.dart';
 import 'package:frontend/shared/layout.dart';
 import 'package:frontend/utils/survey_instance.dart';
 
@@ -69,15 +70,7 @@ class _Who5ViewState extends State<Who5View> {
             icon: Icon(Icons.info, color: Colors.blueGrey),
             label: Text("Info", style: TextStyle(color: Colors.blueGrey)),
             onPressed: () {
-              AppDialog.showInfo(
-                context,
-                Text("WHO-5"),
-                Text(
-                  "Die folgenden Aussagen betreffen Ihr Wohlbefinden in den letzten zwei Wochen. Bitte markieren "
-                  "Sie bei jeder Aussage die Rubrik, die Ihrer Meinung nach am besten beschreibt, wie Sie sich in den "
-                  "letzten zwei Wochen gefühlt haben",
-                ),
-              );
+              AppDialog.showInfo(context, Text("WHO-5"), Text(InfoTexts.who5));
             },
           ),
         ],
