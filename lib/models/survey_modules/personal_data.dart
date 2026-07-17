@@ -4,12 +4,17 @@ class PersonalData {
   int? age;
   Gender? gender;
   Occupation? occupation;
+
   HearingAided? hearingAided;
   HearingAidDuration? hearingAidDuration;
+  HearingAidType? hearingAidType;
+
   ResidentialArea? residentialArea;
+
   PhysicalActivityType? physicalActivityType;
   PhysicalActivityFrequency? physicalActivityFrequency;
   PhysicalActivityDuration? physicalActivityDuration;
+
   Diet? diet;
   String? allergies;
   String? diseases;
@@ -37,7 +42,7 @@ class PersonalData {
   bool get isHearingAided => hearingAided != HearingAided.none;
   bool get isHearingAidComplete {
     if (!isHearingAided) return true;
-    return hearingAidDuration != null;
+    return hearingAidDuration != null && hearingAidType != null;
   }
 
   PersonalData({
@@ -46,6 +51,7 @@ class PersonalData {
     this.occupation,
     this.hearingAided,
     this.hearingAidDuration,
+    this.hearingAidType,
     this.residentialArea,
     this.physicalActivityType,
     this.physicalActivityFrequency,
@@ -61,6 +67,7 @@ class PersonalData {
     'occupation': occupation?.name,
     'hearingAided': hearingAided?.name,
     'hearingAidDuration': hearingAidDuration?.name,
+    'hearingAidType': hearingAidType?.name,
     'residentialArea': residentialArea?.name,
     'physicalActivityType': physicalActivityType?.name,
     'physicalActivityFrequency': physicalActivityFrequency?.name,
@@ -88,6 +95,12 @@ class PersonalData {
     hearingAidDuration = json['hearingAidDuration'] != null
         ? HearingAidDuration.values.firstWhere(
             (e) => e.name == json['hearingAidDuration'],
+          )
+        : null;
+
+    hearingAidType = json['hearingAidType'] != null
+        ? HearingAidType.values.firstWhere(
+            (e) => e.name == json['hearingAidType'],
           )
         : null;
 
@@ -146,6 +159,14 @@ enum HearingAidDuration {
   twoToFiveYears,
   fiveToTenYears,
   moreThanTenYears,
+}
+
+enum HearingAidType {
+  behindTheEar,
+  inTheEar,
+  cochlearImplant,
+  boneConduction,
+  other,
 }
 
 enum ResidentialArea { urban, suburban, rural }
@@ -228,6 +249,27 @@ extension HearingAidDurationLabel on HearingAidDuration {
         return "5–10 Jahre";
       case HearingAidDuration.moreThanTenYears:
         return "Mehr als 10 Jahre";
+    }
+  }
+}
+
+extension HearingAidTypeLabel on HearingAidType {
+  String get label {
+    switch (this) {
+      case HearingAidType.behindTheEar:
+        return "Hinter-dem-Ohr (HdO)";
+
+      case HearingAidType.inTheEar:
+        return "Im-Ohr (IdO)";
+
+      case HearingAidType.cochlearImplant:
+        return "Cochlea-Implantat (CI)";
+
+      case HearingAidType.boneConduction:
+        return "Knochenleitungs-Hörsystem";
+
+      case HearingAidType.other:
+        return "Andere Hörhilfe";
     }
   }
 }

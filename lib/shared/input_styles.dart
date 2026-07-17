@@ -39,7 +39,7 @@ class AppInputStyles {
       labelText: label,
       hintText: hint,
 
-      floatingLabelStyle: TextStyle(color: accentColor),
+      floatingLabelStyle: TextStyle(color: accentColor, fontSize: 22),
 
       border: OutlineInputBorder(),
 

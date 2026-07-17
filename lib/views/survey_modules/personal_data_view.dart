@@ -26,12 +26,17 @@ class _PersonalDataViewState extends State<PersonalDataView> {
   final ageController = TextEditingController();
   Gender? gender;
   Occupation? occupation;
+
   HearingAided? hearingAided;
   HearingAidDuration? hearingAidDuration;
+  HearingAidType? hearingAidType;
+
   ResidentialArea? residentialArea;
+
   PhysicalActivityType? physicalActivityType;
   PhysicalActivityFrequency? physicalActivityFrequency;
   PhysicalActivityDuration? physicalActivityDuration;
+
   Diet? diet;
   final allergiesController = TextEditingController();
   final diseasesController = TextEditingController();
@@ -46,12 +51,17 @@ class _PersonalDataViewState extends State<PersonalDataView> {
     ageController.text = personalData.age?.toString() ?? "";
     gender = personalData.gender;
     occupation = personalData.occupation;
+
     hearingAided = personalData.hearingAided;
     hearingAidDuration = personalData.hearingAidDuration;
+    hearingAidType = personalData.hearingAidType;
+
     residentialArea = personalData.residentialArea;
+
     physicalActivityType = personalData.physicalActivityType;
     physicalActivityFrequency = personalData.physicalActivityFrequency;
     physicalActivityDuration = personalData.physicalActivityDuration;
+
     diet = personalData.diet;
     allergiesController.text = personalData.allergies ?? "";
     diseasesController.text = personalData.diseases ?? "";
@@ -107,7 +117,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
             },
           ),
 
-          // WEITER BUTTON 
+          // WEITER BUTTON
           SaveAndContinueButton(
             onPressed: () async {
               await Navigator.push(
@@ -203,6 +213,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                     hearingAided = value;
                     if (value == HearingAided.none) {
                       hearingAidDuration = null;
+                      hearingAidType = null;
                     }
                   });
                 },
@@ -228,6 +239,28 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                   onChanged: (value) {
                     setState(() {
                       hearingAidDuration = value;
+                    });
+                  },
+                ),
+                SizedBox(height: 30),
+
+                // HÖRGERÄTE TYP (hearingAidType)
+                DropdownButtonFormField<HearingAidType>(
+                  decoration: AppInputStyles.dropdown(
+                    label: "Art des Hörgeräts",
+                    hint: "Hörgerätetyp auswählen",
+                    accentColor: Colors.orange,
+                  ),
+                  initialValue: hearingAidType,
+                  items: HearingAidType.values.map((hearingAidType) {
+                    return DropdownMenuItem(
+                      value: hearingAidType,
+                      child: Text(hearingAidType.label),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      hearingAidType = value;
                     });
                   },
                 ),
@@ -390,6 +423,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
       occupation: occupation,
       hearingAided: hearingAided,
       hearingAidDuration: hearingAidDuration,
+      hearingAidType: hearingAidType,
       residentialArea: residentialArea,
       physicalActivityType: physicalActivityType,
       physicalActivityFrequency: physicalActivityFrequency,
