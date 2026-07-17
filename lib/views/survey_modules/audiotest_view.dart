@@ -7,6 +7,7 @@ import 'package:frontend/shared/footer.dart';
 import 'package:frontend/shared/section_card.dart';
 import 'package:frontend/utils/survey_instance.dart';
 import 'package:frontend/views/survey_modules/audio_tests/ccsm_view.dart';
+import 'package:frontend/views/survey_view.dart';
 
 class AudioTestView extends StatefulWidget {
   const AudioTestView({super.key});
@@ -19,10 +20,19 @@ class _AudioTestViewState extends State<AudioTestView> {
   @override
   Widget build(BuildContext context) {
     return AppLayout(
+      appBar: CustomAppBar(
+        title: "Hörtests",
+        color: Colors.pinkAccent,
+        nav: true,
+        onBackPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => SurveyView()),
+          );
+        },
+      ),
       footer: AppFooter(
         actions: [
-          // Damit der Info Button rechts aligned ist
-          Spacer(),
           // INFO BUTTON
           TextButton.icon(
             icon: Icon(Icons.info, size: 20, color: Colors.blueGrey),
@@ -40,11 +50,6 @@ class _AudioTestViewState extends State<AudioTestView> {
             },
           ),
         ],
-      ),
-      appBar: CustomAppBar(
-        title: "Hörtests",
-        color: Colors.pinkAccent,
-        nav: true,
       ),
       children: [
         // EQ-5D CARD

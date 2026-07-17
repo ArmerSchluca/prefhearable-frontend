@@ -8,6 +8,7 @@ import 'package:frontend/shared/section_card.dart';
 import 'package:frontend/utils/survey_instance.dart';
 import 'package:frontend/views/survey_modules/questionnaires/eq5d_view.dart';
 import 'package:frontend/views/survey_modules/questionnaires/who5_view.dart';
+import 'package:frontend/views/survey_view.dart';
 
 class QuestionnairesView extends StatefulWidget {
   const QuestionnairesView({super.key});
@@ -20,6 +21,17 @@ class _QuestionnairesViewState extends State<QuestionnairesView> {
   @override
   Widget build(BuildContext context) {
     return AppLayout(
+      appBar: CustomAppBar(
+        title: "Umfragebögen",
+        color: Colors.deepPurpleAccent,
+        nav: true,
+        onBackPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => SurveyView()),
+          );
+        },
+      ),
       footer: AppFooter(
         actions: [
           // Damit der Info Button rechts aligned ist
@@ -35,17 +47,12 @@ class _QuestionnairesViewState extends State<QuestionnairesView> {
               AppDialog.showInfo(
                 context,
                 Text("Umfragebögen"),
-                
+
                 Text(InfoTexts.questionnaires),
               );
             },
           ),
         ],
-      ),
-      appBar: CustomAppBar(
-        title: "Umfragebögen",
-        color: Colors.deepPurpleAccent,
-        nav: true,
       ),
       children: [
         // EQ-5D CARD

@@ -6,7 +6,10 @@ import 'package:frontend/shared/footer.dart';
 import 'package:frontend/shared/info_texts.dart';
 import 'package:frontend/shared/input_styles.dart';
 import 'package:frontend/shared/layout.dart';
+import 'package:frontend/shared/save_and_continue.dart';
 import 'package:frontend/utils/survey_instance.dart';
+import 'package:frontend/views/survey_modules/context_data_view.dart';
+import 'package:frontend/views/survey_view.dart';
 
 class PersonalDataView extends StatefulWidget {
   const PersonalDataView({super.key});
@@ -64,7 +67,10 @@ class _PersonalDataViewState extends State<PersonalDataView> {
         onBackPressed: () {
           _savePersonalData();
 
-          Navigator.pop(context);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => SurveyView()),
+          );
 
           if (!surveyService.currentSurvey!.personalData.isComplete) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -85,7 +91,6 @@ class _PersonalDataViewState extends State<PersonalDataView> {
       ),
       footer: AppFooter(
         actions: [
-          Spacer(),
           // INFO BUTTON
           TextButton.icon(
             icon: Icon(Icons.info, size: 20, color: Colors.blueGrey),
@@ -94,8 +99,21 @@ class _PersonalDataViewState extends State<PersonalDataView> {
               style: TextStyle(color: Colors.blueGrey, fontSize: 18),
             ),
             onPressed: () {
-              AppDialog.showInfo(context, Text("Personendaten"), 
-                Text(InfoTexts.personalData),);
+              AppDialog.showInfo(
+                context,
+                Text("Personendaten"),
+                Text(InfoTexts.personalData),
+              );
+            },
+          ),
+
+          // WEITER BUTTON 
+          SaveAndContinueButton(
+            onPressed: () async {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ContextDataView()),
+              );
             },
           ),
         ],

@@ -5,7 +5,10 @@ import 'package:frontend/shared/dialogs.dart';
 import 'package:frontend/shared/footer.dart';
 import 'package:frontend/shared/info_texts.dart';
 import 'package:frontend/shared/layout.dart';
+import 'package:frontend/shared/save_and_continue.dart';
 import 'package:frontend/utils/survey_instance.dart';
+import 'package:frontend/views/survey_modules/questionnaires_view.dart';
+import 'package:frontend/views/survey_view.dart';
 
 class Who5View extends StatefulWidget {
   const Who5View({super.key});
@@ -44,7 +47,10 @@ class _Who5ViewState extends State<Who5View> {
         onBackPressed: () {
           _saveWho5();
 
-          Navigator.pop(context);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => QuestionnairesView()),
+          );
 
           if (!surveyService.currentSurvey!.questionnaireData.who5.isComplete) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -65,12 +71,21 @@ class _Who5ViewState extends State<Who5View> {
       ),
       footer: AppFooter(
         actions: [
-          Spacer(),
           TextButton.icon(
             icon: Icon(Icons.info, color: Colors.blueGrey),
             label: Text("Info", style: TextStyle(color: Colors.blueGrey)),
             onPressed: () {
               AppDialog.showInfo(context, Text("WHO-5"), Text(InfoTexts.who5));
+            },
+          ),
+
+          // WEITER BUTTON
+          SaveAndContinueButton(
+            onPressed: () async {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SurveyView()),
+              );
             },
           ),
         ],

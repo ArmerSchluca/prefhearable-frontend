@@ -23,6 +23,17 @@ class _SurveyViewState extends State<SurveyView> {
   @override
   Widget build(BuildContext context) {
     return AppLayout(
+      appBar: CustomAppBar(
+        title: "Umfrage",
+        color: Colors.blueAccent,
+        nav: true,
+        onBackPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => HomeView()),
+          );
+        },
+      ),
       footer: AppFooter(
         actions: [
           // LOGOUT BUTTON
@@ -82,11 +93,6 @@ class _SurveyViewState extends State<SurveyView> {
             },
           ),
         ],
-      ),
-      appBar: CustomAppBar(
-        title: "Umfrage",
-        color: Colors.blueAccent,
-        nav: true,
       ),
       children: [
         SectionCard(

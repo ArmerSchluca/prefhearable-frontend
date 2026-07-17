@@ -5,7 +5,10 @@ import 'package:frontend/shared/dialogs.dart';
 import 'package:frontend/shared/footer.dart';
 import 'package:frontend/shared/info_texts.dart';
 import 'package:frontend/shared/layout.dart';
+import 'package:frontend/shared/save_and_continue.dart';
 import 'package:frontend/utils/survey_instance.dart';
+import 'package:frontend/views/survey_modules/questionnaires/who5_view.dart';
+import 'package:frontend/views/survey_modules/questionnaires_view.dart';
 
 class Eq5dView extends StatefulWidget {
   const Eq5dView({super.key});
@@ -84,7 +87,10 @@ class _Eq5dViewState extends State<Eq5dView> {
         onBackPressed: () {
           _saveEq5d();
 
-          Navigator.pop(context);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => QuestionnairesView()),
+          );
 
           if (!surveyService.currentSurvey!.questionnaireData.eq5d.isComplete) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -105,7 +111,6 @@ class _Eq5dViewState extends State<Eq5dView> {
       ),
       footer: AppFooter(
         actions: [
-          Spacer(),
           TextButton.icon(
             icon: Icon(Icons.info, color: Colors.blueGrey),
             label: Text("Info", style: TextStyle(color: Colors.blueGrey)),
@@ -114,6 +119,15 @@ class _Eq5dViewState extends State<Eq5dView> {
                 context,
                 Text("EQ-5D-5L"),
                 Text(InfoTexts.eq5d),
+              );
+            },
+          ),
+          // WEITER BUTTON
+          SaveAndContinueButton(
+            onPressed: () async {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Who5View()),
               );
             },
           ),

@@ -10,7 +10,10 @@ import 'package:frontend/shared/footer.dart';
 import 'package:frontend/shared/info_texts.dart';
 import 'package:frontend/shared/input_styles.dart';
 import 'package:frontend/shared/layout.dart';
+import 'package:frontend/shared/save_and_continue.dart';
 import 'package:frontend/utils/survey_instance.dart';
+import 'package:frontend/views/survey_modules/audiotest_view.dart';
+import 'package:frontend/views/survey_view.dart';
 import 'package:intl/intl.dart';
 
 class ContextDataView extends StatefulWidget {
@@ -42,7 +45,10 @@ class _ContextDataViewState extends State<ContextDataView> {
         onBackPressed: () {
           surveyService.saveContextData(contextData);
 
-          Navigator.pop(context);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => SurveyView()),
+          );
 
           if (!surveyService.currentSurvey!.contextData.isComplete) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -63,7 +69,6 @@ class _ContextDataViewState extends State<ContextDataView> {
       ),
       footer: AppFooter(
         actions: [
-          Spacer(),
           // INFO BUTTON
           TextButton.icon(
             icon: Icon(Icons.info, size: 20, color: Colors.blueGrey),
@@ -76,6 +81,15 @@ class _ContextDataViewState extends State<ContextDataView> {
                 context,
                 Text("Kontextdaten"),
                 Text(InfoTexts.contextData),
+              );
+            },
+          ),
+          // WEITER BUTTON
+          SaveAndContinueButton(
+            onPressed: () async {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AudioTestView()),
               );
             },
           ),

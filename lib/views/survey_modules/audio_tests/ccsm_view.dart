@@ -7,7 +7,9 @@ import 'package:frontend/shared/dialogs.dart';
 import 'package:frontend/shared/footer.dart';
 import 'package:frontend/shared/info_texts.dart';
 import 'package:frontend/shared/layout.dart';
+import 'package:frontend/shared/save_and_continue.dart';
 import 'package:frontend/utils/survey_instance.dart';
+import 'package:frontend/views/survey_modules/questionnaires_view.dart';
 
 class CcsmAudioTestView extends StatefulWidget {
   const CcsmAudioTestView({super.key});
@@ -65,7 +67,7 @@ class _CcsmAudioTestViewState extends State<CcsmAudioTestView> {
       ),
       footer: AppFooter(
         actions: [
-          Spacer(),
+          // INFO BUTTON
           TextButton.icon(
             icon: Icon(Icons.info, color: Colors.blueGrey),
             label: Text("Info", style: TextStyle(color: Colors.blueGrey)),
@@ -74,6 +76,16 @@ class _CcsmAudioTestViewState extends State<CcsmAudioTestView> {
                 context,
                 Text("CCSM Hörtest"),
                 Text(InfoTexts.ccsm),
+              );
+            },
+          ),
+
+          // WEITER BUTTON
+          SaveAndContinueButton(
+            onPressed: () async {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => QuestionnairesView()),
               );
             },
           ),
@@ -125,7 +137,7 @@ class _CcsmAudioTestViewState extends State<CcsmAudioTestView> {
   }) {
     return Card(
       child: Padding(
-        padding: EdgeInsets.all(16),
+        padding: EdgeInsets.all(10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -209,31 +221,84 @@ class _CcsmAudioTestViewState extends State<CcsmAudioTestView> {
 
   Widget _slider(
     String title,
-    int psychoacousticParameterValue,
+    int value,
     bool enabled,
     ValueChanged<int> onChanged,
   ) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Expanded(child: Text(title)),
-            Text(psychoacousticParameterValue.toString()),
-            Slider(
+    String label;
+    if (value < 11) {
+      label = "nicht";
+    } else if (value < 21) {
+      label = "wenig";
+    } else if (value < 31) {
+      label = "mittelmäßig";
+    } else if (value < 41) {
+      label = "ziemlich";
+    } else {
+      label = "sehr";
+    }
+
+    return Padding(
+      padding: EdgeInsets.only(bottom: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  title,
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+              Text(label, style: const TextStyle(color: Colors.blueGrey)),
+            ],
+          ),
+
+          SizedBox(height: 12),
+          SliderTheme(
+            data: SliderTheme.of(context).copyWith(
+              padding: EdgeInsets.only(left: 4, right: 5),
+              // Dickere Schiene
+              trackHeight: 8,
+
+              // Größerer Griff
+              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 12),
+
+              // Größerer Berührungsbereich
+              overlayShape: const RoundSliderOverlayShape(overlayRadius: 20),
+            ),
+            child: Slider(
               thumbColor: Colors.pinkAccent,
               activeColor: Colors.pinkAccent,
               min: 0,
               max: 50,
-              divisions: 50,
-              value: psychoacousticParameterValue.toDouble(),
+              value: value.toDouble(),
               onChanged: enabled ? (v) => onChanged(v.round()) : null,
             ),
-          ],
-        ),
-
-        SizedBox(height: 8),
-      ],
+          ),
+          Stack(
+            children: [
+              // Tick Marks
+              SizedBox(
+                height: 30,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: List.generate(6, (i) {
+                    return Column(
+                      children: [
+                        Container(width: 2, height: 8, color: Colors.grey),
+                        const SizedBox(height: 2),
+                        Text("${i * 10}"),
+                      ],
+                    );
+                  }),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
