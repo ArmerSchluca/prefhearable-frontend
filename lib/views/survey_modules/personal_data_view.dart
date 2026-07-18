@@ -7,6 +7,7 @@ import 'package:frontend/shared/info_texts.dart';
 import 'package:frontend/shared/input_styles.dart';
 import 'package:frontend/shared/layout.dart';
 import 'package:frontend/shared/save_and_continue.dart';
+import 'package:frontend/utils/session_instance.dart';
 import 'package:frontend/utils/survey_instance.dart';
 import 'package:frontend/views/survey_modules/context_data_view.dart';
 import 'package:frontend/views/survey_view.dart';
@@ -120,6 +121,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
           // WEITER BUTTON
           SaveAndContinueButton(
             onPressed: () async {
+              _savePersonalData();
               await Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => ContextDataView()),
@@ -429,11 +431,13 @@ class _PersonalDataViewState extends State<PersonalDataView> {
       physicalActivityFrequency: physicalActivityFrequency,
       physicalActivityDuration: physicalActivityDuration,
       diet: diet,
-      // Macht aus den Kommagetrennten Einträgen Listenobjekte
       allergies: allergiesController.text,
       diseases: diseasesController.text,
     );
 
     await surveyService.savePersonalData(personalData);
+
+    participant.personalData = surveyService.currentSurvey!.personalData.copy();
+    await sessionService.updatePersonalData(participant.personalData);
   }
 }

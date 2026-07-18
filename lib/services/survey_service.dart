@@ -25,6 +25,11 @@ class SurveyService {
   /// Erstellt eine neue Umfrage und legt sie im lokalen Zwischenspeicher ab.
   Future<void> startSurvey() async {
     currentSurvey = Survey();
+
+    // Personendaten immer automatisch an jeder Survey direkt
+    // ausfüllen mit vorhandenen Daten
+    currentSurvey!.personalData = participant.personalData.copy();
+
     await cacheSurvey();
   }
 

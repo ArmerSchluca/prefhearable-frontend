@@ -135,6 +135,24 @@ class PersonalData {
     allergies = json['allergies'];
     diseases = json['diseases'];
   }
+
+  PersonalData copy() {
+    return PersonalData(
+      age: age,
+      gender: gender,
+      occupation: occupation,
+      hearingAided: hearingAided,
+      hearingAidDuration: hearingAidDuration,
+      hearingAidType: hearingAidType,
+      residentialArea: residentialArea,
+      physicalActivityType: physicalActivityType,
+      physicalActivityFrequency: physicalActivityFrequency,
+      physicalActivityDuration: physicalActivityDuration,
+      diet: diet,
+      allergies: allergies,
+      diseases: diseases,
+    );
+  }
 }
 
 enum Gender { male, female, diverse }

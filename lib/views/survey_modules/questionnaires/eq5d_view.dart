@@ -125,6 +125,8 @@ class _Eq5dViewState extends State<Eq5dView> {
           // WEITER BUTTON
           SaveAndContinueButton(
             onPressed: () async {
+              _saveEq5d();
+
               await Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => Who5View()),

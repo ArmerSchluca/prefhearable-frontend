@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:frontend/models/survey_modules/personal_data.dart';
 import 'package:frontend/utils/base_url.dart';
+import 'package:frontend/utils/session_instance.dart';
 import 'package:frontend/utils/survey_instance.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -70,6 +72,38 @@ class SessionService {
     return prefs.getString(storageKey);
   }
 
+  Future<PersonalData> getPersonalData() async {
+    final participantId = await getCurrentParticipantId();
+
+    final response = await http.get(
+      Uri.parse('$baseUrl/participants/me/'),
+      headers: {'X-Participant-Id': participantId!},
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception("COULD_NOT_LOAD_PERSONAL_DATA");
+    }
+
+    return PersonalData.fromJson(jsonDecode(response.body));
+  }
+
+  Future<void> updatePersonalData(PersonalData personalData) async {
+    final participantId = await getCurrentParticipantId();
+
+    final response = await http.put(
+      Uri.parse('$baseUrl/participants/me/personal-data'),
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Participant-Id': participantId!,
+      },
+      body: jsonEncode(personalData.toJson()),
+    );
+
+    if (response.statusCode != 204) {
+      throw Exception("COULD_NOT_UPDATE_PERSONAL_DATA");
+    }
+  }
+
   /// Meldet den aktuellen Teilnehmer ab.
   ///
   /// Entfernt die zwischengespeicherte Teilnehmer-ID aus dem SharedStorage
@@ -81,6 +115,9 @@ class SessionService {
     if (surveyService.currentSurvey != null) {
       surveyService.cancelSurvey();
     }
+
+    // Personendaten aus Local Storage clearen
+    participant.personalData = PersonalData();
   }
 
   /// Speichert die Teilnehmer-ID lokal auf dem Gerät,

@@ -54,6 +54,7 @@ class _LaunchHandlerState extends State<LaunchHandler> {
     try {
       // Bei Internetverbindung, versuche UUID aus lokal laufender Sitzung über das Backend validieren
       await sessionService.loginWithUuid(id);
+      participant.personalData = await sessionService.getPersonalData();
     } on Exception catch (e) {
       // Offline-Modus: lokale Sitzung weiterhin verwenden
       if (e.toString().contains("SERVER_UNREACHABLE")) {
@@ -76,6 +77,15 @@ class _LaunchHandlerState extends State<LaunchHandler> {
 
     // Eine eventuell begonnene Umfrage aus dem lokalen Speicher wiederherstellen
     await surveyService.loadCachedSurvey();
+
+    if (surveyService.currentSurvey != null) {
+      // Lokale Survey hat Vorrang
+      participant.personalData = surveyService.currentSurvey!.personalData
+          .copy();
+    } else {
+      // Keine lokale Survey -> aktuelles Profil vom Backend holen
+      participant.personalData = await sessionService.getPersonalData();
+    }
 
     if (!mounted) return;
 

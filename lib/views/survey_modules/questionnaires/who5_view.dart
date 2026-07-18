@@ -82,6 +82,8 @@ class _Who5ViewState extends State<Who5View> {
           // WEITER BUTTON
           SaveAndContinueButton(
             onPressed: () async {
+              _saveWho5();
+
               await Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => SurveyView()),
