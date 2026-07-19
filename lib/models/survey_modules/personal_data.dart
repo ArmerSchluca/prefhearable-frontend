@@ -8,6 +8,7 @@ class PersonalData {
   HearingAided? hearingAided;
   HearingAidDuration? hearingAidDuration;
   HearingAidType? hearingAidType;
+  String? hearingImpairment;
 
   ResidentialArea? residentialArea;
 
@@ -55,6 +56,7 @@ class PersonalData {
     this.hearingAided,
     this.hearingAidDuration,
     this.hearingAidType,
+    this.hearingImpairment,
     this.residentialArea,
     this.physicalActivityType,
     this.physicalActivityIntensity,
@@ -72,6 +74,7 @@ class PersonalData {
     'hearingAided': hearingAided?.name,
     'hearingAidDuration': hearingAidDuration?.name,
     'hearingAidType': hearingAidType?.name,
+    'hearingImpairment': hearingImpairment,
     'residentialArea': residentialArea?.name,
     'physicalActivityType': physicalActivityType?.name,
     'physicalActivityIntensity': physicalActivityIntensity?.name,
@@ -108,6 +111,8 @@ class PersonalData {
             (e) => e.name == json['hearingAidType'],
           )
         : null;
+
+    hearingImpairment = json['hearingImpairment'];
 
     residentialArea = json['residentialArea'] != null
         ? ResidentialArea.values.firstWhere(
@@ -155,6 +160,7 @@ class PersonalData {
       hearingAided: hearingAided,
       hearingAidDuration: hearingAidDuration,
       hearingAidType: hearingAidType,
+      hearingImpairment: hearingImpairment,
       residentialArea: residentialArea,
       physicalActivityType: physicalActivityType,
       physicalActivityIntensity: physicalActivityIntensity,

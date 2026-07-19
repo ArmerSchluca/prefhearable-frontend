@@ -31,6 +31,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
   HearingAided? hearingAided;
   HearingAidDuration? hearingAidDuration;
   HearingAidType? hearingAidType;
+  final hearingImpairmentController = TextEditingController();
 
   ResidentialArea? residentialArea;
 
@@ -57,6 +58,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
     hearingAided = personalData.hearingAided;
     hearingAidDuration = personalData.hearingAidDuration;
     hearingAidType = personalData.hearingAidType;
+    hearingImpairmentController.text = personalData.hearingImpairment ?? "";
 
     residentialArea = personalData.residentialArea;
 
@@ -292,6 +294,18 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                 SizedBox(height: 30),
               ],
 
+              // HÖRBEEINTRÄCHTIGUNGEN (hearingImpairment)
+              TextFormField(
+                controller: hearingImpairmentController,
+                keyboardType: TextInputType.text,
+                decoration: AppInputStyles.textField(
+                  label: "Hörbeeinträchtigungen",
+                  hint: "Kommagetrennt: Tinnitus, Hörsturz, ...",
+                  accentColor: Colors.orange,
+                ),
+              ),
+              SizedBox(height: 30),
+
               // WOHNRAUM (residentialArea)
               DropdownButtonFormField<ResidentialArea>(
                 decoration: AppInputStyles.dropdown(
@@ -474,6 +488,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
       hearingAided: hearingAided,
       hearingAidDuration: hearingAidDuration,
       hearingAidType: hearingAidType,
+      hearingImpairment: hearingImpairmentController.text,
       residentialArea: residentialArea,
       physicalActivityType: physicalActivityType,
       physicalActivityIntensity: physicalActivityIntensity,
