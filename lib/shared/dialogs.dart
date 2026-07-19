@@ -126,7 +126,7 @@ class AppDialog {
               TextField(
                 controller: controller,
                 decoration: AppInputStyles.textField(
-                  label: "Zugangscode",
+                  label: "Teilnahme-ID",
                   hint: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
                   accentColor: Colors.blueAccent,
                 ),
@@ -150,7 +150,7 @@ class AppDialog {
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text("Zugangscode falsch!"),
+                      content: Text("Teilnahme-ID falsch!"),
                       backgroundColor: Colors.red,
                     ),
                   );

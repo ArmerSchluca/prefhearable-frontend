@@ -12,6 +12,7 @@ class PersonalData {
   ResidentialArea? residentialArea;
 
   PhysicalActivityType? physicalActivityType;
+  PhysicalActivityIntensity? physicalActivityIntensity;
   PhysicalActivityFrequency? physicalActivityFrequency;
   PhysicalActivityDuration? physicalActivityDuration;
 
@@ -30,15 +31,17 @@ class PersonalData {
       diet != null;
   // allergies und diseases nicht verpflichtend
 
-  // Wenn Sport = none oder null ist, sollen beide anderen Felder null sein
+  // Wenn Sport = none oder null ist, sollen die anderen Sport-Felder auch null sein
   bool get isSportRequired => physicalActivityType != PhysicalActivityType.none;
   bool get isSportComplete {
     if (!isSportRequired) return true;
-    return physicalActivityFrequency != null &&
+
+    return physicalActivityIntensity != null &&
+        physicalActivityFrequency != null &&
         physicalActivityDuration != null;
   }
 
-  // Wenn HearingAided = none oder null ist, soll auch HearingAidDuration null sein
+  // Wenn HearingAided = none oder null ist, sollen die anderen Hör-Felder auch null sein
   bool get isHearingAided => hearingAided != HearingAided.none;
   bool get isHearingAidComplete {
     if (!isHearingAided) return true;
@@ -54,6 +57,7 @@ class PersonalData {
     this.hearingAidType,
     this.residentialArea,
     this.physicalActivityType,
+    this.physicalActivityIntensity,
     this.physicalActivityFrequency,
     this.physicalActivityDuration,
     this.diet,
@@ -70,6 +74,7 @@ class PersonalData {
     'hearingAidType': hearingAidType?.name,
     'residentialArea': residentialArea?.name,
     'physicalActivityType': physicalActivityType?.name,
+    'physicalActivityIntensity': physicalActivityIntensity?.name,
     'physicalActivityFrequency': physicalActivityFrequency?.name,
     'physicalActivityDuration': physicalActivityDuration?.minutes,
     'diet': diet?.name,
@@ -116,6 +121,12 @@ class PersonalData {
           )
         : null;
 
+    physicalActivityIntensity = json['physicalActivityIntensity'] != null
+        ? PhysicalActivityIntensity.values.firstWhere(
+            (e) => e.name == json['physicalActivityIntensity'],
+          )
+        : null;
+
     physicalActivityFrequency = json['physicalActivityFrequency'] != null
         ? PhysicalActivityFrequency.values.firstWhere(
             (e) => e.name == json['physicalActivityFrequency'],
@@ -146,6 +157,7 @@ class PersonalData {
       hearingAidType: hearingAidType,
       residentialArea: residentialArea,
       physicalActivityType: physicalActivityType,
+      physicalActivityIntensity: physicalActivityIntensity,
       physicalActivityFrequency: physicalActivityFrequency,
       physicalActivityDuration: physicalActivityDuration,
       diet: diet,
@@ -189,7 +201,17 @@ enum HearingAidType {
 
 enum ResidentialArea { urban, suburban, rural }
 
-enum PhysicalActivityType { endurance, strength, combined, team, other, none }
+// Erfassung des Sports nach ACSM FITT-Prinzip
+enum PhysicalActivityType {
+  aerobic,
+  resistance,
+  flexibility,
+  neuromotor,
+  other,
+  none,
+}
+
+enum PhysicalActivityIntensity { light, moderate, vigorous }
 
 enum PhysicalActivityFrequency {
   oneToTwoPerWeek,
@@ -278,7 +300,7 @@ extension HearingAidTypeLabel on HearingAidType {
         return "Hinter-dem-Ohr (HdO)";
 
       case HearingAidType.inTheEar:
-        return "Im-Ohr (IdO)";
+        return "In-dem-Ohr (IdO)";
 
       case HearingAidType.cochlearImplant:
         return "Cochlea-Implantat (CI)";
@@ -308,18 +330,31 @@ extension ResidentialAreaLabel on ResidentialArea {
 extension PhysicalActivityTypeLabel on PhysicalActivityType {
   String get label {
     switch (this) {
-      case PhysicalActivityType.endurance:
-        return "Ausdauersport";
-      case PhysicalActivityType.strength:
-        return "Kraftsport";
-      case PhysicalActivityType.combined:
-        return "Kraft-/Ausdauersport";
-      case PhysicalActivityType.team:
-        return "Teamsport";
+      case PhysicalActivityType.aerobic:
+        return "Ausdauertraining";
+      case PhysicalActivityType.resistance:
+        return "Krafttraining";
+      case PhysicalActivityType.flexibility:
+        return "Beweglichkeitstraining (z.B. Yoga)";
+      case PhysicalActivityType.neuromotor:
+        return "Koordinations-/Gleichgewichtstraining";
       case PhysicalActivityType.other:
         return "Sonstige";
       case PhysicalActivityType.none:
         return "Keine";
+    }
+  }
+}
+
+extension PhysicalActivityIntensityLabel on PhysicalActivityIntensity {
+  String get label {
+    switch (this) {
+      case PhysicalActivityIntensity.light:
+        return "Leicht";
+      case PhysicalActivityIntensity.moderate:
+        return "Moderat";
+      case PhysicalActivityIntensity.vigorous:
+        return "Intensiv";
     }
   }
 }

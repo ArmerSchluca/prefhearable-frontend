@@ -1,15 +1,21 @@
 import 'package:frontend/models/survey_modules/personal_data.dart';
 
 class Participant {
-  // Dient dazu, dass Personaldata selbst nach Abschluss einer
-  // Survey an diesem Objekt gespeichert bleibt
+  final String? id;
   PersonalData personalData;
 
-  Participant({PersonalData? personalData})
+  Participant({this.id, PersonalData? personalData})
     : personalData = personalData ?? PersonalData();
 
-  Map<String, dynamic> toJson() => {'personalData': personalData};
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'personalData': personalData.toJson(),
+  };
 
-  Participant.fromJson(Map<String, dynamic> json)
-    : personalData = PersonalData.fromJson(json['personalData']);
+  factory Participant.fromJson(Map<String, dynamic> json) {
+    return Participant(
+      id: json['id'],
+      personalData: PersonalData.fromJson(json['personalData']),
+    );
+  }
 }

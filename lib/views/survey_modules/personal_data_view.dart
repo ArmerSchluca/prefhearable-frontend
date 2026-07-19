@@ -35,6 +35,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
   ResidentialArea? residentialArea;
 
   PhysicalActivityType? physicalActivityType;
+  PhysicalActivityIntensity? physicalActivityIntensity;
   PhysicalActivityFrequency? physicalActivityFrequency;
   PhysicalActivityDuration? physicalActivityDuration;
 
@@ -60,6 +61,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
     residentialArea = personalData.residentialArea;
 
     physicalActivityType = personalData.physicalActivityType;
+    physicalActivityIntensity = personalData.physicalActivityIntensity;
     physicalActivityFrequency = personalData.physicalActivityFrequency;
     physicalActivityDuration = personalData.physicalActivityDuration;
 
@@ -122,6 +124,27 @@ class _PersonalDataViewState extends State<PersonalDataView> {
           SaveAndContinueButton(
             onPressed: () async {
               _savePersonalData();
+
+              if (!context.mounted) return;
+
+              if (!surveyService.currentSurvey!.personalData.isComplete) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      "Es wurden noch nicht alle Personendaten erfasst!",
+                    ),
+                    backgroundColor: Colors.grey,
+                  ),
+                );
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text("Personendaten erfasst!"),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+              }
+
               await Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => ContextDataView()),
@@ -309,6 +332,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                   setState(() {
                     physicalActivityType = value;
                     if (value == PhysicalActivityType.none) {
+                      physicalActivityIntensity = null;
                       physicalActivityFrequency = null;
                       physicalActivityDuration = null;
                     }
@@ -339,6 +363,30 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                   onChanged: (value) {
                     setState(() {
                       physicalActivityFrequency = value;
+                    });
+                  },
+                ),
+                SizedBox(height: 30),
+
+                // SPORT INTENSITY (physicalActivityIntensity)
+                DropdownButtonFormField<PhysicalActivityIntensity>(
+                  decoration: AppInputStyles.dropdown(
+                    label: "Intensität des Sportmachens",
+                    hint: "Intensität angeben",
+                    accentColor: Colors.orange,
+                  ),
+                  initialValue: physicalActivityIntensity,
+                  items: PhysicalActivityIntensity.values.map((
+                    physicalActivityIntensity,
+                  ) {
+                    return DropdownMenuItem(
+                      value: physicalActivityIntensity,
+                      child: Text(physicalActivityIntensity.label),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      physicalActivityIntensity = value;
                     });
                   },
                 ),
@@ -428,6 +476,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
       hearingAidType: hearingAidType,
       residentialArea: residentialArea,
       physicalActivityType: physicalActivityType,
+      physicalActivityIntensity: physicalActivityIntensity,
       physicalActivityFrequency: physicalActivityFrequency,
       physicalActivityDuration: physicalActivityDuration,
       diet: diet,
@@ -438,6 +487,5 @@ class _PersonalDataViewState extends State<PersonalDataView> {
     await surveyService.savePersonalData(personalData);
 
     participant.personalData = surveyService.currentSurvey!.personalData.copy();
-    await sessionService.updatePersonalData(participant.personalData);
   }
 }

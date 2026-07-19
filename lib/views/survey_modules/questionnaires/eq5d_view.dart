@@ -127,6 +127,30 @@ class _Eq5dViewState extends State<Eq5dView> {
             onPressed: () async {
               _saveEq5d();
 
+              if (!context.mounted) return;
+
+              if (!surveyService
+                  .currentSurvey!
+                  .questionnaireData
+                  .eq5d
+                  .isComplete) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      "Es wurden noch nicht alle Fragen des EQ-5D beantwortet!",
+                    ),
+                    backgroundColor: Colors.grey,
+                  ),
+                );
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text("EQ-5D erfasst!"),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+              }
+
               await Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => Who5View()),

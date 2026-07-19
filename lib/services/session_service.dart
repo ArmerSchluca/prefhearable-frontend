@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:frontend/models/particpant.dart';
 import 'package:frontend/models/survey_modules/personal_data.dart';
 import 'package:frontend/utils/base_url.dart';
 import 'package:frontend/utils/session_instance.dart';
@@ -39,8 +40,8 @@ class SessionService {
   ///
   /// Vor der Anmeldung wird das Format der UUID geprüft. Anschließend wird
   /// im Backend validiert, ob der Teilnehmer existiert. Bei erfolgreicher
-  /// Anmeldung wird die UUID lokal gespeichert.
-  Future<String> loginWithUuid(String participantId) async {
+  /// Anmeldung wird der Participant mit UUID und Personendaten lokal gespeichert.
+  Future<Participant> authenticateParticipant(String participantId) async {
     if (!UuidValidation.isValidUUID(fromString: participantId)) {
       throw Exception("INVALID_UUID_FORMAT");
     }
@@ -56,9 +57,11 @@ class SessionService {
         throw Exception("PARTICIPANT_NOT_FOUND");
       }
 
+      final participant = Participant.fromJson(jsonDecode(response.body));
+
       await _cacheId(participantId);
 
-      return participantId;
+      return participant;
     } on SocketException {
       throw Exception("SERVER_UNREACHABLE");
     }
@@ -72,22 +75,15 @@ class SessionService {
     return prefs.getString(storageKey);
   }
 
-  Future<PersonalData> getPersonalData() async {
-    final participantId = await getCurrentParticipantId();
-
-    final response = await http.get(
-      Uri.parse('$baseUrl/participants/me/'),
-      headers: {'X-Participant-Id': participantId!},
-    );
-
-    if (response.statusCode != 200) {
-      throw Exception("COULD_NOT_LOAD_PERSONAL_DATA");
-    }
-
-    return PersonalData.fromJson(jsonDecode(response.body));
-  }
-
-  Future<void> updatePersonalData(PersonalData personalData) async {
+  /// Aktualisiert die im Backend gespeicherten Personendaten
+  /// des angemeldeten Teilnehmers.
+  ///
+  /// Wird nach erfolgreichem Abschluss einer Umfrage aufgerufen,
+  /// damit die zuletzt eingegebenen Personendaten für zukünftige
+  /// Umfragen wiederverwendet werden können.
+  Future<void> updatePersonalDataOnParticipant(
+    PersonalData personalData,
+  ) async {
     final participantId = await getCurrentParticipantId();
 
     final response = await http.put(
@@ -96,7 +92,7 @@ class SessionService {
         'Content-Type': 'application/json',
         'X-Participant-Id': participantId!,
       },
-      body: jsonEncode(personalData.toJson()),
+      body: jsonEncode(personalData),
     );
 
     if (response.statusCode != 204) {

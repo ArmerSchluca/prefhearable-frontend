@@ -46,8 +46,8 @@ class _HomeViewState extends State<HomeView> {
                 "Wirklich abmelden? ",
                 "Laufende Umfragen werden abgebrochen!\n\n"
                     "Wenn Sie künftig auf Ihre bisherigen Umfragen zugreifen können möchten, "
-                    "sichern Sie vorher Ihren Zugangscode zur Anmeldung! \n\n"
-                    "Bitte geben Sie Ihren Zugangscode zur Bestätigung ein:",
+                    "sichern Sie vorher Ihre Teilnahme-ID zur Anmeldung! \n\n"
+                    "Bitte geben Sie Ihre Teilnahme-ID zur Bestätigung ein:",
               );
 
               if (!confirmed) return;
@@ -191,7 +191,7 @@ class _HomeViewState extends State<HomeView> {
 
         SizedBox(height: 50),
 
-        // GRAUER KASTEN MIT UUID/Zugangscode
+        // GRAUER KASTEN MIT UUID/TEILNAHME-ID
         Card(
           elevation: 3,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
@@ -202,7 +202,7 @@ class _HomeViewState extends State<HomeView> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  "Ihr Zugangscode:",
+                  "Ihre Teilnahme-ID:",
                   style: TextStyle(
                     fontSize: 18,
                     decoration: TextDecoration.underline,
@@ -221,7 +221,7 @@ class _HomeViewState extends State<HomeView> {
                     final id = snapshot.data;
 
                     if (id == null) {
-                      return Text("kein Zugangscode vorhanden");
+                      return Text("keine Teilnahme-ID vorhanden");
                     }
 
                     return SelectableText(
@@ -238,8 +238,9 @@ class _HomeViewState extends State<HomeView> {
 
                 SizedBox(height: 15),
                 Text(
-                  "Sichern Sie Ihren Zugangscode, um "
-                  "geräteübergreifend auf Ihre Daten zuzugreifen.",
+                  "Die Teilnahme-ID dient der Zuordnung Ihrer Umfrageergebnisse. "
+                  "Sie selbst benötigen die Teilnahme-ID nur, wenn Sie sich nach einer Abmeldung "
+                  "oder auf einem anderen Gerät erneut anmelden möchten. Bewahren Sie sie daher für diesen Fall gut auf.",
                   style: TextStyle(fontStyle: FontStyle.italic),
                 ),
               ],

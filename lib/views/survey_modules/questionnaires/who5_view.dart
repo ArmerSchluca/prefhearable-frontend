@@ -84,6 +84,30 @@ class _Who5ViewState extends State<Who5View> {
             onPressed: () async {
               _saveWho5();
 
+              if (!context.mounted) return;
+
+              if (!surveyService
+                  .currentSurvey!
+                  .questionnaireData
+                  .who5
+                  .isComplete) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      "Es wurden noch nicht alle Fragen des WHO-5 beantwortet!",
+                    ),
+                    backgroundColor: Colors.grey,
+                  ),
+                );
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text("WHO-5 erfasst!"),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+              }
+
               await Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => SurveyView()),

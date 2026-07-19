@@ -5,6 +5,7 @@ import 'package:frontend/shared/layout.dart';
 import 'package:frontend/shared/appbar.dart';
 import 'package:frontend/shared/footer.dart';
 import 'package:frontend/shared/section_card.dart';
+import 'package:frontend/utils/session_instance.dart';
 import 'package:frontend/utils/survey_instance.dart';
 import 'package:frontend/views/home_view.dart';
 import 'package:frontend/views/survey_modules/audiotest_view.dart';
@@ -179,7 +180,18 @@ class _SurveyViewState extends State<SurveyView> {
             onPressed: surveyService.currentSurvey!.isComplete
                 ? () async {
                     try {
+                      // Personendaten sichern, bevor die Survey durch submitSurvey()
+                      // aus dem lokalen Speicher gelöscht wird
+                      final personalData = surveyService
+                          .currentSurvey!
+                          .personalData
+                          .copy();
+
                       await surveyService.submitSurvey();
+                      // Personendaten mit vorher gesichertem Objekt am Participant aktualisieren
+                      await sessionService.updatePersonalDataOnParticipant(
+                        personalData,
+                      );
 
                       if (!context.mounted) return;
 

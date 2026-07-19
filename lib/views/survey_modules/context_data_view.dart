@@ -87,6 +87,25 @@ class _ContextDataViewState extends State<ContextDataView> {
           // WEITER BUTTON
           SaveAndContinueButton(
             onPressed: () async {
+              if (!context.mounted) return;
+
+              if (!surveyService.currentSurvey!.contextData.isComplete) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      "Es wurden noch nicht alle Kontextdaten erfasst!",
+                    ),
+                    backgroundColor: Colors.grey,
+                  ),
+                );
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text("Kontextdaten erfasst!"),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+              }
               await Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => AudioTestView()),
@@ -191,7 +210,7 @@ class _ContextDataViewState extends State<ContextDataView> {
                 ),
               ),
 
-              SizedBox(height: 50),
+              SizedBox(height: 30),
 
               // BUTTON FÜR STANDORT UND WETTER ERFASSEN
               Center(
@@ -223,13 +242,6 @@ class _ContextDataViewState extends State<ContextDataView> {
                     ],
                   ),
                 ),
-              ),
-
-              SizedBox(height: 30),
-
-              Text(
-                "Automatisch erfasste Kontextdaten",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
 
               SizedBox(height: 10),

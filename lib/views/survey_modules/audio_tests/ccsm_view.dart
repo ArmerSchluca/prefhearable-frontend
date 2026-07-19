@@ -83,6 +83,26 @@ class _CcsmAudioTestViewState extends State<CcsmAudioTestView> {
           // WEITER BUTTON
           SaveAndContinueButton(
             onPressed: () async {
+              if (!context.mounted) return;
+
+              if (!surveyService.currentSurvey!.audioTestData.ccsm.isComplete) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      "Es wurden noch nicht alle Hörspuren des CCSM bewertet!",
+                    ),
+                    backgroundColor: Colors.grey,
+                  ),
+                );
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text("CCSM erfasst!"),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+              }
+
               await Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => QuestionnairesView()),

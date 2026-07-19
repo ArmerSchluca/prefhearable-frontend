@@ -2,17 +2,17 @@ class InfoTexts {
   static const String launch = '''
 Willkommen bei Prefhearable.
 
-Die Teilnahme erfolgt anonym. Beim ersten Start wird automatisch ein persönlicher Zugangscode erstellt, mit dem Ihre Umfragen einem Teilnehmerkonto zugeordnet werden können.
+Die Teilnahme erfolgt anonym. Beim ersten Start wird automatisch eine persönliche Teilnahme-ID erstellt, mit der Ihre Umfragen Ihnen pseudonymisiert zugeordnet werden können.
 
-Falls Sie bereits einen Zugangscode besitzen, können Sie sich über „Bereits registriert?“ erneut anmelden und Ihre bisherigen Daten weiterverwenden.
+Falls Sie bereits eine Teilnahme-ID besitzen, können Sie sich über „Bereits registriert?“ erneut anmelden und Ihre bisherigen Daten weiterverwenden.
 ''';
 
   static const String login = '''
-Melden Sie sich mit Ihrem persönlichen Zugangscode an.
+Melden Sie sich mit Ihrer persönlichen Teilnahme-ID an.
 
-Der Zugangscode wurde Ihnen bei der ersten Registrierung zugewiesen und ermöglicht den Zugriff auf Ihre bereits abgeschlossenen sowie laufenden Umfragen.
+Die Teilnahme-ID wurde Ihnen bei der ersten Registrierung zugewiesen und ermöglicht den Zugriff auf Ihre bereits abgeschlossenen Umfragen.
 
-Bewahren Sie den Zugangscode daher sicher auf. Ohne ihn kann Ihr Teilnehmerkonto nicht wiederhergestellt werden.
+Bewahren Sie die Teilnahme-ID daher sicher auf. Ohne sie kann Ihr Teilnehmerkonto nicht wiederhergestellt werden.
 ''';
 
   static const String home = '''
@@ -57,6 +57,12 @@ Je nach Test bewerten Sie einzelne Klänge oder beantworten Fragen zu Ihrem Hör
 Im folgenden Hörtest bewerten Sie verschiedene Klänge hinsichtlich ihrer wahrgenommenen Eigenschaften.
 
 Hören Sie sich jeden Klang vollständig an und bewerten Sie anschließend dessen Lautheit, Rauigkeit, Tonhaltigkeit, Schärfe und empfundene Belästigung möglichst spontan nach Ihrem persönlichen Eindruck.
+
+• Lautheit: Wie laut erscheint Ihnen der Klang?
+• Rauigkeit: Wie rau, kratzig oder flatternd wirkt der Klang?
+• Tonhaltigkeit: Wie deutlich ist ein klarer Ton oder eine erkennbare Tonhöhe wahrnehmbar?
+• Schärfe: Wie schrill oder hochfrequent wirkt der Klang?
+• Belästigung: Wie störend oder unangenehm empfinden Sie den Klang insgesamt?
 ''';
 
   static const String questionnaires = '''

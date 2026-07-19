@@ -31,7 +31,7 @@ class _LoginViewState extends State<LoginView> {
             onPressed: () {
               AppDialog.showInfo(
                 context,
-                Text("Anmelden mit Zugangscode"),
+                Text("Anmelden mit Teilnahme-ID"),
                 Text(InfoTexts.login),
               );
             },
@@ -49,7 +49,7 @@ class _LoginViewState extends State<LoginView> {
             errorMessage = null;
           },
           decoration: AppInputStyles.textField(
-            label: "Zugangscode",
+            label: "Teilnahme-ID",
             hint: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
             accentColor: Colors.blueAccent,
             errorText: errorMessage,
@@ -99,8 +99,9 @@ class _LoginViewState extends State<LoginView> {
 
   Future<void> login() async {
     try {
-      await sessionService.loginWithUuid(participantId.trim());
-      participant.personalData = await sessionService.getPersonalData();
+      participant = await sessionService.authenticateParticipant(
+        participantId.trim(),
+      );
 
       if (!mounted) return;
 
@@ -119,14 +120,14 @@ class _LoginViewState extends State<LoginView> {
 
       if (e.toString().contains('INVALID_UUID_FORMAT')) {
         setState(() {
-          errorMessage = 'Ungültiger Zugangscode: falsches Format!';
+          errorMessage = 'Ungültige Teilnahme-ID: falsches Format!';
         });
         return;
       }
 
       if (e.toString().contains('PARTICIPANT_NOT_FOUND')) {
         setState(() {
-          errorMessage = 'Zugangscode nicht gefunden!';
+          errorMessage = 'Teilnahme-ID nicht gefunden!';
         });
         return;
       }

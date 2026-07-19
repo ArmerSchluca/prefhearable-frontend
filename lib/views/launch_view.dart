@@ -117,7 +117,7 @@ class _LaunchViewState extends State<LaunchView> {
               );
             },
             child: Text(
-              'mit Zugangscode anmelden',
+              'mit Teilnahme-ID anmelden',
               style: TextStyle(fontSize: 16),
             ),
           ),
