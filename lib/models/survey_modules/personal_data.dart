@@ -214,6 +214,7 @@ enum ResidentialArea { urban, suburban, rural }
 enum PhysicalActivityType {
   aerobic,
   resistance,
+  mixed,
   flexibility,
   neuromotor,
   other,
@@ -349,6 +350,8 @@ extension PhysicalActivityTypeLabel on PhysicalActivityType {
         return "Ausdauertraining";
       case PhysicalActivityType.resistance:
         return "Krafttraining";
+      case PhysicalActivityType.mixed:
+        return "Gemischt (z. B. Kraft-/Ausdauertraining)";
       case PhysicalActivityType.flexibility:
         return "Beweglichkeitstraining (z.B. Yoga)";
       case PhysicalActivityType.neuromotor:

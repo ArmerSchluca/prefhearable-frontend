@@ -198,7 +198,7 @@ class _Who5ViewState extends State<Who5View> {
           if (value != null)
             Padding(
               padding: EdgeInsets.only(top: 8),
-              child: Text(value.label, style: TextStyle(color: Colors.grey)),
+              child: Text(value.label, style: TextStyle(color: Colors.blueGrey)),
             ),
         ],
       ),
