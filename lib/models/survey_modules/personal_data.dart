@@ -181,6 +181,9 @@ enum Occupation {
   manualLabor,
   healthcare,
   education,
+  publicSafety,
+  transportation,
+  service,
   unemployed,
   retired,
   other,
@@ -246,15 +249,21 @@ extension OccupationLabel on Occupation {
   String get label {
     switch (this) {
       case Occupation.student:
-        return "StudentIn/SchülerIn";
+        return "SchülerIn / StudentIn";
       case Occupation.office:
-        return "Büro";
+        return "Büro / Verwaltung";
       case Occupation.manualLabor:
-        return "Handwerk";
+        return "Handwerk / Bau";
       case Occupation.healthcare:
-        return "Pflege";
+        return "Gesundheitswesen (Pflege, Arzt, ...)";
       case Occupation.education:
-        return "Lehre";
+        return "Bildung / Lehre";
+      case Occupation.publicSafety:
+        return "Öffentliche Sicherheit (Polizei, Feuerwehr, ...)";
+      case Occupation.transportation:
+        return "Verkehr / Transport (Bus, LKW, ...)";
+      case Occupation.service:
+        return "Dienstleistung (Gastro, Handel, ...)";
       case Occupation.unemployed:
         return "Arbeitslos";
       case Occupation.retired:

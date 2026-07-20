@@ -157,7 +157,7 @@ class _CcsmAudioTestViewState extends State<CcsmAudioTestView> {
   }) {
     return Card(
       child: Padding(
-        padding: EdgeInsets.all(10),
+        padding: EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -195,7 +195,7 @@ class _CcsmAudioTestViewState extends State<CcsmAudioTestView> {
 
             Text(
               "Klingt das Geräusch...",
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, fontStyle: FontStyle.italic),
             ),
             SizedBox(height: 20),
 
@@ -268,25 +268,32 @@ class _CcsmAudioTestViewState extends State<CcsmAudioTestView> {
               Expanded(
                 child: Text(
                   title,
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
                 ),
               ),
-              Text(label, style: const TextStyle(color: Colors.blueGrey)),
+              Text(
+                label,
+                style: TextStyle(
+                  color: Colors.blueGrey,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16,
+                ),
+              ),
             ],
           ),
 
           SizedBox(height: 12),
           SliderTheme(
             data: SliderTheme.of(context).copyWith(
-              padding: EdgeInsets.only(left: 4, right: 5),
+              padding: EdgeInsets.only(left: 3, right: 5),
               // Dickere Schiene
-              trackHeight: 8,
+              trackHeight: 25,
 
               // Größerer Griff
-              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 12),
+              thumbShape: RoundSliderThumbShape(enabledThumbRadius: 14),
 
               // Größerer Berührungsbereich
-              overlayShape: const RoundSliderOverlayShape(overlayRadius: 20),
+              overlayShape: RoundSliderOverlayShape(overlayRadius: 50),
             ),
             child: Slider(
               thumbColor: Colors.pinkAccent,
@@ -308,7 +315,7 @@ class _CcsmAudioTestViewState extends State<CcsmAudioTestView> {
                     return Column(
                       children: [
                         Container(width: 2, height: 8, color: Colors.grey),
-                        const SizedBox(height: 2),
+                        SizedBox(height: 2),
                         Text("${i * 10}"),
                       ],
                     );

@@ -3,9 +3,10 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
     
     <application
-        android:label="frontend"
+        android:label="Prefhearable"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
